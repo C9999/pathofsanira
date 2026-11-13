@@ -185,8 +185,8 @@ function startRun(){
     else if(p==='h'){it.k='hole';it.w=82;it.h=20;}
     else{it.w=44;it.h=50;}
     return it;});
-  [1,5,9,13,17].forEach(i=>items.push({wx:760+i*330+165,k:'s',coin:true,star:true,gold:false,air:true,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:0}));
-  $('tb').style.display=P.torre?'flex':'none';
+  Array.from({length:P.roda?8:5},(_,i)=>i).forEach(i=>items.push({wx:760+(i*3+1)*330+165,k:'s',coin:true,star:true,gold:false,air:true,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:0}));
+  $('tb').style.display='none';
   $('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');$('jb').style.display='flex';$('countdown').classList.remove('off');$('count').textContent='5';$('pauseBtn').style.display='none';$('powerBtn').style.display=P.torre?'block':'none';$('audioBtn').style.display='block';state='countdown';S.countdown=5;S.pauseUsed=false;last=performance.now();
 }
 function gy(x){return 190+SLOPE*x}
@@ -199,7 +199,7 @@ stage.addEventListener('pointerdown',e=>{pointers.add(e.pointerId);if(state==='p
 ['pointerup','pointercancel','pointerleave'].forEach(t=>stage.addEventListener(t,e=>pointers.delete(e.pointerId)));
 addEventListener('keydown',e=>{if(e.code==='KeyT'){zap();}if(e.code==='Space'){pointers.add('k');if(state==='play')jump();e.preventDefault();}});
 addEventListener('keyup',e=>{if(e.code==='Space')pointers.delete('k');});
-function zap(){if(state!=='play'||!P.torre||S.torreUsed||S.dead)return;S.torreUsed=true;U.torre++;S.flash=0.35;items.forEach(it=>{if(!it.coin&&!it.gone&&PX+(it.wx-S.dist)<W+80)it.gone=true;});$('tb').style.display='none';}
+function zap(){if(state!=='play'||!P.torre||S.torreUsed||S.dead)return;S.torreUsed=true;U.torre++;S.flash=0.35;items.forEach(it=>{if(!it.coin&&!it.gone&&PX+(it.wx-S.dist)<W+80)it.gone=true;});$('tb').style.display='none';$('powerBtn').style.display='none';}
 $('tb').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();zap();});
 $('go').onclick=startRun;
 $('menu').addEventListener('pointerdown',e=>{if(state==='menu'){e.preventDefault();showDraw();}});
@@ -271,11 +271,11 @@ function usageText(c){
 function finish(){
   state='end';$('jb').style.display='none';$('tb').style.display='none';
   const won=!S.dead;
-  $('end').innerHTML='<div class="box"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score)+'</b><span>pontos</span></div><div class="stat"><b>'+S.stars+'</b><span>Sonhos</span></div><div class="stat"><b>'+S.lives+'</b><span>vida restante</span></div><div class="stat"><b>'+S.hits+'</b><span>colisões</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+
+  $('end').innerHTML='<div class="box"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score)+'</b><span>pontos</span></div><div class="stat"><b>'+(S.stars*10)+'</b><span>Sonhos</span></div><div class="stat"><b>'+S.lives+'</b><span>vida restante</span></div><div class="stat"><b>'+S.hits+'</b><span>colisões</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+
    cards.map((c,i)=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b> · '+c.poder+'<small>'+usageText(c)+'</small></div></div>').join('')+
    '<div style="display:flex;gap:10px;justify-content:center;margin-top:4px"><button id="again">Jogar de novo</button></div></div>';
   $('end').classList.remove('off');$('pauseBtn').style.display='none';$('powerBtn').style.display='none';$('audioBtn').style.display='none';$('again').onclick=showDraw;
-  const share=document.createElement('button');share.className='alt';share.textContent='Compartilhar resultado';share.onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · '+S.stars+' Sonhos';if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};$('end').querySelector('.box').appendChild(share);
+  const share=document.createElement('button');share.className='alt';share.textContent='Compartilhar resultado';share.onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · '+(S.stars*10)+' Sonhos';if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};$('end').querySelector('.box').appendChild(share);
 }
 
 function mount(off,col,base,amp,seed){
