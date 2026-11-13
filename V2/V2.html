@@ -245,7 +245,7 @@ function update(rdt){
       if(it.k==='alligator')it.wx=it.baseWx+Math.sin(S.t*2.1+it.baseWx)*42;
       if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;
       if(it.k==='hole'){
-        if(!S.dead&&sx>-38&&sx<38&&S.z<18&&S.t-(it.lastHit||-10)>1.1){if(P.sacer&&S.sacerFalls>0){S.sacerFalls--;it.gone=true;}else{takeHit();it.lastHit=S.t;S.dist=Math.max(0,S.dist-115);S.invuln=1;}}
+        if(!S.dead&&sx>-38&&sx<38&&S.z<18&&S.t-(it.lastHit||-10)>1.1){if(P.sacer&&S.sacerFalls>0){S.sacerFalls--;it.gone=true;}else{takeHit();it.lastHit=S.t;S.dist=Math.max(0,S.dist-115);}}
       }else if(!S.dead&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?95:0),it.w,it.h)){takeHit();}
       if(sx<-80)it.gone=true;
     }
