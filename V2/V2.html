@@ -113,7 +113,7 @@ FACE
 const CARDS=[
 {id:'louco',num:'0',nome:'O Louco',poder:'Pulo duplo',desc:'Um pulo extra no ar.',cor:'#5FCFE0'},
 {id:'mago',num:'I',nome:'O Mago',poder:'Ímã',desc:'Atrai Sonhos próximos.',cor:'#A78BDB'},
-{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Evita duas quedas em buracos ou armadilhas.',cor:'#6CC38A'},
+{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Poder reservado para uma futura mecânica de proteção.',cor:'#6CC38A'},
 {id:'imper',num:'III',nome:'A Imperatriz',poder:'Vida extra',desc:'Acrescenta um nível de vida.',cor:'#F28FB1'},
 {id:'carro',num:'VII',nome:'O Carro',poder:'Arrancada',desc:'Velocidade +25%.',cor:'#3FBFA8'},
 {id:'forca',num:'VIII',nome:'A Força',poder:'Três vidas',desc:'Começa a sessão com 3 níveis de vida.',cor:'#F28C28'},
@@ -275,7 +275,7 @@ function usageText(c){
   case'forca':return 'vida inicial: 3 níveis';
   case'louco':return U.louco+' pulos duplos';
   case'mago':return U.mago+(U.mago===1?' Sonho atraído':' Sonhos atraídos');
-  case'sacer':return (2-S.sacerFalls)+' quedas evitadas';
+  case'sacer':return 'poder temporariamente sem efeito nesta versão';
   case'imper':return U.imper?'vida extra usada':'vida extra não foi necessária';
   case'carro':return 'velocidade +25% o tempo todo';
   case'eremita':return U.eremita.toFixed(1).replace('.',',')+' s planando';
