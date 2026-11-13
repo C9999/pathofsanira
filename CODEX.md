@@ -145,6 +145,102 @@ A transição, duração e relação desses ambientes com os níveis de dificuld
 - [ ] Definir o formato de compartilhamento do resultado.
 - [ ] Definir os detalhes de áudio e vibração.
 
+
+### 11. Status de implementação — versão de testes atual (branch `main`)
+
+> Status conferido no código de `index.html` da branch `main`. **Implementado** significa que existe no protótipo atual; não significa necessariamente que já segue a regra final consolidada. Quando o comportamento da demo divergir da decisão mais recente, isso fica indicado como implementação antiga a substituir.
+
+#### Base do jogo e controles
+
+- [x] Página HTML com canvas e loop de jogo.
+- [x] Nome Path of Sanira exibido na tela inicial.
+- [x] Personagem levitando em posição de lótus, com SVG e variações de aura/expressão.
+- [x] Cenário de ladeira com deslocamento e inclinação.
+- [x] Toque/clique durante a corrida faz Sanira pular.
+- [x] Suporte a teclado para testes (barra de espaço).
+- [ ] Orientação paisagem obrigatória com aviso de rotação.
+- [ ] Pausa de uma vez por corrida / “Sessão de meditação”.
+- [ ] Corrida infinita na versão final (a demo ainda é limitada).
+
+#### Tiragem e cartas
+
+- [x] Tiragem de três cartas.
+- [x] A Força é a primeira carta em 90% dos sorteios.
+- [x] Cartas sorteadas sem repetição.
+- [x] Revelação individual das cartas com animação escalonada.
+- [ ] Regra que impede A Lua e O Sol de saírem juntos.
+- [ ] Aumento de 40% na chance da Lua entre 21h e 6h.
+- [ ] Revelação mais lenta conforme a nova decisão.
+- [ ] Tela inicial que inicia a tiragem ao tocar em qualquer lugar (hoje há botão “Tirar as cartas”).
+- [ ] Botão com o texto “Começar a meditar”.
+- [ ] Espera de 5 segundos com Sanira parada antes do início efetivo da corrida.
+
+#### Corrida, obstáculos e dano
+
+- [x] Percurso de teste com sequência limitada de elementos.
+- [x] Obstáculos de pedra e tronco.
+- [x] Inimigo genérico desenhado na demo.
+- [x] Colisão com obstáculos causa dano.
+- [x] Janela de invulnerabilidade após dano (os tempos variam conforme o efeito defensivo).
+- [ ] Geração procedural de percurso para a versão final.
+- [ ] Inimigos específicos: jacaré horizontal, gado parado e tucano voador.
+- [ ] Inimigos voadores com comportamento próprio.
+- [ ] Buracos/armadilhas de chão falso e retorno a um ponto anterior após a queda.
+- [ ] Regra final de dano para todos os tipos de contato, integrada ao sistema definitivo de vida.
+- [ ] Expressão triste por 1,5 segundo (a demo ainda usa 0,5 segundo).
+- [ ] Encerramento por morte com o nome “Meditação interrompida” (a demo ainda encerra ao resolver a sequência de itens ou cair).
+
+#### Coletáveis, pontuação e HUD
+
+- [x] Contador de pontos.
+- [x] Coleta de estrelas e moedas na demo.
+- [x] HUD mostra as cartas/poderes ativos.
+- [ ] Substituir moedas e estrelas atuais por estrelas vermelhas chamadas **Sonhos**.
+- [ ] Cada Sonho valer 10 Sonhos.
+- [ ] Exibir vida no HUD de acordo com a regra final.
+- [ ] Registrar resultados dos cinco jogadores em Google Sheets.
+- [ ] Compartilhar o resultado da sessão.
+
+#### Poderes — implementação atual versus regra definida
+
+| Carta | Status no código atual |
+|---|---|
+| O Louco | [x] Pulo duplo implementado. |
+| O Mago | [x] Ímã que atrai moedas/estrelas implementado; ajustar a terminologia e o coletável final. |
+| A Sacerdotisa | [ ] O código tem câmera lenta ao segurar o toque; **não corresponde** à nova regra de evitar duas armadilhas. |
+| A Imperatriz | [x] Vida extra implementada na demo; conferir e adaptar ao sistema final de níveis de vida. |
+| O Carro | [x] Aumento de velocidade implementado; dash não existe. |
+| A Força | [ ] O código aumenta a altura do pulo em 35%; **não corresponde** à nova regra de começar com 3 níveis de vida. |
+| O Eremita | [x] Planar por até 1,5 segundo por pulo implementado. |
+| A Roda da Fortuna | [x] Aumenta a quantidade/chance de moedas douradas na demo; adaptar ao sistema de Sonhos, se aplicável. |
+| A Morte | [x] Renascimento uma vez após dano, com invulnerabilidade, implementado. |
+| A Torre | [x] Botão de ativação e limpeza dos obstáculos visíveis implementados. |
+| A Lua | [x] Redução de visibilidade e multiplicador de pontuação x1,5 implementados; falta a regra de horário e a restrição com O Sol. |
+| O Sol | [ ] O código atual usa escudo que absorve uma batida e recarrega; **não corresponde** à nova regra de reduzir o dano pela metade. |
+
+#### Sanira, interface e apresentação
+
+- [x] Aura laranja quando A Força está presente e aura cinza fina quando não está.
+- [x] Expressão triste e retorno à expressão normal (duração atual de 0,5 segundo).
+- [x] Inclinação da personagem acompanhando a ladeira.
+- [x] Arte atual das mãos/mudra mantida.
+- [ ] Movimento de levitação refinado conforme a decisão final, se necessário.
+- [ ] Menu inicial com logo e fluxo de início conforme as novas regras.
+- [ ] Tela final com o título “Meditação interrompida”, cartas, pontuação e frase.
+- [ ] Frase gerada com base nas cartas e na pontuação.
+- [ ] Botão/ação para compartilhar resultado.
+- [ ] Áudio (ambiente/música e efeitos).
+- [ ] Vibração/háptica.
+- [ ] Botão central para poderes ativos, conforme a nova decisão (a demo tem botão específico da Torre, não um controle central genérico).
+
+#### Mundos e publicação
+
+- [ ] Planície verde, floresta densa, neve, fábricas, vulcão, espaço e outra dimensão como progressão de ambientes.
+- [ ] Transições entre mundos.
+- [ ] PWA e funcionamento offline.
+- [ ] Testes em aparelhos Android e iPhone reais.
+- [ ] Integração de placar/registro externo para os cinco jogadores.
+
 ## 2. Regras principais
 
 - **Plataforma:** navegador de celular, em paisagem, sem instalação. Hospedagem estática (GitHub Pages).
