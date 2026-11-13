@@ -469,3 +469,32 @@ Cada poder tem uma cor, usada nas faixas das mangas e no V do peito da personage
 **Testes feitos:** 20 verificações automáticas em um navegador de teste (Chromium), todas passaram. Cobrem o pulo duplo do Louco e a recarga, a câmera lenta da Sacerdotisa, o renascimento da Morte, a ordem Sol, Imperatriz e Morte absorvendo batidas, o pulo da Força (+35%), o planar do Eremita, a velocidade do Carro, as moedas douradas da Roda, o bônus da Lua, o relâmpago da Torre e uma corrida completa com 10 moedas e 4 estrelas. Ainda não foi testada em um celular de verdade.
 
 **Fora da demo:** buracos, frase final com vocabulário de tarot, dash do Carro, tipos variados de inimigo e som.
+
+## 12. Versão paralela V2 — `V2/V2.html`
+
+- A página `V2/V2.html` é uma cópia independente do protótipo `index.html`, criada para testar as decisões mais recentes sem alterar a experiência da página original.
+- Título da página: **v 0.2 — Path of Sanira — V2**. A versão principal `index.html` permanece em v0.1.
+- Tecnologia mantida: HTML5, Canvas 2D, JavaScript e CSS, sem frameworks ou dependências externas.
+- APIs nativas usadas na V2: Web Audio API para efeitos sonoros sintetizados; Vibration API para retorno háptico; Web Share API para compartilhar o resultado, com cópia para a área de transferência como alternativa quando disponível.
+- Regras já incorporadas na V2:
+  - Toque em qualquer ponto do menu inicia a tiragem; cartas reveladas individualmente em ritmo mais lento; botão “Começar a meditar”.
+  - Contagem regressiva de 5 segundos antes do início do movimento.
+  - A Força define 3 níveis de vida; sem A Força, 1 nível. A Imperatriz acrescenta um nível.
+  - A Sacerdotisa evita duas quedas em buracos; outras quedas causam dano e permitem retornar um trecho do percurso para tentar novamente.
+  - O Sol reduz o dano de cada colisão pela metade.
+  - Invulnerabilidade de 1 segundo após dano e expressão triste por 1,5 segundo.
+  - Restrição que impede A Lua e O Sol de serem sorteados juntos; aumento relativo de 40% no peso de sorteio da Lua entre 21h e 6h.
+  - Coletáveis convertidos em estrelas vermelhas chamadas Sonhos, cada uma valendo 10 Sonhos; O Mago atrai Sonhos e A Roda aumenta a quantidade de oportunidades.
+  - Inclusão de jacaré móvel, gado parado, tucano voador e buracos/armadilhas, além dos obstáculos já existentes.
+  - Pausa permitida uma vez por corrida; botão central para ativar A Torre.
+  - HUD com pontos, Sonhos, vida e cartas; encerramento por morte com “Meditação interrompida”.
+  - Compartilhamento de resultado, efeitos sonoros simples e vibração, quando suportados pelo navegador/aparelho.
+- Limitações ainda presentes na V2:
+  - A corrida continua limitada para testes e termina após a coleta de 10 Sonhos; ainda não é endless.
+  - A distribuição do percurso continua baseada em uma sequência de teste, não em geração procedural.
+  - A progressão de velocidade a partir do nível 3 e os sete mundos ainda não foram implementados.
+  - Os efeitos sonoros são sintetizados e pontuais; música/ambiente contínuo ainda não foi criado.
+  - A frase final baseada nas cartas e pontuação ainda está pendente.
+  - A integração com Google Sheets, o registro dos cinco jogadores e os testes em aparelhos reais continuam pendentes.
+  - A orientação paisagem já é exigida pelo aviso de rotação do protótipo; ainda precisa de validação em dispositivos.
+- A V2 é uma área de experimentação. Não copiar automaticamente suas alterações para `index.html`; primeiro validar a jogabilidade e depois decidir o que será promovido para a versão principal.
