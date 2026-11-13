@@ -170,22 +170,41 @@ function startRun(){
   const peak=70,g=1800;
   S={dist:0,z:0,vz:0,g,v0:Math.sqrt(2*g*peak),air:0,float:0,score:0,coins:0,stars:0,flash:0,resolved:0,hits:0,lives:(P.forca?3:1)+(P.imper?1:0),invuln:0,face:0,
      shield:false,shieldT:0,slowE:2,sacerFalls:2,morteUsed:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,speed:300*(P.carro?1.25:1)};
-  const pat=['c','r','c','a','h','c','g','t','c','R','h','e','C','c','l','a','t','g','c','h'];
-  const coinIdx=pat.map((p,i)=>p==='c'||p==='C'?i:-1).filter(i=>i>=0);
-  for(let i=coinIdx.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[coinIdx[i],coinIdx[j]]=[coinIdx[j],coinIdx[i]];}
-  const golds=new Set(coinIdx.slice(0,P.roda?4:2));
-  items=pat.map((p,i)=>{
-    const it={wx:760+i*330,k:p,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,seen:false,bob:Math.random()*6};
-    if(p==='c'||p==='C'){it.coin=true;it.star=true;it.air=p==='C';it.gold=false;}
-    else if(p==='r'){it.w=40;it.h=46;}else if(p==='R'){it.w=52;it.h=58;it.k='r';}
-    else if(p==='l'){it.w=70;it.h=44;}
-    else if(p==='a'){it.k='alligator';it.w=76;it.h=38;it.baseWx=it.wx;}
-    else if(p==='g'){it.k='cattle';it.w=62;it.h=68;}
-    else if(p==='t'){it.k='toucan';it.w=52;it.h=42;it.baseWx=it.wx;}
-    else if(p==='h'){it.k='hole';it.w=82;it.h=20;}
-    else{it.w=44;it.h=50;}
-    return it;});
-  Array.from({length:P.roda?8:5},(_,i)=>i).forEach(i=>items.push({wx:760+(i*3+1)*330+165,k:'s',coin:true,star:true,gold:false,air:true,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:0}));
+  const obstacleTypes=[
+    {k:'r',w:40,h:46,weight:20},
+    {k:'l',w:70,h:44,weight:15},
+    {k:'alligator',w:76,h:38,weight:15},
+    {k:'cattle',w:62,h:68,weight:15},
+    {k:'toucan',w:52,h:42,weight:15},
+    {k:'e',w:44,h:50,weight:8}
+  ];
+  const pickObstacle=previous=>{
+    let pool=obstacleTypes.filter(o=>o.k!==previous);
+    const total=pool.reduce((n,o)=>n+o.weight,0);let roll=Math.random()*total;
+    for(const o of pool){roll-=o.weight;if(roll<=0)return o;}
+    return pool[pool.length-1];
+  };
+  const events=[];let previous='';
+  for(let i=0;i<20;i++){
+    const dream=i<7;
+    if(dream){events.push({type:'dream'});continue;}
+    const obstacle=pickObstacle(previous);previous=obstacle.k;
+    events.push({type:'obstacle',obstacle});
+  }
+  for(let i=events.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[events[i],events[j]]=[events[j],events[i]];}
+  let wx=760;
+  items=events.map((event,i)=>{
+    wx+=270+Math.random()*150;
+    if(event.type==='dream')return {wx,k:'s',coin:true,star:true,gold:false,air:Math.random()<.65,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};
+    const o=event.obstacle,it={wx,k:o.k,w:o.w,h:o.h,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};
+    if(o.k==='alligator'||o.k==='toucan')it.baseWx=wx;
+    return it;
+  });
+  const bonusDreams=P.roda?8:5;
+  for(let i=0;i<bonusDreams;i++){
+    const target=items[Math.floor(Math.random()*items.length)];
+    items.push({wx:target.wx+100+Math.random()*180,k:'s',coin:true,star:true,gold:false,air:true,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6});
+  }
   $('tb').style.display='none';
   $('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');$('jb').style.display='flex';$('countdown').classList.remove('off');$('count').textContent='5';$('pauseBtn').style.display='none';$('powerBtn').style.display=P.torre?'block':'none';$('audioBtn').style.display='block';state='countdown';S.countdown=5;S.pauseUsed=false;last=performance.now();
 }
@@ -244,9 +263,7 @@ function update(rdt){
       const y=gy(sx),bob=(it.k==='e'||it.k==='toucan')?Math.sin(S.t*4+it.bob)*10:0;it.x=sx;it.y=y;it.by=bob;
       if(it.k==='alligator')it.wx=it.baseWx+Math.sin(S.t*2.1+it.baseWx)*42;
       if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;
-      if(it.k==='hole'){
-        if(!S.dead&&sx>-38&&sx<38&&S.z<18&&S.t-(it.lastHit||-10)>1.1){if(P.sacer&&S.sacerFalls>0){S.sacerFalls--;it.gone=true;}else{takeHit();it.lastHit=S.t;S.dist=Math.max(0,S.dist-115);}}
-      }else if(!S.dead&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?95:0),it.w,it.h)){takeHit();}
+      if(!S.dead&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?95:0),it.w,it.h)){takeHit();}
       if(sx<-80)it.gone=true;
     }
   }
@@ -319,7 +336,7 @@ function render(){
     if(it.gone||it.taken)continue;
     if(it.coin){if(it.x===undefined)continue;(it.star?drawStar(it.x,it.y):drawCoin(it.x,it.y,it.gold));continue;}
     const sx=PX+(it.wx-S.dist),y=gy(sx);if(sx>W+80||sx<-80)continue;
-    if(it.k==='r')drawRock(sx,y,it.w,it.h);else if(it.k==='l')drawLog(sx,y,it.w,it.h);else if(it.k==='hole'){ctx.fillStyle='#26352F';ctx.beginPath();ctx.ellipse(sx,y+2,it.w/2,12,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#B9DDB0';ctx.lineWidth=3;ctx.stroke();}else if(it.k==='alligator')drawAlligator(sx,y,it.w,it.h);else if(it.k==='cattle')drawCattle(sx,y,it.w,it.h);else if(it.k==='toucan')drawToucan(sx,y-95,it.w,it.h);else drawEnemy(sx,y-(Math.sin(S.t*4+it.bob)*10),it.w,it.h);
+    if(it.k==='r')drawRock(sx,y,it.w,it.h);else if(it.k==='l')drawLog(sx,y,it.w,it.h);else if(it.k==='alligator')drawAlligator(sx,y,it.w,it.h);else if(it.k==='cattle')drawCattle(sx,y,it.w,it.h);else if(it.k==='toucan')drawToucan(sx,y-95,it.w,it.h);else drawEnemy(sx,y-(Math.sin(S.t*4+it.bob)*10),it.w,it.h);
   }
   const gyP=gy(PX),s=S0;
   ctx.fillStyle='rgba(62,53,82,.2)';ctx.beginPath();ctx.ellipse(PX,gyP+4,40/(1+S.z/150),6/(1+S.z/150),0,0,7);ctx.fill();
