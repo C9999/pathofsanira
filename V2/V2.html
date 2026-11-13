@@ -51,7 +51,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <div id="jb">PULAR</div>
 <div id="tb"><span style="font-size:22px">⚡</span>RAIO</div>
 <div id="menu" class="scr"><h1>Path of Sanira</h1><p>Uma sessão de meditação começa com três cartas.</p><p class="hint">Toque em qualquer lugar para tirar as cartas</p></div>
-<div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar</button></div>
+<div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
 <div id="countdown" class="scr off"><h2>Prepare-se para meditar</h2><div id="count" style="font:600 64px Georgia,serif;color:#E8C46A">5</div><p>Sanira começará a se mover em instantes</p></div>
 <div id="pause" class="scr off"><h2>Sessão de meditação pausada</h2><button id="resume">Continuar</button></div>
@@ -159,9 +159,9 @@ function showDraw(){
   cards.forEach((c,i)=>{
     const el=document.createElement('div');el.className='card';
     el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'"><div class="bar" style="background:'+c.cor+'"></div><div class="role">'+ROLES[i]+'</div><div class="num">'+c.num+'</div><div class="nm">'+c.nome+'</div><div class="pw">'+c.poder+'</div><div class="ds">'+c.desc+'</div></div></div>';
-    box.appendChild(el);setTimeout(()=>el.classList.add('flip'),500+i*700);
+    box.appendChild(el);setTimeout(()=>el.classList.add('flip'),900+i*1100);
   });
-  loadImgs().then(()=>setTimeout(()=>$('go').classList.remove('off'),500+2*700+700));
+  loadImgs().then(()=>setTimeout(()=>$('go').classList.remove('off'),900+2*1100+700));
 }
 function startRun(){
   const has=id=>cards.some(c=>c.id===id);
