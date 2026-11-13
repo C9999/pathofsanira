@@ -18,6 +18,133 @@ No início de cada corrida é feita uma tiragem de tarot: 3 cartas são sorteada
 - **Cenário:** descida de uma ladeira de montanha, céu limpo, obstáculos no caminho e uma moeda no fim. Referência na seção 8.
 - **Descartado:** a ideia anterior (menina de bicicleta fugindo de um jacaré, com pedras e galhos) e o dino do jogo original.
 
+
+## Decisões consolidadas — regras definidas pelo usuário
+
+> Esta seção registra as decisões mais recentes e prevalece sobre descrições antigas ou provisórias das seções anteriores. Valores ainda não definidos permanecem identificados como pendentes.
+
+### 1. Estrutura da corrida e dificuldade
+
+- **Versão final:** a corrida será infinita (endless).
+- **Versão de testes atual:** manter a duração/estrutura limitada que já existe, sem transformar os testes em corrida infinita ainda.
+- **Fim da corrida:** acontece quando Sanira morre. A tela/estado de fim será chamado **“Meditação interrompida”**.
+- **Dificuldade progressiva:** aumentar a frequência dos obstáculos e a velocidade do jogo. A progressão de velocidade (item B da decisão) só começa quando a corrida alcançar o **nível 3**. O sistema de níveis e seus critérios ainda precisam ser especificados.
+- **Velocidade:** haverá um limite máximo; o valor ainda será definido.
+- **Pausa:** permitida apenas uma vez por corrida. A sessão de jogo será chamada **“Sessão de meditação”**.
+- **Geração de percurso:** na versão final, o caminho será procedural e diferente a cada corrida. Nos testes, manter uma quantidade razoável de elementos semelhante à atual.
+
+### 2. Obstáculos, armadilhas e inimigos
+
+- Manter os obstáculos existentes e acrescentar **inimigos voadores** e **armadilhas de chão falso/buracos**.
+- Inimigos definidos:
+  - **Jacaré:** movimenta-se horizontalmente.
+  - **Gado:** permanece parado; é um obstáculo um pouco alto por causa dos chifres.
+  - **Tucano:** inimigo voador.
+- Cada inimigo permanece na tela seguindo seu comportamento padrão; não terá perseguição ou mudança de comportamento adicional definida por enquanto.
+- **Qualquer contato com obstáculo ou inimigo causa dano.**
+- Ao receber dano, Sanira fica invulnerável por **1 segundo** (manter o valor atual da demo) e apresenta a expressão triste por **1,5 segundo**.
+- **Queda em buraco/armadilha:** não causa morte imediata. Sanira reaparece um pouco antes no percurso, com invulnerabilidade, e pode tentar pular novamente. A queda conta como um dano normal de obstáculo e reduz a vida conforme as regras gerais.
+
+### 3. Sonhos e pontuação
+
+- Não haverá moedas.
+- O item coletável será uma **estrela vermelha**, chamada **Sonho**.
+- Cada estrela vermelha vale **10 Sonhos**.
+- Não haverá bônus adicionais definidos por enquanto.
+- A quantidade de Sonhos/estrelas por percurso será mantida razoável, como na demo de testes. Na versão final, a distribuição será procedural.
+- **Recorde/resultado dos jogadores:** serão cinco jogadores. A possibilidade considerada é registrar os resultados em uma planilha do Google Drive/Google Sheets; a integração e a estrutura da planilha ainda precisam ser definidas. Não implementar ranking online ou contas sem nova decisão.
+
+### 4. Sorteio das cartas
+
+- As três cartas não podem se repetir na mesma corrida.
+- Manter a regra já definida para a primeira carta: A Força aparece em 90% das corridas; nos outros 10%, uma das outras cartas é escolhida uniformemente.
+- **Restrição de combinação:** A Lua nunca pode ser sorteada junto com O Sol.
+- **Horário da Lua:** deseja-se aumentar em 40% a chance de A Lua ser sorteada quando a pessoa jogar entre **21h e 6h**. A forma exata de aplicar esse aumento (40% relativo ou pontos percentuais) e o ajuste das probabilidades para manter um sorteio válido ainda precisam ser especificados.
+- A seleção continua sem repetição e respeitando a restrição Lua + Sol.
+
+### 5. Poderes e vida
+
+Os poderes podem ser ajustados durante o balanceamento. Por enquanto, manter os valores atuais da demo, exceto pelas alterações explicitadas abaixo.
+
+| Carta | Regra definida |
+|---|---|
+| O Louco | Mantém o pulo duplo. |
+| O Mago | Mantém o ímã para atrair itens coletáveis. |
+| A Sacerdotisa | Permite evitar **duas** quedas em buracos ou armadilhas de chão por corrida. Substitui a câmera lenta descrita anteriormente. |
+| A Imperatriz | Mantém o efeito defensivo de vida extra; pode acumular com os outros poderes defensivos. |
+| O Carro | Apenas aumenta a velocidade. **Não terá dash**. |
+| A Força | Define a vida inicial: com A Força ativa, Sanira começa com **3 níveis de vida**; sem A Força, começa com **1 nível**. Cada colisão/dano reduz um nível. A Força deixa de ser descrita como poder de pulo maior. |
+| O Eremita | Mantém a capacidade de planar por até **1,5 segundo por pulo**. |
+| A Roda da Fortuna | Manter o funcionamento atual por enquanto; valores podem ser ajustados no balanceamento. |
+| A Morte | Mantém o renascimento/retorno após receber dano, conforme a implementação atual; pode acumular com outros poderes defensivos. |
+| A Torre | Ao ativar, limpa **todos os obstáculos** da tela. |
+| A Lua | Reduz a visibilidade e multiplica a pontuação por **1,5**. Não pode aparecer junto com O Sol. |
+| O Sol | Seu efeito passa a reduzir pela metade o dano de colisão; substitui o escudo que absorvia uma batida e recarregava. |
+
+- Poderes defensivos podem acumular entre si (por exemplo, Imperatriz, Morte e Sol), respeitando seus efeitos individuais.
+- Poderes ativos terão um **botão de ativação na região central da tela**. A posição e o comportamento visual exatos serão definidos na implementação.
+- Os poderes podem ser reequilibrados futuramente; não tratar os valores atuais como definitivos.
+
+### 6. Sanira e animações
+
+- Sanira acompanha a inclinação da ladeira.
+- Manter o movimento suave de levitação.
+- Manter o desenho atual das mãos/mudra, sem alterações por enquanto.
+- A expressão triste após dano dura **1,5 segundo** e depois retorna à expressão normal.
+- Não alterar a animação de pulo atual.
+- A aura permanece:
+  - **Com A Força:** laranja e mais evidente.
+  - **Sem A Força:** cinza clara e fina, como já implementado.
+
+### 7. Mundos e progressão visual
+
+A progressão visual desejada para os ambientes é:
+1. Plano/planície verde.
+2. Floresta densa.
+3. Neve.
+4. Fábricas.
+5. Vulcão.
+6. Espaço.
+7. Outra dimensão.
+
+A transição, duração e relação desses ambientes com os níveis de dificuldade ainda serão definidas.
+
+### 8. Tarot, resultado e compartilhamento
+
+- A frase de encerramento será baseada nas **cartas sorteadas e na pontuação**.
+- A tela final deverá mostrar as cartas, a pontuação, o resultado da sessão e uma frase.
+- O usuário pretende reunir referências de Tarot para decidir como implementar a linguagem e a apresentação das cartas.
+- A escolha do baralho/sistema visual (por exemplo, Marselha ou Rider-Waite) continua **em aberto** e depende dessa pesquisa.
+- Incluir opção de compartilhar o resultado, como imagem ou texto; formato final ainda a definir.
+
+### 9. Menu, tiragem e início da sessão
+
+- A tela inicial terá o logo com o nome **Path of Sanira**.
+- Ao tocar em qualquer lugar da tela inicial, o jogo sorteia as três cartas.
+- As cartas serão reveladas uma por uma, com uma animação mais lenta que a versão atual.
+- Após a revelação, exibir o botão **“Começar a meditar”**.
+- Ao iniciar, Sanira permanece parada na tela por **5 segundos**; somente depois começa a se mover e a corrida efetivamente começa.
+- Manter a tiragem de cartas com revelação individual, uma carta por vez.
+
+### 10. HUD, áudio, vibração e orientação
+
+- O HUD deverá exibir pontuação, itens coletados, vida e poderes/habilidades ativos.
+- O jogo terá áudio (música/ambiente e efeitos sonoros a definir).
+- Terá vibração/háptica.
+- A orientação paisagem será obrigatória.
+
+### Lembretes e pendências para decisões futuras
+
+- [ ] **Retomar a regra de dificuldade no nível 3:** definir como os níveis são alcançados e quais mudanças acontecem em cada nível. A progressão de velocidade só começa no nível 3.
+- [ ] Definir o limite máximo de velocidade.
+- [ ] Definir a integração com Google Sheets para registrar os resultados dos cinco jogadores.
+- [ ] Definir como o aumento de 40% na chance da Lua entre 21h e 6h será calculado.
+- [ ] Definir os detalhes do sistema de vida e como os efeitos defensivos acumulados interagem.
+- [ ] Pesquisar referências de Tarot e escolher o baralho/sistema visual.
+- [ ] Definir como a sequência de ambientes se relaciona com níveis, duração e geração procedural.
+- [ ] Definir o formato de compartilhamento do resultado.
+- [ ] Definir os detalhes de áudio e vibração.
+
 ## 2. Regras principais
 
 - **Plataforma:** navegador de celular, em paisagem, sem instalação. Hospedagem estática (GitHub Pages).
