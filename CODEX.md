@@ -498,3 +498,12 @@ Cada poder tem uma cor, usada nas faixas das mangas e no V do peito da personage
   - A integração com Google Sheets, o registro dos cinco jogadores e os testes em aparelhos reais continuam pendentes.
   - A orientação paisagem já é exigida pelo aviso de rotação do protótipo; ainda precisa de validação em dispositivos.
 - A V2 é uma área de experimentação. Não copiar automaticamente suas alterações para `index.html`; primeiro validar a jogabilidade e depois decidir o que será promovido para a versão principal.
+
+## 13. Ajuste de geração aleatória e remoção temporária de buracos — V2
+
+- Na V2, inimigos e obstáculos agora são sorteados a cada nova sessão: tanto o tipo de elemento quanto sua posição/distância no percurso variam entre partidas.
+- O gerador de testes mistura pedras, troncos, jacarés, gado, tucanos e o inimigo genérico já existente. A quantidade de elementos continua limitada para teste; isso ainda não é a geração procedural infinita da versão final.
+- Os Sonhos também recebem posições aleatórias; A Roda aumenta a quantidade de Sonhos extras.
+- **Buracos e armadilhas de chão foram removidos temporariamente da V2**, incluindo desenho e colisão. A regra da Sacerdotisa para evitar duas quedas fica sem aplicação prática enquanto não houver armadilhas.
+- A decisão geral de gameplay sobre buracos permanece registrada como ideia futura, mas não deve aparecer no protótipo até nova orientação.
+- Página alterada: `V2/V2.html`. A página principal `index.html` permanece inalterada.
