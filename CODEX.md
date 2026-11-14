@@ -584,3 +584,11 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - O teste exige que A Sacerdotisa esteja selecionada. O botão de simulação só fica habilitado quando o poder está carregado.
 - `Cartas.html` atualizado para v0.2 para manter a descrição da Sacerdotisa sincronizada com o componente.
 - Os testes são experimentos isolados: não alteram `v0.5.html` nem integram a mecânica ao jogo. A integração depende de aprovação explícita após os testes.
+
+
+## Beta v0.6 — novos poderes e HUD
+
+- Criado `beta.html` como nova página jogável beta, derivada da versão integrada `v0.5.html`; a versão anterior foi preservada sem alterações.
+- O HUD da corrida exibe o nome de cada carta acompanhado de sua cor, em vez do nome do poder. A intenção é incentivar os jogadores a memorizar os efeitos das cartas.
+- Aplicados na beta os poderes revisados: O Louco gira 360° no segundo pulo; A Sacerdotisa atravessa automaticamente o próximo obstáculo (não inimigos), ativa recarga de 30 segundos com indicador no topo e aura verde por 1,5 segundo; A Roda da Fortuna multiplica o valor dos Sonhos por 1,5; A Morte concede uma vida extra ao zerar as vidas e deixa Sanira totalmente cinza; O Sol reduz em 0,5 o dano somente nas colisões com inimigos.
+- A central `teste.html` agora aponta para `beta.html` como jogo atual. `v0.5.html` permanece preservada como versão anterior.
