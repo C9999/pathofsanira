@@ -120,7 +120,7 @@ FACE
 const CARDS=[
 {id:'louco',num:'0',nome:'O Louco',poder:'Pulo duplo',desc:'No segundo pulo, Sanira gira 360° rapidamente.',cor:'#5FCFE0'},
 {id:'mago',num:'I',nome:'O Mago',poder:'Ímã',desc:'Atrai Sonhos próximos.',cor:'#A78BDB'},
-{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Atravessa automaticamente o próximo obstáculo sem colisão. Após ativar, recarrega em 30 segundos.',cor:'#6CC38A'},
+{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Atravessa automaticamente o próximo obstáculo sem colisão. Após ativar, recarrega em 15 segundos.',cor:'#6CC38A'},
 {id:'imper',num:'III',nome:'A Imperatriz',poder:'Vida extra',desc:'Acrescenta um nível de vida.',cor:'#F28FB1'},
 {id:'carro',num:'VII',nome:'O Carro',poder:'Arrancada',desc:'Velocidade +25%.',cor:'#3FBFA8'},
 {id:'forca',num:'VIII',nome:'A Força',poder:'Três vidas',desc:'Começa a sessão com 3 níveis de vida.',cor:'#F28C28'},
@@ -167,7 +167,7 @@ function showDraw(mode='random'){
   const box=$('cards');box.innerHTML='';
   cards.forEach((c,i)=>{
     const el=document.createElement('div');el.className='card';
-    el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'"><div class="bar" style="background:'+c.cor+'"></div><div class="role">'+ROLES[i]+'</div><div class="num">'+c.num+'</div><div class="nm">'+c.nome+'</div><div class="pw">'+c.poder+'</div><div class="ds">'+(c.id==='sacer'?c.desc.replace('30 segundos','15 segundos'):c.desc)+'</div></div></div>';
+    el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'"><div class="bar" style="background:'+c.cor+'"></div><div class="role">'+ROLES[i]+'</div><div class="num">'+c.num+'</div><div class="nm">'+c.nome+'</div><div class="pw">'+c.poder+'</div><div class="ds">'+c.desc+'</div></div></div>';
     box.appendChild(el);setTimeout(()=>el.classList.add('flip'),900+i*1100);
   });
   loadImgs().then(()=>setTimeout(()=>$('go').classList.remove('off'),900+2*1100+700));
