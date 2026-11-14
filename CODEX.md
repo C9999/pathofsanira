@@ -509,3 +509,20 @@ Cada poder tem uma cor, usada nas faixas das mangas e no V do peito da personage
 - **Buracos e armadilhas de chão foram removidos temporariamente da V2**, incluindo desenho e colisão. A regra da Sacerdotisa para evitar duas quedas fica sem aplicação prática enquanto não houver armadilhas.
 - A decisão geral de gameplay sobre buracos permanece registrada como ideia futura, mas não deve aparecer no protótipo até nova orientação.
 - Página alterada: `V2/V2.html`. A página principal `index.html` permanece inalterada.
+
+
+## Central de testes — 13/11/2026
+
+- Criada a central `teste.html`, com oito acessos independentes.
+- `v0.5.html`: cópia da V2 v0.4, com título atualizado para v0.5. A pasta e o arquivo V2 originais foram preservados.
+- Experimentos independentes iniciados em v0.0:
+  - `Sanira.html`: personagem, combinações de poderes por caixas de seleção e expressão feliz/triste.
+  - `Cartas.html`: catálogo das 12 cartas da versão atual.
+  - `Tela.html`: referências visuais das telas já existentes no fluxo de teste.
+  - `Inimigos.html`: jacaré, gado, tucano e inimigo genérico; seletor de cenário preparado, opções futuras desabilitadas.
+  - `Obstaculos.html`: pedra e tronco; buracos registrados como temporariamente removidos.
+  - `Tiragem.html`: prévia independente de modal com mensagem de Tarot após o fim da meditação.
+  - `Ranking.html`: protótipo visual com dados fictícios; sem integração ou persistência.
+- Cada experimento possui HTML próprio e não altera o jogo principal.
+- `index.html` (v0.1) e `V2/V2.html` (v0.4) permanecem preservados.
+- A página `v0.5.html` é uma cópia do estado atual da V2; não representa ainda novas mecânicas de gameplay.
