@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.6 — Path of Sanira — Beta</title>
+<title>v 0.7 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -33,6 +33,11 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 .pw{font-size:13px;font-weight:700;color:#FFD98A}
  .ds{font-size:12px;line-height:1.3;color:#CFC8E8}
 .sacer-hud{font:700 10px system-ui,sans-serif;fill:#355D48}
+.custom-powers{display:grid;grid-template-columns:repeat(4,150px);gap:7px;max-width:650px}
+.custom-powers label{display:flex;align-items:center;gap:6px;padding:7px 8px;border:1px solid #6B5FB5;border-radius:8px;background:#2E2760;font-size:11px;text-align:left}
+.custom-powers input{accent-color:#E8C46A;flex:none}
+#custom button:disabled{opacity:.4;cursor:not-allowed}
+@media(max-width:700px){.custom-powers{grid-template-columns:repeat(3,1fr);max-width:95%}}
 #end .box{width:640px;background:#211C45;border:1px solid #6B5FB5;border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;gap:10px;text-align:left}
 .stats{display:flex;gap:10px}
 .stat{flex:1;background:#2E2760;border-radius:10px;padding:8px 10px}
@@ -51,7 +56,8 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <canvas id="c"></canvas>
 <div id="jb">PULAR</div>
 <div id="tb"><span style="font-size:22px">⚡</span>RAIO</div>
-<div id="menu" class="scr"><h1>Path of Sanira</h1><p>Uma sessão de meditação começa com três cartas.</p><p class="hint">Toque em qualquer lugar para tirar as cartas</p></div>
+<div id="menu" class="scr"><h1>Path of Sanira</h1><p>Escolha como deseja começar sua sessão.</p><button id="randomMode">Tiragem aleatória</button><button id="customMode" class="alt">Escolher poderes para testar</button></div>
+<div id="custom" class="scr off"><h2>Escolha três poderes</h2><p>Marque exatamente três cartas para esta sessão.</p><div id="customPowers" class="custom-powers"></div><p id="customHint" class="hint">0 de 3 selecionados</p><button id="customStart" disabled>Começar com estes poderes</button><button id="customBack" class="alt">Voltar</button></div>
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
 <div id="countdown" class="scr off"><h2>Prepare-se para meditar</h2><div id="count" style="font:600 64px Georgia,serif;color:#E8C46A">5</div><p>Sanira começará a se mover em instantes</p></div>
@@ -153,13 +159,15 @@ function loadImgs(){
   const jobs=['feliz','triste'].map(face=>new Promise(res=>{const im=new Image();im.onload=()=>res();im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgFor(aura,face,a,b,c));out[face]=im;}));
   imgs=out;return Promise.all(jobs);
 }
-function showDraw(){
-  cards=drawCards();state='draw';
-  $('menu').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('jb').style.display='none';$('tb').style.display='none';
+function showDraw(mode='random'){
+  if(mode==='random')cards=drawCards();
+  else cards=[...document.querySelectorAll('.custom-power:checked')].map(input=>CARDS.find(c=>c.id===input.value));
+  state='draw';
+  $('menu').classList.add('off');$('custom').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('jb').style.display='none';$('tb').style.display='none';
   const box=$('cards');box.innerHTML='';
   cards.forEach((c,i)=>{
     const el=document.createElement('div');el.className='card';
-    el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'"><div class="bar" style="background:'+c.cor+'"></div><div class="role">'+ROLES[i]+'</div><div class="num">'+c.num+'</div><div class="nm">'+c.nome+'</div><div class="pw">'+c.poder+'</div><div class="ds">'+c.desc+'</div></div></div>';
+    el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'"><div class="bar" style="background:'+c.cor+'"></div><div class="role">'+ROLES[i]+'</div><div class="num">'+c.num+'</div><div class="nm">'+c.nome+'</div><div class="pw">'+c.poder+'</div><div class="ds">'+(c.id==='sacer'?c.desc.replace('30 segundos','15 segundos'):c.desc)+'</div></div></div>';
     box.appendChild(el);setTimeout(()=>el.classList.add('flip'),900+i*1100);
   });
   loadImgs().then(()=>setTimeout(()=>$('go').classList.remove('off'),900+2*1100+700));
@@ -222,7 +230,29 @@ addEventListener('keyup',e=>{if(e.code==='Space')pointers.delete('k');});
 function zap(){if(state!=='play'||!P.torre||S.torreUsed||S.dead)return;S.torreUsed=true;U.torre++;S.flash=0.35;items.forEach(it=>{if(!it.coin&&!it.gone&&PX+(it.wx-S.dist)<W+80)it.gone=true;});$('tb').style.display='none';$('powerBtn').style.display='none';}
 $('tb').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();zap();});
 $('go').onclick=startRun;
-$('menu').addEventListener('pointerdown',e=>{if(state==='menu'){e.preventDefault();showDraw();}});
+function showMenu(){
+  state='menu';$('menu').classList.remove('off');$('custom').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');
+  $('countdown').classList.add('off');$('pause').classList.add('off');$('jb').style.display='none';$('tb').style.display='none';
+  $('pauseBtn').style.display='none';$('powerBtn').style.display='none';$('audioBtn').style.display='none';
+}
+function updateCustomSelection(){
+  const chosen=[...document.querySelectorAll('.custom-power:checked')].map(x=>x.value);
+  const valid=chosen.length===3&&!(chosen.includes('lua')&&chosen.includes('sol'));
+  $('customHint').textContent=chosen.length+' de 3 selecionados'+(chosen.includes('lua')&&chosen.includes('sol')?' · A Lua e O Sol não podem sair juntos':'');
+  $('customStart').disabled=!valid;
+  document.querySelectorAll('.custom-power').forEach(input=>{
+    input.disabled=!input.checked&&chosen.length>=3;
+  });
+}
+$('randomMode').onclick=()=>showDraw('random');
+$('customMode').onclick=()=>{
+  $('menu').classList.add('off');$('custom').classList.remove('off');state='custom';updateCustomSelection();
+};
+$('customBack').onclick=showMenu;
+$('customPowers').addEventListener('change',updateCustomSelection);
+$('customStart').onclick=()=>showDraw('custom');
+$('customPowers').innerHTML=CARDS.map(c=>'<label><input class="custom-power" type="checkbox" value="'+c.id+'"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+c.cor+'"></span>'+c.nome+'</label>').join('');
+updateCustomSelection();
 $('pauseBtn').onclick=()=>{if(state==='play'&&!S.pauseUsed){S.pauseUsed=true;state='paused';$('pause').classList.remove('off');$('pauseBtn').style.display='none';}};
 $('resume').onclick=()=>{if(state==='paused'){$('pause').classList.add('off');state='play';last=performance.now();}};
 let audioOn=true,audioCtx=null;function tone(f=440,d=.08){if(!audioOn)return;try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.025,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d);}catch(e){}}
@@ -266,7 +296,7 @@ function update(rdt){
       if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;
       if(!S.dead&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?95:0),it.w,it.h)){
         const isEnemy=['alligator','cattle','toucan','enemy','e'].includes(it.k);
-        if(P.sacer&&!isEnemy&&S.sacerCooldown<=0){S.sacerCooldown=30;S.sacerAura=1.5;U.sacer++;it.gone=true;}
+        if(P.sacer&&!isEnemy&&S.sacerCooldown<=0){S.sacerCooldown=15;S.sacerAura=1.5;U.sacer++;it.gone=true;}
         else takeHit(isEnemy?'enemy':'obstacle');
       }
       if(sx<-80)it.gone=true;
@@ -280,7 +310,7 @@ function usageText(c){
   case'forca':return 'vida inicial: 3 níveis';
   case'louco':return U.louco+' pulos duplos';
   case'mago':return U.mago+(U.mago===1?' Sonho atraído':' Sonhos atraídos');
-  case'sacer':return U.sacer+' obstáculos atravessados; recarga de 30 s';
+  case'sacer':return U.sacer+' obstáculos atravessados; recarga de 15 s';
   case'imper':return U.imper?'vida extra usada':'vida extra não foi necessária';
   case'carro':return 'velocidade +25% o tempo todo';
   case'eremita':return U.eremita.toFixed(1).replace('.',',')+' s planando';
@@ -295,8 +325,8 @@ function finish(){
   const won=!S.dead;
   $('end').innerHTML='<div class="box"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score)+'</b><span>pontos</span></div><div class="stat"><b>'+(S.stars*10)+'</b><span>Sonhos</span></div><div class="stat"><b>'+S.lives+'</b><span>vida restante</span></div><div class="stat"><b>'+S.hits+'</b><span>colisões</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+
    cards.map((c,i)=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b> · '+c.poder+'<small>'+usageText(c)+'</small></div></div>').join('')+
-   '<div style="display:flex;gap:10px;justify-content:center;margin-top:4px"><button id="again">Jogar de novo</button></div></div>';
-  $('end').classList.remove('off');$('pauseBtn').style.display='none';$('powerBtn').style.display='none';$('audioBtn').style.display='none';$('again').onclick=showDraw;
+   '<div style="display:flex;gap:10px;justify-content:center;margin-top:4px"><button id="backMenu">Voltar à tela inicial</button></div></div>';
+  $('end').classList.remove('off');$('pauseBtn').style.display='none';$('powerBtn').style.display='none';$('audioBtn').style.display='none';$('backMenu').onclick=showMenu;
   const share=document.createElement('button');share.className='alt';share.textContent='Compartilhar resultado';share.onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · '+(S.stars*10)+' Sonhos';if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};$('end').querySelector('.box').appendChild(share);
 }
 
@@ -359,8 +389,16 @@ function render(){
   ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(718,14,112,60,16);ctx.fill();
   ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillStyle='#6C5B9E';ctx.font='700 11px system-ui,sans-serif';ctx.fillText('PONTOS',774,32);
   ctx.fillStyle='#3E3552';ctx.font='700 30px system-ui,sans-serif';ctx.fillText(String(Math.round(S.score)),774,63);ctx.textAlign='left';
-  let x=14;cards.forEach(c=>{x+=pill(x,14,c.nome,c.cor)+6;});
-  if(P.sacer){ctx.fillStyle='rgba(255,255,255,.72)';ctx.beginPath();ctx.roundRect(140,44,190,28,10);ctx.fill();ctx.fillStyle='#355D48';ctx.font='700 11px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText(S.sacerCooldown>0?'SACERDOTISA · '+S.sacerCooldown.toFixed(1)+' s':'SACERDOTISA · CARREGADA',150,58);ctx.fillStyle='#D8E7DA';ctx.fillRect(140,75,190,5);ctx.fillStyle='#6CC38A';ctx.fillRect(140,75,190*(1-S.sacerCooldown/30),5);}
+  let x=14;cards.forEach(c=>{
+    if(c.id==='sacer'&&S.sacerCooldown>0){
+      ctx.font='12px system-ui,sans-serif';const w=ctx.measureText(c.nome).width+28,h=22;
+      ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.fill();
+      ctx.save();ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.clip();
+      ctx.fillStyle=c.cor;ctx.fillRect(x,14,w*(1-S.sacerCooldown/15),h);ctx.restore();
+      x+=w+6;
+    }else{x+=pill(x,14,c.nome,c.cor)+6;}
+  });
+
   ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(14,44,112,22,11);ctx.fill();ctx.fillStyle='#3E3552';ctx.font='700 12px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText('Sonhos '+S.stars*10,24,56);
   ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(14,72,112,22,11);ctx.fill();ctx.fillStyle='#3E3552';ctx.fillText('Vida '+Math.max(0,S.lives),24,84);
 }
