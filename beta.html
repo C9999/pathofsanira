@@ -265,7 +265,7 @@ function update(rdt){
       if(it.k==='alligator')it.wx=it.baseWx+Math.sin(S.t*2.1+it.baseWx)*42;
       if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;
       if(!S.dead&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?95:0),it.w,it.h)){
-        const isEnemy=['alligator','cattle','toucan','enemy'].includes(it.k);
+        const isEnemy=['alligator','cattle','toucan','enemy','e'].includes(it.k);
         if(P.sacer&&!isEnemy&&S.sacerCooldown<=0){S.sacerCooldown=30;S.sacerAura=1.5;U.sacer++;it.gone=true;}
         else takeHit(isEnemy?'enemy':'obstacle');
       }
@@ -360,7 +360,7 @@ function render(){
   ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillStyle='#6C5B9E';ctx.font='700 11px system-ui,sans-serif';ctx.fillText('PONTOS',774,32);
   ctx.fillStyle='#3E3552';ctx.font='700 30px system-ui,sans-serif';ctx.fillText(String(Math.round(S.score)),774,63);ctx.textAlign='left';
   let x=14;cards.forEach(c=>{x+=pill(x,14,c.nome,c.cor)+6;});
-  if(P.sacer){ctx.fillStyle='rgba(255,255,255,.72)';ctx.beginPath();ctx.roundRect(300,14,190,28,10);ctx.fill();ctx.fillStyle='#355D48';ctx.font='700 11px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText(S.sacerCooldown>0?'SACERDOTISA · '+S.sacerCooldown.toFixed(1)+' s':'SACERDOTISA · CARREGADA',310,28);ctx.fillStyle='#D8E7DA';ctx.fillRect(300,45,190,5);ctx.fillStyle='#6CC38A';ctx.fillRect(300,45,190*(1-S.sacerCooldown/30),5);}
+  if(P.sacer){ctx.fillStyle='rgba(255,255,255,.72)';ctx.beginPath();ctx.roundRect(140,44,190,28,10);ctx.fill();ctx.fillStyle='#355D48';ctx.font='700 11px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText(S.sacerCooldown>0?'SACERDOTISA · '+S.sacerCooldown.toFixed(1)+' s':'SACERDOTISA · CARREGADA',150,58);ctx.fillStyle='#D8E7DA';ctx.fillRect(140,75,190,5);ctx.fillStyle='#6CC38A';ctx.fillRect(140,75,190*(1-S.sacerCooldown/30),5);}
   ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(14,44,112,22,11);ctx.fill();ctx.fillStyle='#3E3552';ctx.font='700 12px system-ui,sans-serif';ctx.textBaseline='middle';ctx.fillText('Sonhos '+S.stars*10,24,56);
   ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(14,72,112,22,11);ctx.fill();ctx.fillStyle='#3E3552';ctx.fillText('Vida '+Math.max(0,S.lives),24,84);
 }
