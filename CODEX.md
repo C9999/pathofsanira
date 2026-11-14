@@ -526,3 +526,19 @@ Cada poder tem uma cor, usada nas faixas das mangas e no V do peito da personage
 - Cada experimento possui HTML próprio e não altera o jogo principal.
 - `index.html` (v0.1) e `V2/V2.html` (v0.4) permanecem preservados.
 - A página `v0.5.html` é uma cópia do estado atual da V2; não representa ainda novas mecânicas de gameplay.
+
+
+## Ajustes da central de testes — 13/11/2026
+
+- `Sanira.html`:
+  - Lista dos poderes atualizada para refletir nome, descrição e cor definidos na constante `CARDS` do jogo.
+  - A cor de cada carta aparece ao lado do poder.
+  - Limite de seleção: no máximo três poderes simultâneos; ao atingir três, os demais controles ficam desabilitados até desmarcar algum.
+  - Mantida a seleção independente da expressão feliz/triste.
+- `Cartas.html`:
+  - Catálogo alinhado exatamente à constante `CARDS` da versão jogável `v0.5.html`, preservando ordem, numeração, nomes, poderes, descrições e cores.
+- `Inimigos.html`:
+  - Incluída uma cena em Canvas com jacaré, gado, tucano e inimigo genérico.
+  - Os desenhos usam as mesmas funções de renderização da versão jogável; posições fixas apenas para visualização do catálogo.
+- Removido `V2/V2.html`: redundante após a criação da central de testes e da página `v0.5.html`.
+- `v0.5.html` e `index.html` permanecem preservados.
