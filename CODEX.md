@@ -592,3 +592,15 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - O HUD da corrida exibe o nome de cada carta acompanhado de sua cor, em vez do nome do poder. A intenção é incentivar os jogadores a memorizar os efeitos das cartas.
 - Aplicados na beta os poderes revisados: O Louco gira 360° no segundo pulo; A Sacerdotisa atravessa automaticamente o próximo obstáculo (não inimigos), ativa recarga de 30 segundos com indicador no topo e aura verde por 1,5 segundo; A Roda da Fortuna multiplica o valor dos Sonhos por 1,5; A Morte concede uma vida extra ao zerar as vidas e deixa Sanira totalmente cinza; O Sol reduz em 0,5 o dano somente nas colisões com inimigos.
 - A central `teste.html` agora aponta para `beta.html` como jogo atual. `v0.5.html` permanece preservada como versão anterior.
+
+
+## Beta v0.7 — recarga visual e seleção de poderes para testes
+
+- `beta.html` atualizado para v0.7.
+- A Sacerdotisa mantém a proteção automática contra o próximo obstáculo (sem proteger contra inimigos), mas sua recarga foi reduzida de 30 para **15 segundos**.
+- Removido o contador separado da Sacerdotisa no HUD. Enquanto recarrega, o espaço da própria carta é ocupado por uma barra horizontal verde, com a mesma largura e altura do indicador da carta; a barra progride até completar. Ao terminar, o nome da carta volta a aparecer.
+- O menu da beta oferece dois caminhos: tiragem aleatória, que preserva as regras atuais, e seleção manual para testes.
+- A seleção manual permite escolher exatamente três poderes, impede a combinação A Lua + O Sol e inicia a sessão com os poderes selecionados, sem sorteio.
+- Ao encerrar a meditação, o botão retorna à tela inicial, permitindo escolher outro modo e reiniciar.
+- Componentes isolados atualizados: `Sanira.html` v0.3 (simulação da Sacerdotisa com 15 s), `Cartas.html` v0.3 (descrição revisada) e `Tela.html` v0.1 (fluxo do menu e retorno após a sessão).
+- A página `index.html` e a antiga `v0.5.html` permanecem preservadas. Os componentes continuam independentes da beta, exceto pelas alterações explicitamente integradas nesta v0.7.
