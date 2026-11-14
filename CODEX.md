@@ -555,3 +555,24 @@ Cada poder tem uma cor, usada nas faixas das mangas e no V do peito da personage
 - Alterações nos componentes não são aplicadas automaticamente ao jogo integrado. A promoção para o jogo de testes atual (`v0.5.html`) só ocorre quando o usuário solicitar a integração.
 - Cada integração deve gerar um novo arquivo/versão do jogo, preservando a versão integrada anterior.
 - A página original `index.html` permanece preservada e não deve ser alterada sem solicitação explícita.
+
+
+## Propostas de poderes em teste — 13/11/2026
+
+As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.html` e `Sanira.html`. São propostas em avaliação e **não estão aprovadas para integração no jogo**. Não alterar `v0.5.html`, `index.html` ou a lógica integrada dos poderes até aprovação explícita do usuário após os testes.
+
+| Carta | Proposta para avaliação |
+|---|---|
+| O Louco | No segundo pulo, Sanira executa rapidamente um giro de 360°. |
+| A Roda da Fortuna | Cada Sonho coletado vale 1,5. |
+| A Morte | Quando Sanira perde todas as vidas, recebe uma vida extra e fica totalmente cinza. |
+| O Sol | Reduz em 50% o dano recebido em colisões com inimigos. |
+
+- `Cartas.html` foi atualizado para v0.1 com as novas descrições.
+- `Sanira.html` foi atualizado para v0.1 com as mesmas descrições e controles de simulação visual para o giro do segundo pulo (O Louco) e o estado cinza após renascimento (A Morte).
+- As simulações em `Sanira.html` são demonstrações visuais do componente; não implementam a lógica de jogo nem alteram a versão integrada.
+- A descrição do Sol nesta proposta especifica colisões com inimigos. O escopo de outros tipos de colisão deve permanecer conforme a regra integrada atual até que a proposta seja aprovada ou ajustada.
+
+## Idioma dos commits
+
+- Todas as mensagens de commit deste repositório devem ser escritas em português, incluindo alterações de código, documentação, correções e manutenção.
