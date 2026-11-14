@@ -576,3 +576,11 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 ## Idioma dos commits
 
 - Todas as mensagens de commit deste repositório devem ser escritas em português, incluindo alterações de código, documentação, correções e manutenção.
+
+
+## Sacerdotisa em teste — 13/11/2026
+
+- `Sanira.html` atualizado para v0.2 com simulação interativa da Sacerdotisa: proteção automática na próxima colisão simulada com obstáculo, colisão anulada, recarga de 30 segundos com indicador de progresso e aura verde (#6CC38A) por 1,5 segundo após atravessar.
+- O teste exige que A Sacerdotisa esteja selecionada. O botão de simulação só fica habilitado quando o poder está carregado.
+- `Cartas.html` atualizado para v0.2 para manter a descrição da Sacerdotisa sincronizada com o componente.
+- Os testes são experimentos isolados: não alteram `v0.5.html` nem integram a mecânica ao jogo. A integração depende de aprovação explícita após os testes.
