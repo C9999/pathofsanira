@@ -1,0 +1,20 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>v0.0 — Tela — Path of Sanira</title><style>
+:root{--bg:#14122B;--panel:#211C45;--panel2:#2E2760;--gold:#E8C46A;--cream:#F5EFE0;--muted:#CFC8E8;--line:#6B5FB5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--cream);font:15px system-ui,sans-serif;padding:28px}
+main{max-width:1100px;margin:auto}h1,h2{font-family:Georgia,serif;font-weight:600}h1{font-size:32px}p,.muted{color:var(--muted)}a,button{color:var(--bg);background:var(--gold);border:0;border-radius:10px;padding:11px 18px;text-decoration:none;font-weight:700;cursor:pointer}
+.back{display:inline-block;margin-bottom:16px;background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.item{background:var(--panel2);border:1px solid #51478f;border-radius:12px;padding:14px}
+label{display:flex;align-items:center;gap:9px;margin:9px 0;cursor:pointer}input{accent-color:var(--gold);width:17px;height:17px}
+button.secondary{background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+.pill{display:inline-block;border-radius:20px;padding:4px 9px;background:#3b326d;color:var(--gold);font-size:12px}
+canvas{max-width:100%;background:#A9D8EE;border-radius:12px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel2);min-height:160px}
+.card b{display:block;color:var(--gold);font:600 20px Georgia,serif;margin:7px 0}
+.preview{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+#modal{position:fixed;inset:0;background:#080719dd;display:none;align-items:center;justify-content:center;padding:20px}
+#modal .panel{max-width:540px;width:100%;text-align:center}
+@media(max-width:600px){body{padding:16px}h1{font-size:26px}}
+</style></head><body><main><a class="back" href="teste.html">← Central de testes</a><h1>Tela</h1><p class="muted">v0.0 · Experimento isolado</p><p>Estudo das telas atualmente presentes na versão de teste. A referência visual é a interface atual da V2.</p><div class="grid">
+<div class="item"><span class="pill">Menu inicial</span><h2>Path of Sanira</h2><p>Uma sessão de meditação começa com três cartas.</p><button>Toque em qualquer lugar para tirar as cartas</button></div><div class="item"><span class="pill">Tiragem inicial</span><h2>Sua tiragem</h2><p>Três cartas reveladas uma a uma.</p><button>Começar a meditar</button></div><div class="item"><span class="pill">Contagem regressiva</span><h2>Prepare-se para meditar</h2><p>5</p><button>Sanira começará a se mover em instantes</button></div><div class="item"><span class="pill">Pausa</span><h2>Sessão de meditação pausada</h2><p>A sessão está pausada.</p><button>Continuar</button></div><div class="item"><span class="pill">Fim</span><h2>Meditação interrompida</h2><p>Resumo da sessão, cartas e pontuação.</p><button>Jogar novamente</button></div></div></main></body></html>
