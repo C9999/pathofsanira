@@ -1,0 +1,81 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>v0.0 — Sanira — Path of Sanira</title><style>
+:root{--bg:#14122B;--panel:#211C45;--panel2:#2E2760;--gold:#E8C46A;--cream:#F5EFE0;--muted:#CFC8E8;--line:#6B5FB5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--cream);font:15px system-ui,sans-serif;padding:28px}
+main{max-width:1100px;margin:auto}h1,h2{font-family:Georgia,serif;font-weight:600}h1{font-size:32px}p,.muted{color:var(--muted)}a,button{color:var(--bg);background:var(--gold);border:0;border-radius:10px;padding:11px 18px;text-decoration:none;font-weight:700;cursor:pointer}
+.back{display:inline-block;margin-bottom:16px;background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.item{background:var(--panel2);border:1px solid #51478f;border-radius:12px;padding:14px}
+label{display:flex;align-items:center;gap:9px;margin:9px 0;cursor:pointer}input{accent-color:var(--gold);width:17px;height:17px}
+button.secondary{background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+.pill{display:inline-block;border-radius:20px;padding:4px 9px;background:#3b326d;color:var(--gold);font-size:12px}
+canvas{max-width:100%;background:#A9D8EE;border-radius:12px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel2);min-height:160px}
+.card b{display:block;color:var(--gold);font:600 20px Georgia,serif;margin:7px 0}
+.preview{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+#modal{position:fixed;inset:0;background:#080719dd;display:none;align-items:center;justify-content:center;padding:20px}
+#modal .panel{max-width:540px;width:100%;text-align:center}
+@media(max-width:600px){body{padding:16px}h1{font-size:26px}}
+</style></head><body><main><a class="back" href="teste.html">← Central de testes</a><h1>Sanira</h1><p class="muted">v0.0 · Experimento isolado</p><p>Marque os poderes que deseja combinar. A expressão pode ser alternada independentemente.</p><div class="panel"><h2>Poderes</h2><div class="grid"><label><input type="checkbox" class="power" value="forca" checked>A Força — aura laranja / 3 vidas</label><label><input type="checkbox" class="power" value="imper" >A Imperatriz — vida extra</label><label><input type="checkbox" class="power" value="louco" >O Louco — pulo duplo</label><label><input type="checkbox" class="power" value="mago" >O Mago — ímã</label><label><input type="checkbox" class="power" value="carro" >O Carro — velocidade</label><label><input type="checkbox" class="power" value="eremita" >O Eremita — planar</label><label><input type="checkbox" class="power" value="roda" >A Roda da Fortuna — Sonhos extras</label><label><input type="checkbox" class="power" value="morte" >A Morte — renascimento</label><label><input type="checkbox" class="power" value="torre" >A Torre — limpar obstáculos</label><label><input type="checkbox" class="power" value="lua" >A Lua — baixa visibilidade</label><label><input type="checkbox" class="power" value="sol" >O Sol — dano reduzido</label><label><input type="checkbox" class="power" value="sacer" >A Sacerdotisa — proteção futura</label></div><h2>Expressão</h2><label><input type="radio" name="face" value="feliz" checked> Feliz</label><label><input type="radio" name="face" value="triste"> Triste</label></div><div class="panel preview"><div id="person"></div><div><b id="auraLabel">Aura laranja (A Força)</b><p id="summary">A Força selecionada</p></div></div></main><script>const SVG_HEAD='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">';
+const SVG_AURA={forca:`<g id="aura-forca">
+<ellipse cx="120" cy="116" rx="94" ry="100" fill="#F9C784" opacity="0.35"/>
+<ellipse cx="120" cy="116" rx="80" ry="86" fill="#F4A259" opacity="0.45"/>
+<ellipse cx="120" cy="116" rx="80" ry="86" fill="none" stroke="#F28C28" stroke-width="3" opacity="0.85"/>
+</g>`,normal:`<g id="aura-normal">
+<ellipse cx="120" cy="116" rx="86" ry="92" fill="#EEF0F4" opacity="0.45"/>
+<ellipse cx="120" cy="116" rx="86" ry="92" fill="none" stroke="#D5DAE3" stroke-width="2"/>
+</g>`};
+const SVG_FACE={feliz:`<g id="rosto-feliz">
+<path d="M104 50q5-3 11-1M125 49q6-2 11 1" stroke="#4A2C20" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+<path d="M105 56q5 4 10 0M125 56q5 4 10 0" stroke="#3A241B" stroke-width="1.9" stroke-linecap="round" fill="none"/>
+<path d="M119 60q-2 4 1 5" stroke="#9A6240" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+<path d="M112 69q8 5 16 0" stroke="#7A3B2E" stroke-width="1.9" stroke-linecap="round" fill="none"/>
+<circle cx="104" cy="64" r="3.5" fill="#E58E7A" opacity="0.4"/><circle cx="136" cy="64" r="3.5" fill="#E58E7A" opacity="0.4"/>
+</g>`,triste:`<g id="rosto-triste">
+<path d="M104 52L115 48M125 48L136 52" stroke="#4A2C20" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+<path d="M105 58q5-3 10 0M125 58q5-3 10 0" stroke="#3A241B" stroke-width="1.9" stroke-linecap="round" fill="none"/>
+<path d="M119 60q-2 4 1 5" stroke="#9A6240" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+<path d="M112 72q8-5 16 0" stroke="#7A3B2E" stroke-width="1.9" stroke-linecap="round" fill="none"/>
+<path d="M137 61q3 4 0 7q-3-3 0-7z" fill="#8FC1E8"/>
+</g>`};
+const SVG_BODY=`<g id="personagem">
+<ellipse cx="120" cy="162" rx="44" ry="15" fill="#26262E"/>
+<ellipse cx="62" cy="178" rx="32" ry="18" fill="#26262E"/>
+<ellipse cx="178" cy="178" rx="32" ry="18" fill="#26262E"/>
+<ellipse cx="100" cy="190" rx="40" ry="11" transform="rotate(-8 100 190)" fill="#1E1E25" stroke="#3B3B47" stroke-width="1.5"/>
+<ellipse cx="140" cy="190" rx="40" ry="11" transform="rotate(8 140 190)" fill="#1E1E25" stroke="#3B3B47" stroke-width="1.5"/>
+<ellipse cx="96" cy="187" rx="13" ry="6" fill="#B87A52"/>
+<ellipse cx="144" cy="187" rx="13" ry="6" fill="#B87A52"/>
+<circle cx="86" cy="184" r="2" fill="#B87A52"/><circle cx="90" cy="182" r="2" fill="#B87A52"/><circle cx="154" cy="184" r="2" fill="#B87A52"/><circle cx="150" cy="182" r="2" fill="#B87A52"/>
+<path d="M84 98Q84 88 98 86L142 86Q156 88 156 98L150 156L90 156Z" fill="#26262E"/>
+<polyline points="100,110 120,126 140,110" fill="none" stroke-width="7" stroke-linejoin="miter" style="stroke:__V__"/>
+<path d="M88 100Q62 128 52 168" stroke="#26262E" stroke-width="16" stroke-linecap="round" fill="none"/>
+<path d="M152 100Q178 128 188 168" stroke="#26262E" stroke-width="16" stroke-linecap="round" fill="none"/>
+<path d="M64.2 134.4L60 143.6" stroke-width="16" fill="none" style="stroke:__E__"/>
+<path d="M175.8 134.4L180 143.6" stroke-width="16" fill="none" style="stroke:__D__"/>
+<circle cx="51" cy="172" r="7.5" fill="#B87A52"/><circle cx="189" cy="172" r="7.5" fill="#B87A52"/>
+<circle cx="47" cy="168" r="3" fill="none" stroke="#9A6240" stroke-width="1.4"/><circle cx="193" cy="168" r="3" fill="none" stroke="#9A6240" stroke-width="1.4"/>
+<rect x="112" y="68" width="16" height="16" fill="#9A6240"/>
+<path d="M102 82h36v9q-18 7-36 0z" fill="#1E1E25"/>
+<g fill="#4A2C20"><circle cx="98" cy="46" r="12"/><circle cx="142" cy="46" r="12"/><circle cx="104" cy="32" r="12"/><circle cx="120" cy="26" r="13"/><circle cx="136" cy="32" r="12"/><circle cx="96" cy="60" r="9"/><circle cx="144" cy="60" r="9"/></g>
+<ellipse cx="120" cy="52" rx="22" ry="25" fill="#B87A52"/>
+<ellipse cx="97.5" cy="57" rx="3.5" ry="5" fill="#B87A52"/><ellipse cx="142.5" cy="57" rx="3.5" ry="5" fill="#B87A52"/>
+<circle cx="97.5" cy="63" r="1.7" fill="#E8C46A"/><circle cx="142.5" cy="63" r="1.7" fill="#E8C46A"/>
+<g fill="#4A2C20"><circle cx="108" cy="40" r="8"/><circle cx="120" cy="37" r="8"/><circle cx="132" cy="40" r="8"/><circle cx="100" cy="48" r="6"/><circle cx="140" cy="48" r="6"/></g>
+<g fill="#6B4330"><circle cx="104" cy="35" r="2.4"/><circle cx="124" cy="31" r="2.4"/><circle cx="138" cy="38" r="2.2"/><circle cx="100" cy="44" r="2"/></g>
+FACE
+</g>`;
+function svgFor(aura,face,v,e,d){
+  const body=SVG_BODY.replace('FACE',SVG_FACE[face]).replace(/__V__/g,v).replace(/__E__/g,e).replace(/__D__/g,d);
+  return SVG_HEAD+SVG_AURA[aura]+body+'</svg>';
+}
+
+const powers=[...document.querySelectorAll('.power')],person=document.getElementById('person');
+function render(){const ids=powers.filter(x=>x.checked).map(x=>x.value),aura=ids.includes('forca')?'forca':'normal',face=document.querySelector('[name=face]:checked').value;
+const colors={forca:'#F28C28',imper:'#F28FB1',louco:'#5FCFE0',mago:'#A78BDB',carro:'#3FBFA8',eremita:'#5B8DEF',roda:'#B5D96B',morte:'#D95FD0',torre:'#E8604C',lua:'#E6E9F0',sol:'#F3C74F',sacer:'#6CC38A'};
+const svg=svgFor(aura,face,colors[ids[0]]||'#5B8DEF',colors[ids[1]]||'#5B8DEF',colors[ids[2]]||'#5B8DEF');
+person.innerHTML=svg;person.querySelector('svg').style.width='240px';person.querySelector('svg').style.height='240px';
+document.getElementById('auraLabel').textContent=aura==='forca'?'Aura laranja (A Força)':'Aura cinza clara (sem A Força)';
+document.getElementById('summary').textContent=ids.length?ids.map(id=>powers.find(p=>p.value===id).parentElement.textContent.trim()).join(' · '):'Nenhum poder selecionado';
+}
+powers.forEach(x=>x.addEventListener('change',render));document.querySelectorAll('[name=face]').forEach(x=>x.addEventListener('change',render));render();</script></body></html>
