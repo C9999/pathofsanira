@@ -604,3 +604,13 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - Ao encerrar a meditação, o botão retorna à tela inicial, permitindo escolher outro modo e reiniciar.
 - Componentes isolados atualizados: `Sanira.html` v0.3 (simulação da Sacerdotisa com 15 s), `Cartas.html` v0.3 (descrição revisada) e `Tela.html` v0.1 (fluxo do menu e retorno após a sessão).
 - A página `index.html` e a antiga `v0.5.html` permanecem preservadas. Os componentes continuam independentes da beta, exceto pelas alterações explicitamente integradas nesta v0.7.
+
+## Beta v0.8 — modo de tela cheia
+
+- `beta.html` atualizado para v0.8.
+- Adicionado botão **“Tela cheia”** à interface da beta, disponível antes e durante a sessão.
+- O botão solicita tela cheia para o documento usando a Fullscreen API, com preferência por ocultar a interface de navegação quando o navegador aceitar essa opção.
+- O texto do botão acompanha o estado do navegador e permite sair da tela cheia.
+- A entrada em tela cheia ocorre após toque/clique do usuário, conforme a exigência dos navegadores móveis.
+- Se a API não estiver disponível ou o navegador negar a solicitação, a demo continua funcionando em modo normal.
+- A tela cheia não força a orientação do aparelho; a exigência de paisagem continua sendo tratada pelo aviso de rotação existente.
