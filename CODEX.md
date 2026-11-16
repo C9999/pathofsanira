@@ -614,3 +614,13 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - A entrada em tela cheia ocorre após toque/clique do usuário, conforme a exigência dos navegadores móveis.
 - Se a API não estiver disponível ou o navegador negar a solicitação, a demo continua funcionando em modo normal.
 - A tela cheia não força a orientação do aparelho; a exigência de paisagem continua sendo tratada pelo aviso de rotação existente.
+
+
+### Beta v0.9 — correção dos controles e tela cheia (16/11/2026)
+
+- Corrigida a falha de JavaScript causada por sequências literais `\\n` inseridas no bloco de script da beta v0.8, que impediam a execução de todo o código e, consequentemente, inutilizavam os botões.
+- Normalizadas as quebras de linha no HTML e no JavaScript.
+- Botão de tela cheia posicionado explicitamente sobre a interface, com prioridade de camada e interação por toque.
+- Camada de aviso de rotação elevada para permanecer acima da interface.
+- Validada a sintaxe do JavaScript após a correção com compilação do script.
+- Ainda é necessária validação de interação em navegador Android real; o suporte à Fullscreen API depende do navegador e da interação do usuário.
