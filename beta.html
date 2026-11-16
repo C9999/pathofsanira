@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.8 — Path of Sanira — Beta</title>
+<title>v 0.9 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -46,7 +46,8 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 .pu{display:flex;align-items:center;gap:10px;font-size:13px;padding:5px 0;border-top:1px solid #3a3470}
 .dot{width:14px;height:14px;border-radius:50%;flex:none}
 .pu small{display:block;color:#CFC8E8;font-size:12px}
-#rot{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#14122B;color:#F5EFE0;font-size:18px;text-align:center;padding:30px;z-index:9}
+#rot{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#14122B;color:#F5EFE0;font-size:18px;text-align:center;padding:30px;z-index:99}
+#fullscreenBtn{position:absolute;z-index:30;top:12px;right:12px;padding:8px 12px;font-size:12px;touch-action:manipulation;pointer-events:auto}
 @media (orientation:portrait){#rot{display:flex}#stage{display:none}}
 </style>
 </head>
@@ -64,7 +65,8 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <div id="pause" class="scr off"><h2>Sessão de meditação pausada</h2><button id="resume">Continuar</button></div>
 <button id="pauseBtn" class="alt" style="position:absolute;right:112px;top:18px;display:none;padding:8px 12px;font-size:12px">Pausar</button>
 <button id="powerBtn" style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:none;border-radius:50%;width:66px;height:66px;padding:6px;font-size:11px">PODER</button>
-<div id="audioBtn" style="position:absolute;right:16px;bottom:16px;display:none;color:#3E3552;background:rgba(255,255,255,.7);padding:7px 10px;border-radius:12px;font-size:11px">Áudio: ligado</div>\n<button id="fullscreenBtn" type="button" aria-label="Ativar tela cheia">⛶ Tela cheia</button>
+<div id="audioBtn" style="position:absolute;right:16px;bottom:16px;display:none;color:#3E3552;background:rgba(255,255,255,.7);padding:7px 10px;border-radius:12px;font-size:11px">Áudio: ligado</div>
+<button id="fullscreenBtn" type="button" aria-label="Ativar tela cheia">⛶ Tela cheia</button>
 </div>
 <script>
 const W=844,H=390,PX=190,S0=0.55,SLOPE=0.15;
@@ -140,7 +142,13 @@ function fit(){
   stage.style.transform='scale('+scale+')';stage.style.left=(innerWidth-W*scale)/2+'px';stage.style.top=(innerHeight-H*scale)/2+'px';
   cv.width=Math.round(W*scale*dpr);cv.height=Math.round(H*scale*dpr);ctx.setTransform(scale*dpr,0,0,scale*dpr,0,0);
 }
-addEventListener('resize',fit);fit();\nconst fullscreenBtn=$('fullscreenBtn');\nfunction syncFullscreenButton(){const active=!!document.fullscreenElement;fullscreenBtn.textContent=active?'⛶ Sair da tela cheia':'⛶ Tela cheia';fullscreenBtn.setAttribute('aria-label',active?'Sair da tela cheia':'Ativar tela cheia');fit();}\nfullscreenBtn.addEventListener('pointerdown',e=>{e.stopPropagation();});\nfullscreenBtn.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(document.fullscreenElement){try{await document.exitFullscreen();}catch(err){}return;}if(!document.fullscreenEnabled||!document.documentElement.requestFullscreen){fullscreenBtn.textContent='Indisponível';return;}try{await document.documentElement.requestFullscreen({navigationUI:'hide'});}catch(err){try{await document.documentElement.requestFullscreen();}catch(failure){fullscreenBtn.textContent='Não disponível';}}});\ndocument.addEventListener('fullscreenchange',syncFullscreenButton);\ndocument.addEventListener('fullscreenerror',()=>{fullscreenBtn.textContent='Não disponível';});
+addEventListener('resize',fit);fit();
+const fullscreenBtn=$('fullscreenBtn');
+function syncFullscreenButton(){const active=!!document.fullscreenElement;fullscreenBtn.textContent=active?'⛶ Sair da tela cheia':'⛶ Tela cheia';fullscreenBtn.setAttribute('aria-label',active?'Sair da tela cheia':'Ativar tela cheia');fit();}
+fullscreenBtn.addEventListener('pointerdown',e=>{e.stopPropagation();});
+fullscreenBtn.addEventListener('click',async e=>{e.preventDefault();e.stopPropagation();if(document.fullscreenElement){try{await document.exitFullscreen();}catch(err){}return;}if(!document.fullscreenEnabled||!document.documentElement.requestFullscreen){fullscreenBtn.textContent='Indisponível';return;}try{await document.documentElement.requestFullscreen({navigationUI:'hide'});}catch(err){try{await document.documentElement.requestFullscreen();}catch(failure){fullscreenBtn.textContent='Não disponível';}}});
+document.addEventListener('fullscreenchange',syncFullscreenButton);
+document.addEventListener('fullscreenerror',()=>{fullscreenBtn.textContent='Não disponível';});
 
 function drawCards(){
   const hour=new Date().getHours(),night=hour>=21||hour<6;
