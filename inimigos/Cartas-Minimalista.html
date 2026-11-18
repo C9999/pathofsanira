@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>v0.1 — Cartas Minimalista — Path of Sanira</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.card{background:#1B1740;border:1px solid #3A3470;border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:6px}
+.hit{border-color:#F28C28}
+.num{display:flex;justify-content:space-between;align-items:center;font:600 10px Inter,sans-serif;letter-spacing:.12em;color:#A9A3D0}
+.tag{font-size:9px;letter-spacing:0;color:#14122B;background:#F28C28;padding:1px 5px;border-radius:6px}
+.art{height:80px;display:flex;align-items:center;justify-content:center}
+.ic{width:60px;height:60px;fill:none;stroke:currentColor;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.ic .fl{fill:currentColor;stroke:none}
+.name{font:600 12px/1.15 Cinzel,serif;color:#F5EFE0;min-height:28px}
+.pw{font:600 12px Inter,sans-serif}
+.ds{font:400 10.5px/1.3 Inter,sans-serif;color:#CFC8E8}
+</style>
+</head>
+<body style="margin:0;background:#14122B;display:flex;justify-content:center">
+<div style="width: 100%; max-width: 430px; min-height: 1060px; box-sizing: border-box; padding: 20px 12px; background: #14122B; display: flex; flex-direction: column; gap: 14px; font-family: Inter, sans-serif">
+<div style="text-align: center">
+<h1 style="margin: 0; font: 600 22px Cinzel, serif; color: #F5EFE0; letter-spacing: .04em">Path of Sanira</h1>
+<div style="margin-top: 4px; font-size: 12px; color: #CFC8E8">12 cartas, uma cor para cada poder</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
+<div class="card"><div class="num">0</div><div class="art" style="color: #5FCFE0"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 30L32 16L46 30"/><path d="M18 46L32 32L46 46"/></svg></div><div class="name">O Louco</div><div class="pw" style="color: #5FCFE0">Pulo duplo</div><div class="ds">Um pulo extra no ar.</div></div>
+<div class="card"><div class="num">I</div><div class="art" style="color: #A78BDB"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 12v22a14 14 0 0 0 28 0V12"/><path d="M13 12h10M41 12h10"/></svg></div><div class="name">O Mago</div><div class="pw" style="color: #A78BDB">Ímã</div><div class="ds">Atrai moedas e estrelas próximas.</div></div>
+<div class="card"><div class="num">II</div><div class="art" style="color: #6CC38A"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 32Q32 8 58 32Q32 56 6 32Z"/><circle cx="32" cy="32" r="7"/></svg></div><div class="name">A Sacerdotisa</div><div class="pw" style="color: #6CC38A">Intuição</div><div class="ds">Segure: o tempo desacelera por 2 s.</div></div>
+<div class="card"><div class="num">III</div><div class="art" style="color: #F28FB1"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 50C10 36 12 16 24 16C29 16 32 20 32 23C32 20 35 16 40 16C52 16 54 36 32 50Z"/></svg></div><div class="name">A Imperatriz</div><div class="pw" style="color: #F28FB1">Vida x2</div><div class="ds">Aguenta uma batida.</div></div>
+<div class="card"><div class="num">VII</div><div class="art" style="color: #3FBFA8"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 18L30 32L14 46"/><path d="M32 18L48 32L32 46"/></svg></div><div class="name">O Carro</div><div class="pw" style="color: #3FBFA8">Arrancada</div><div class="ds">Mais velocidade e dash com toque duplo.</div></div>
+<div class="card hit"><div class="num">VIII<span class="tag">1ª carta · 90%</span></div><div class="art" style="color: #F28C28"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22"/><circle cx="32" cy="34" r="11"/><circle class="fl" cx="28" cy="31" r="1.8"/><circle class="fl" cx="36" cy="31" r="1.8"/><path class="fl" d="M29 38h6l-3 3z"/></svg></div><div class="name">A Força</div><div class="pw" style="color: #F28C28">Pulo maior</div><div class="ds">+35% de altura no pulo.</div></div>
+<div class="card"><div class="num">IX</div><div class="art" style="color: #5B8DEF"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="16" r="7"/><path d="M12 34q5-5 10 0t10 0t10 0t10 0"/><path d="M12 46q5-5 10 0t10 0t10 0t10 0"/></svg></div><div class="name">O Eremita</div><div class="pw" style="color: #5B8DEF">Flutuação</div><div class="ds">Segure no ar para planar.</div></div>
+<div class="card"><div class="num">X</div><div class="art" style="color: #B5D96B"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="22"/><circle class="fl" cx="32" cy="32" r="4"/><path d="M32 10v44M10 32h44M16 16l32 32M48 16L16 48" stroke-width="2.5"/></svg></div><div class="name">A Roda da Fortuna</div><div class="pw" style="color: #B5D96B">Sorte</div><div class="ds">Moedas douradas com o dobro de chance.</div></div>
+<div class="card"><div class="num">XIII</div><div class="art" style="color: #D95FD0"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path d="M50 32A18 18 0 1 1 44 19"/><path d="M46 8v13H33"/></svg></div><div class="name">A Morte</div><div class="pw" style="color: #D95FD0">Renascimento</div><div class="ds">Volta uma vez depois de bater.</div></div>
+<div class="card"><div class="num">XVI</div><div class="art" style="color: #E8604C"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path class="fl" d="M36 6L16 36h14l-4 22L50 26H35z"/></svg></div><div class="name">A Torre</div><div class="pw" style="color: #E8604C">Relâmpago</div><div class="ds">Limpa os obstáculos 1x por corrida.</div></div>
+<div class="card"><div class="num">XVIII</div><div class="art" style="color: #E6E9F0"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><path class="fl" d="M42 10A24 24 0 1 0 42 54A22.5 22.5 0 0 1 42 10Z"/></svg></div><div class="name">A Lua</div><div class="pw" style="color: #E6E9F0">Noite eterna</div><div class="ds">Menos visão, pontos x1,5.</div></div>
+<div class="card"><div class="num">XIX</div><div class="art" style="color: #F3C74F"><svg class="ic" viewBox="0 0 64 64" aria-hidden="true"><circle class="fl" cx="32" cy="32" r="9"/><path d="M32 8v8M32 48v8M8 32h8M48 32h8M15 15l6 6M43 43l6 6M49 15l-6 6M21 43l-6 6"/></svg></div><div class="name">O Sol</div><div class="pw" style="color: #F3C74F">Escudo solar</div><div class="ds">Absorve 1 batida e recarrega em 20 s.</div></div>
+</div>
+<div style="text-align: center; font-size: 11px; color: #CFC8E8">A Força abre 90% das tiragens. As outras 2 cartas saem ao acaso.</div>
+</div>
+</body>
+</html>

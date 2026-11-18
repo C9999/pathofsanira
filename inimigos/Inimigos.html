@@ -1,0 +1,174 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>v0.2 — Inimigos — Path of Sanira</title><style>
+:root{--bg:#14122B;--panel:#211C45;--panel2:#2E2760;--gold:#E8C46A;--cream:#F5EFE0;--muted:#CFC8E8;--line:#6B5FB5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--cream);font:15px system-ui,sans-serif;padding:28px}
+main{max-width:1100px;margin:auto}h1,h2{font-family:Georgia,serif;font-weight:600}h1{font-size:32px}p,.muted{color:var(--muted)}a,button{color:var(--bg);background:var(--gold);border:0;border-radius:10px;padding:11px 18px;text-decoration:none;font-weight:700;cursor:pointer}
+.back{display:inline-block;margin-bottom:16px;background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.item{background:var(--panel2);border:1px solid #51478f;border-radius:12px;padding:14px}
+label{display:flex;align-items:center;gap:9px;margin:9px 0;cursor:pointer}input{accent-color:var(--gold);width:17px;height:17px}
+button.secondary{background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+.pill{display:inline-block;border-radius:20px;padding:4px 9px;background:#3b326d;color:var(--gold);font-size:12px}
+canvas{max-width:100%;background:#A9D8EE;border-radius:12px}
+.card{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--panel2);min-height:160px}
+.card b{display:block;color:var(--gold);font:600 20px Georgia,serif;margin:7px 0}
+.preview{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+#modal{position:fixed;inset:0;background:#080719dd;display:none;align-items:center;justify-content:center;padding:20px}
+#modal .panel{max-width:540px;width:100%;text-align:center}
+@media(max-width:600px){body{padding:16px}h1{font-size:26px}}
+</style></head><body><main><a class="back" href="teste.html">← Central de testes</a><h1>Inimigos</h1><p class="muted">v0.2 · Experimento isolado</p><p>Inimigos identificados na versão atual, com os desenhos refeitos em formas planas e cores suaves. As dimensões (largura e altura) de cada inimigo foram mantidas, então a colisão não muda. Cada inimigo tem três versões alternativas (outras cores e texturas, mesma forma e tamanho) e uma versão no estilo das cartas, monocromática sobre o fundo escuro. A escolha do cenário fica preparada como controle de interface; os cenários alternativos ainda não estão implementados.</p>
+<div class="panel"><h2>Estilo</h2><div id="estilos"><label><input type="radio" name="estilo" value="0" checked> Padrão</label><label><input type="radio" name="estilo" value="1"> Alternativa 1</label><label><input type="radio" name="estilo" value="2"> Alternativa 2</label><label><input type="radio" name="estilo" value="3"> Alternativa 3</label><label><input type="radio" name="estilo" value="4"> Cartas (monocromático)</label></div><p class="muted">O estilo escolhido vale para o cenário e para a ampliação. A galeria abaixo mostra todos de uma vez.</p></div>
+<div class="panel"><h2>Cenário básico do jogo</h2><p>Os quatro inimigos são desenhados usando funções gráficas com a mesma assinatura das do jogo: <code>drawAlligator</code>, <code>drawCattle</code>, <code>drawToucan</code> e <code>drawEnemy</code>, todas com <code>(x, y, w, h)</code>, onde <code>y</code> é a base do inimigo. A posição é ilustrativa, seguindo a faixa do percurso em que costumam surgir.</p><canvas id="enemyScene" width="844" height="390" style="width:100%;height:auto;display:block;border-radius:12px"></canvas></div>
+<div class="panel"><h2>Ampliação</h2><p>Os mesmos desenhos ampliados 2,4 vezes para conferir os detalhes. O tucano bate as asas.</p><canvas id="enemyZoom" width="844" height="300" style="width:100%;height:auto;display:block;border-radius:12px"></canvas><div class="grid" style="margin-top:12px"><div class="item"><h2>Jacaré</h2><p>Movimenta-se horizontalmente. Focinho longo, dentes e espinhos nas costas. Tamanho 76 x 38.</p></div><div class="item"><h2>Gado</h2><p>Fica parado; é um pouco alto por causa dos chifres. Tamanho 62 x 68.</p></div><div class="item"><h2>Tucano</h2><p>Inimigo voador, com bico grande e asas batendo. Tamanho 52 x 42.</p></div><div class="item"><h2>Inimigo genérico</h2><p>Inimigo de aparência fantástica usado no protótipo: bolinha roxa com espinhos e cara brava. Tamanho 44 x 50.</p></div></div></div><div class="panel"><h2>Galeria de versões</h2><p>As quatro primeiras colunas mostram o padrão e as três alternativas. A última coluna é a versão no estilo das cartas, com a cor de um dos poderes. Tamanho e forma são os mesmos em todas.</p><canvas id="enemyGallery" width="844" height="610" style="width:100%;height:auto;display:block;border-radius:12px"></canvas></div></main><script>
+let ctx;
+const BG='#1B1740';
+function use(id){ctx=document.getElementById(id).getContext('2d');}
+function hx(h){h=h.replace('#','');return[0,2,4].map(i=>parseInt(h.slice(i,i+2),16));}
+function mix(a,b,f){const A=hx(a),B=hx(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*f).toString(16).padStart(2,'0')).join('');}
+const fT=C=>k=>mix(BG,C,k),wT=C=>k=>mix(C,'#FFFFFF',k);
+function tri(a,b,c,d,e,f){ctx.beginPath();ctx.moveTo(a,b);ctx.lineTo(c,d);ctx.lineTo(e,f);ctx.closePath();ctx.fill();}
+const THEMES={
+alligator:[
+ {nome:'Padrão',body:'#477B54',dark:'#3F7048',belly:'#8FBF8A',spike:'#2F5E40',eye:'#F3C74F',pupil:'#14122B',teeth:'#F5EFE0',mouth:'#244A38',tex:'none',texc:'#000'},
+ {nome:'Pântano',body:'#6B7A3A',dark:'#5A6830',belly:'#B9B27A',spike:'#4A5226',eye:'#E8884A',pupil:'#14122B',teeth:'#EDE4C8',mouth:'#3B3A1E',tex:'spots',texc:'#4A5226'},
+ {nome:'Albino',body:'#E8D9C4',dark:'#D9C6AE',belly:'#F6E9E1',spike:'#C9A98F',eye:'#E8604C',pupil:'#14122B',teeth:'#FFFFFF',mouth:'#A07C6B',tex:'scales',texc:'#C9B49C'},
+ {nome:'Gelo',body:'#7FB6D9',dark:'#6AA2C6',belly:'#D7ECF7',spike:'#A9D8F0',eye:'#F5EFE0',pupil:'#2A4D80',teeth:'#FFFFFF',mouth:'#2F5A7C',tex:'frost',texc:'#E8F6FF'},
+ (C=>{const f=fT(C),w=wT(C);return{nome:'Carta',body:C,dark:f(.6),belly:w(.45),spike:f(.6),eye:w(.75),pupil:BG,teeth:w(.85),mouth:BG,tex:'none',texc:'#000'};})('#6CC38A')],
+cattle:[
+ {nome:'Padrão',body:'#F0E9D8',belly:'#E4DAC4',spot:'#4C3D36',muzzle:'#E9B7B0',horn:'#E8C46A',hoof:'#4C3D36',tail:'#4C3D36',eye:'#14122B',bell:'#E8C46A',ear:'#E4DAC4',nose:'#8A5A55',tex:'patches',texc:'#000'},
+ {nome:'Marrom',body:'#A5714C',belly:'#8D5E3E',spot:'#F0E3CF',muzzle:'#E3B09A',horn:'#F0E3CF',hoof:'#3E2A20',tail:'#3E2A20',eye:'#14122B',bell:'#5FCFE0',ear:'#8D5E3E',nose:'#7A4A3A',tex:'patches',texc:'#000'},
+ {nome:'Preto',body:'#3B3A47',belly:'#2F2E3A',spot:'#6B6A7A',muzzle:'#8A6F78',horn:'#E6E0D0',hoof:'#17161D',tail:'#17161D',eye:'#F3C74F',bell:'#E8604C',ear:'#2F2E3A',nose:'#4A3A42',tex:'patches',texc:'#000'},
+ {nome:'Peludo',body:'#D98A4A',belly:'#C0733A',spot:'#E9B27A',muzzle:'#F0C9B0',horn:'#F0E3CF',hoof:'#5A3A28',tail:'#8A4E26',eye:'#14122B',bell:'#6CC38A',ear:'#C0733A',nose:'#8A5A55',tex:'fur',texc:'#A85F2E'},
+ (C=>{const f=fT(C),w=wT(C);return{nome:'Carta',body:C,belly:f(.6),spot:BG,muzzle:w(.5),horn:w(.8),hoof:BG,tail:f(.6),eye:BG,bell:w(.8),ear:f(.6),nose:BG,tex:'patches',texc:'#000'};})('#F28C28')],
+toucan:[
+ {nome:'Padrão',body:'#20252B',wingB:'#14181E',wingF:'#2E343C',chest:'#F5EFE0',cheek:'#F5EFE0',ring:'#5FCFE0',pupil:'#14122B',beakT:'#F3C74F',beakB:'#E8884A',tip:'#20252B',vent:'#E8604C',tex:'none',texc:'#000'},
+ {nome:'Azul',body:'#2F4C9A',wingB:'#223872',wingF:'#3E62C0',chest:'#F3C74F',cheek:'#F5EFE0',ring:'#E8604C',pupil:'#14122B',beakT:'#E8604C',beakB:'#B8403A',tip:'#223872',vent:'#F3C74F',tex:'feathers',texc:'#223872'},
+ {nome:'Escarlate',body:'#B23A3A',wingB:'#8E2B2B',wingF:'#CC4A4A',chest:'#F5EFE0',cheek:'#F5D7D0',ring:'#F3C74F',pupil:'#14122B',beakT:'#F0E3B0',beakB:'#D9B676',tip:'#8E2B2B',vent:'#F3C74F',tex:'feathers',texc:'#8E2B2B'},
+ {nome:'Albino',body:'#F0EAE0',wingB:'#D9D2C6',wingF:'#E4DDD0',chest:'#FFFFFF',cheek:'#FFFFFF',ring:'#E58E9A',pupil:'#14122B',beakT:'#F6D9A0',beakB:'#F2B6A0',tip:'#C9B8A8',vent:'#F2B6A0',tex:'feathers',texc:'#CFC6B8'},
+ (C=>{const f=fT(C),w=wT(C);return{nome:'Carta',body:C,wingB:f(.55),wingF:f(.75),chest:w(.8),cheek:w(.8),ring:w(.5),pupil:BG,beakT:w(.6),beakB:f(.6),tip:BG,vent:f(.55),tex:'none',texc:'#000'};})('#5FCFE0')],
+enemy:[
+ {nome:'Padrão',body:'#5A4B8A',spike:'#4A3D75',shade:'rgba(62,50,99,.5)',feet:'#3E3263',hi:'#A091D6',eyeW:'#F5EFE0',pupil:'#14122B',line:'#14122B',tex:'none',texc:'#000'},
+ {nome:'Limo',body:'#7DBF4E',spike:'#5C9638',shade:'rgba(60,110,40,.45)',feet:'#4E8030',hi:'#C8EC96',eyeW:'#F5EFE0',pupil:'#14122B',line:'#14122B',tex:'dots',texc:'#B5E27A'},
+ {nome:'Magma',body:'#C84B31',spike:'#7A2A1E',shade:'rgba(90,25,15,.45)',feet:'#5E2018',hi:'#F3A15A',eyeW:'#FFE9A8',pupil:'#14122B',line:'#2A0F0B',tex:'cracks',texc:'#FFB347'},
+ {nome:'Gelo',body:'#6FA9D8',spike:'#A9D8F0',shade:'rgba(40,80,130,.4)',feet:'#3F6C9C',hi:'#E8F6FF',eyeW:'#F5F8FF',pupil:'#14325C',line:'#14325C',tex:'facets',texc:'#D7ECF7'},
+ (C=>{const f=fT(C),w=wT(C);return{nome:'Carta',body:C,spike:f(.55),shade:f(.6)+'99',feet:f(.5),hi:w(.55),eyeW:w(.85),pupil:BG,line:BG,tex:'none',texc:'#000'};})('#A78BDB')]};
+function clipEllipse(x,y,rx,ry){ctx.save();ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,7);ctx.clip();}
+function drawAlligator(x,y,w,h,t=THEMES.alligator[0]){
+  ctx.save();ctx.translate(x,y);ctx.scale(w/76,h/38);
+  ctx.fillStyle='rgba(63,90,76,.22)';ctx.beginPath();ctx.ellipse(0,2,34,3.5,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=t.dark;ctx.beginPath();ctx.moveTo(14,-19);ctx.quadraticCurveTo(30,-20,38,-5);ctx.quadraticCurveTo(26,-9,12,-8);ctx.closePath();ctx.fill();
+  ctx.beginPath();ctx.roundRect(-8,-8,8,8,2);ctx.roundRect(14,-8,8,8,2);ctx.fill();
+  ctx.fillStyle=t.body;ctx.beginPath();ctx.ellipse(4,-14,24,10,0,0,Math.PI*2);ctx.fill();
+  clipEllipse(4,-14,24,10);
+  if(t.tex==='spots'){ctx.fillStyle=t.texc;[[-6,-17,2.2],[4,-12,2.6],[12,-17,2],[-1,-9,1.6],[18,-12,1.8],[-12,-12,1.4],[22,-16,1.5]].forEach(([a,b,r])=>{ctx.beginPath();ctx.arc(a,b,r,0,7);ctx.fill();});}
+  if(t.tex==='scales'){ctx.strokeStyle=t.texc;ctx.lineWidth=.9;[-19,-14,-9].forEach((ry,i)=>{for(let a=-18+(i%2)*2.7;a<28;a+=5.4){ctx.beginPath();ctx.arc(a,ry,2.3,0,Math.PI);ctx.stroke();}});}
+  if(t.tex==='frost'){ctx.fillStyle=t.texc;ctx.globalAlpha=.4;ctx.beginPath();ctx.ellipse(4,-20,20,3,0,0,7);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle=t.texc;ctx.lineWidth=.9;[[-8,-14],[6,-17],[16,-11],[-1,-10]].forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(a-2,b);ctx.lineTo(a+2,b);ctx.moveTo(a,b-2);ctx.lineTo(a,b+2);ctx.stroke();});}
+  ctx.restore();
+  ctx.fillStyle=t.belly;ctx.beginPath();ctx.ellipse(3,-9,20,4,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=t.body;ctx.beginPath();ctx.moveTo(-17,-20);ctx.lineTo(-37,-15);ctx.lineTo(-38,-9);ctx.lineTo(-17,-7);ctx.closePath();ctx.fill();
+  ctx.fillStyle=t.belly;ctx.beginPath();ctx.moveTo(-38,-9);ctx.lineTo(-18,-8);ctx.lineTo(-18,-5);ctx.lineTo(-36,-6);ctx.closePath();ctx.fill();
+  ctx.fillStyle=t.teeth;[-34,-29,-24].forEach(xi=>tri(xi,-9.5,xi+1.6,-6.2,xi+3.2,-9.5));
+  ctx.strokeStyle=t.mouth;ctx.lineWidth=1.4;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(-37.5,-9.5);ctx.lineTo(-18,-9);ctx.stroke();
+  ctx.fillStyle=t.mouth;ctx.beginPath();ctx.arc(-34,-14.5,1,0,7);ctx.fill();
+  ctx.fillStyle=t.body;ctx.beginPath();ctx.arc(-16,-21,4,0,7);ctx.fill();
+  ctx.fillStyle=t.eye;ctx.beginPath();ctx.arc(-16.5,-21,2.3,0,7);ctx.fill();
+  ctx.fillStyle=t.pupil;ctx.fillRect(-17.2,-22.4,1.4,2.8);
+  ctx.fillStyle=t.spike;for(let i=0;i<6;i++){const x0=-9+i*6.4;tri(x0-2.6,-23,x0,-28,x0+2.6,-23);}
+  ctx.restore();
+}
+function drawCattle(x,y,w,h,t=THEMES.cattle[0]){
+  ctx.save();ctx.translate(x,y);ctx.scale(w/62,h/68);
+  ctx.fillStyle='rgba(63,90,76,.22)';ctx.beginPath();ctx.ellipse(0,2,28,3.5,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=t.tail;ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(24,-40);ctx.quadraticCurveTo(33,-34,30,-23);ctx.stroke();
+  ctx.fillStyle=t.tail;ctx.beginPath();ctx.ellipse(30,-20,2.8,4.5,0,0,7);ctx.fill();
+  ctx.fillStyle=t.belly;[14,20,-22,-16].forEach(lx=>{ctx.fillRect(lx,-22,5.5,22);});
+  ctx.fillStyle=t.hoof;[14,20,-22,-16].forEach(lx=>{ctx.fillRect(lx,-3.5,5.5,3.5);});
+  ctx.fillStyle=t.body;ctx.beginPath();ctx.roundRect(-26,-46,52,26,12);ctx.fill();
+  ctx.fillStyle=t.belly;ctx.beginPath();ctx.roundRect(-24,-28,48,8,4);ctx.fill();
+  ctx.save();ctx.beginPath();ctx.roundRect(-26,-46,52,26,12);ctx.clip();
+  if(t.tex==='patches'){ctx.fillStyle=t.spot;ctx.beginPath();ctx.ellipse(-6,-38,7,6,0,0,7);ctx.ellipse(11,-34,6,5,0,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(2,-26.5,4,2.6,0,0,7);ctx.fill();}
+  if(t.tex==='fur'){ctx.fillStyle=t.spot;ctx.globalAlpha=.55;ctx.beginPath();ctx.ellipse(-4,-38,8,5,0,0,7);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle=t.texc;ctx.lineWidth=1.1;ctx.lineCap='round';for(let yy=-44;yy<-22;yy+=4.5)for(let xx=-24+((yy*3)%4);xx<26;xx+=5){ctx.beginPath();ctx.moveTo(xx,yy);ctx.lineTo(xx+1.6,yy+3);ctx.stroke();}}
+  ctx.restore();
+  ctx.fillStyle=t.body;ctx.beginPath();ctx.ellipse(-24,-40,10,9.5,0,0,7);ctx.fill();
+  ctx.fillStyle=t.ear;ctx.beginPath();ctx.ellipse(-14.5,-47,5,2.4,-0.3,0,7);ctx.fill();
+  ctx.fillStyle=t.muzzle;ctx.beginPath();ctx.ellipse(-30,-36,5.5,4.5,0,0,7);ctx.fill();
+  ctx.fillStyle=t.nose;ctx.beginPath();ctx.arc(-32,-36,.9,0,7);ctx.arc(-28.5,-36,.9,0,7);ctx.fill();
+  ctx.strokeStyle=t.horn;ctx.lineWidth=3.5;ctx.beginPath();ctx.moveTo(-26,-48);ctx.quadraticCurveTo(-34,-56,-27,-65);ctx.moveTo(-19,-49);ctx.quadraticCurveTo(-11,-57,-17,-66);ctx.stroke();
+  ctx.fillStyle=t.eye;ctx.beginPath();ctx.arc(-24,-42,1.8,0,7);ctx.fill();
+  ctx.fillStyle=t.bell;ctx.beginPath();ctx.arc(-16,-31,2.6,0,7);ctx.fill();
+  ctx.restore();
+}
+function drawToucan(x,y,w,h,t=THEMES.toucan[0]){
+  ctx.save();ctx.translate(x,y);ctx.scale(w/52,h/42);
+  const f=Math.sin(performance.now()/1000*9);
+  ctx.save();ctx.translate(6,-22);ctx.rotate(-0.6-f*0.45);ctx.fillStyle=t.wingB;ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(4,-26,24,-24);ctx.quadraticCurveTo(26,-10,0,0);ctx.fill();ctx.restore();
+  ctx.fillStyle=t.body;tri(14,-20,27,-14,25,-23);
+  ctx.beginPath();ctx.ellipse(5,-19,16,9.5,-0.15,0,7);ctx.fill();
+  if(t.tex==='feathers'){ctx.save();ctx.beginPath();ctx.ellipse(5,-19,16,9.5,-0.15,0,7);ctx.clip();ctx.strokeStyle=t.texc;ctx.lineWidth=.9;ctx.lineCap='round';[[2,-24],[9,-24],[16,-22],[5,-19],[12,-18],[0,-14],[8,-14],[15,-14]].forEach(([a,b])=>{ctx.beginPath();ctx.moveTo(a-2,b);ctx.lineTo(a,b+2);ctx.lineTo(a+2,b);ctx.stroke();});ctx.restore();}
+  ctx.fillStyle=t.vent;ctx.beginPath();ctx.ellipse(19,-13,3,2,0,0,7);ctx.fill();
+  ctx.fillStyle=t.chest;ctx.beginPath();ctx.ellipse(-6,-19,7,6,0,0,7);ctx.fill();
+  ctx.fillStyle=t.body;ctx.beginPath();ctx.arc(-9,-27,8,0,7);ctx.fill();
+  ctx.fillStyle=t.cheek;ctx.beginPath();ctx.ellipse(-10,-24.5,5,3.6,0,0,7);ctx.fill();
+  ctx.fillStyle=t.ring;ctx.beginPath();ctx.arc(-10,-28.5,3.2,0,7);ctx.fill();
+  ctx.fillStyle=t.pupil;ctx.beginPath();ctx.arc(-10.8,-28.5,1.6,0,7);ctx.fill();
+  ctx.fillStyle=t.beakT;ctx.beginPath();ctx.moveTo(-14,-34);ctx.quadraticCurveTo(-27,-34,-26,-23.5);ctx.lineTo(-14,-24.5);ctx.closePath();ctx.fill();
+  ctx.fillStyle=t.beakB;ctx.beginPath();ctx.moveTo(-14,-24.5);ctx.lineTo(-26,-23.5);ctx.quadraticCurveTo(-24,-18,-14,-20.5);ctx.closePath();ctx.fill();
+  ctx.fillStyle=t.tip;ctx.beginPath();ctx.arc(-24.4,-26.2,1.3,0,7);ctx.fill();
+  ctx.save();ctx.translate(4,-20);ctx.rotate(0.35+f*0.45);ctx.fillStyle=t.wingF;ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(6,-20,24,-16);ctx.quadraticCurveTo(22,-2,0,0);ctx.fill();ctx.restore();
+  ctx.restore();
+}
+function drawEnemy(x,y,w,h,t=THEMES.enemy[0]){
+  ctx.save();ctx.translate(x,y);ctx.scale(w/44,h/50);
+  ctx.fillStyle='rgba(63,90,76,.22)';ctx.beginPath();ctx.ellipse(0,2,22,3.5,0,0,7);ctx.fill();
+  ctx.fillStyle=t.feet;ctx.beginPath();ctx.ellipse(-9,-2,6,3,0,0,7);ctx.ellipse(9,-2,6,3,0,0,7);ctx.fill();
+  const cx=0,cy=-23;ctx.fillStyle=t.spike;
+  for(let i=0;i<7;i++){const a=(195+i*25)*Math.PI/180,d=.15;tri(cx+Math.cos(a-d)*18,cy+Math.sin(a-d)*18,cx+Math.cos(a)*26.5,cy+Math.sin(a)*26.5,cx+Math.cos(a+d)*18,cy+Math.sin(a+d)*18);}
+  ctx.fillStyle=t.body;ctx.beginPath();ctx.ellipse(cx,cy,20,20,0,0,7);ctx.fill();
+  clipEllipse(cx,cy,20,20);
+  ctx.fillStyle=t.shade;ctx.beginPath();ctx.ellipse(0,-12,17,9,0,0,7);ctx.fill();
+  if(t.tex==='dots'){ctx.fillStyle=t.texc;ctx.globalAlpha=.55;[[-10,-12,2.6],[9,-14,3.2],[13,-30,2.2],[-14,-31,1.8],[2,-9,1.8],[-3,-35,1.6]].forEach(([a,b,r])=>{ctx.beginPath();ctx.arc(a,b,r,0,7);ctx.fill();});ctx.globalAlpha=1;}
+  if(t.tex==='cracks'){ctx.strokeStyle=t.texc;ctx.lineWidth=1.3;ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(-15,-14);ctx.lineTo(-10,-18);ctx.lineTo(-12,-24);ctx.moveTo(14,-10);ctx.lineTo(10,-15);ctx.lineTo(13,-20);ctx.lineTo(11,-27);ctx.moveTo(-2,-8);ctx.lineTo(1,-12);ctx.stroke();}
+  if(t.tex==='facets'){ctx.strokeStyle=t.texc;ctx.lineWidth=.9;ctx.globalAlpha=.7;ctx.beginPath();ctx.moveTo(-20,-23);ctx.lineTo(-4,-12);ctx.lineTo(10,-3);ctx.moveTo(-4,-12);ctx.lineTo(8,-23);ctx.lineTo(20,-23);ctx.moveTo(8,-23);ctx.lineTo(4,-43);ctx.moveTo(-14,-37);ctx.lineTo(-4,-12);ctx.stroke();ctx.globalAlpha=.16;ctx.fillStyle=t.texc;tri(-4,-12,8,-23,-2,-3);ctx.globalAlpha=1;}
+  ctx.restore();
+  ctx.globalAlpha=.55;ctx.fillStyle=t.hi;ctx.beginPath();ctx.ellipse(-8,-33,6,3.2,-0.5,0,7);ctx.fill();ctx.globalAlpha=1;
+  ctx.fillStyle=t.eyeW;ctx.beginPath();ctx.arc(-7.5,-24,5.2,0,7);ctx.arc(7.5,-24,5.2,0,7);ctx.fill();
+  ctx.fillStyle=t.pupil;ctx.beginPath();ctx.arc(-9,-23.5,2.5,0,7);ctx.arc(6,-23.5,2.5,0,7);ctx.fill();
+  ctx.strokeStyle=t.line;ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();ctx.moveTo(-13,-32);ctx.lineTo(-4,-29);ctx.moveTo(13,-32);ctx.lineTo(4,-29);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(-8,-12);ctx.lineTo(-4,-15.5);ctx.lineTo(0,-12);ctx.lineTo(4,-15.5);ctx.lineTo(8,-12);ctx.stroke();
+  ctx.restore();
+}
+let estilo=0;
+const KINDS=[['alligator',drawAlligator,'Jacaré',76,38],['cattle',drawCattle,'Gado',62,68],['toucan',drawToucan,'Tucano',52,42],['enemy',drawEnemy,'Inimigo genérico',44,50]];
+const th=k=>THEMES[k][estilo];
+function paintScene(){
+  use('enemyScene');const carta=estilo===4;
+  const g=ctx.createLinearGradient(0,0,0,390);if(carta){g.addColorStop(0,'#14122B');g.addColorStop(1,'#211C45');}else{g.addColorStop(0,'#A9D8EE');g.addColorStop(1,'#E2F0D6');}
+  ctx.fillStyle=g;ctx.fillRect(0,0,844,390);
+  ctx.fillStyle=carta?'#2E2760':'#8ABF91';ctx.beginPath();ctx.moveTo(0,245);ctx.quadraticCurveTo(180,170,360,238);ctx.quadraticCurveTo(600,160,844,225);ctx.lineTo(844,390);ctx.lineTo(0,390);ctx.fill();
+  ctx.fillStyle=carta?'#1B1740':'#B9A78B';ctx.beginPath();ctx.moveTo(0,300);ctx.quadraticCurveTo(400,270,844,292);ctx.lineTo(844,390);ctx.lineTo(0,390);ctx.fill();
+  ctx.strokeStyle=carta?'#6B5FB5':'#8D806E';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,300);ctx.quadraticCurveTo(400,270,844,292);ctx.stroke();
+  const ground=292;drawAlligator(280,ground,76,38,th('alligator'));drawCattle(440,ground,62,68,th('cattle'));drawToucan(610,ground-95,52,42,th('toucan'));drawEnemy(760,ground,44,50,th('enemy'));
+}
+function paintZoom(){
+  use('enemyZoom');const carta=estilo===4;
+  ctx.fillStyle=carta?'#1B1740':'#DDF0F2';ctx.fillRect(0,0,844,300);ctx.fillStyle=carta?'#14122B':'#B9A78B';ctx.fillRect(0,236,844,64);
+  const s=2.4,pos=[62,150,238,318];
+  KINDS.forEach(([k,fn,name,w,h],i)=>{ctx.save();ctx.scale(s,s);fn(pos[i],fn===drawToucan?86:94,w,h,th(k));ctx.restore();ctx.fillStyle=carta?'#F5EFE0':'#14122B';ctx.font='600 14px system-ui,sans-serif';ctx.textAlign='center';ctx.fillText(name,pos[i]*s,278);});
+}
+function paintGallery(){
+  use('enemyGallery');ctx.clearRect(0,0,844,610);ctx.fillStyle='#14122B';ctx.fillRect(0,0,844,610);
+  KINDS.forEach(([k,fn,name,w,h],r)=>{
+    for(let c=0;c<5;c++){
+      const x0=c*168+2,y0=r*152+2,cw=164,ch=146,carta=c===4,t=THEMES[k][c];
+      ctx.fillStyle=carta?BG:'#DDF0F2';ctx.beginPath();ctx.roundRect(x0,y0,cw,ch,10);ctx.fill();
+      if(carta){ctx.strokeStyle=t.body+'99';ctx.lineWidth=1.5;ctx.beginPath();ctx.roundRect(x0+.75,y0+.75,cw-1.5,ch-1.5,10);ctx.stroke();}
+      ctx.save();ctx.beginPath();ctx.roundRect(x0,y0,cw,ch,10);ctx.clip();ctx.fillStyle=carta?'#14122B':'#B9A78B';ctx.fillRect(x0,y0+100,cw,ch-100);ctx.restore();
+      const s=1.4;ctx.save();ctx.translate(x0+cw/2,y0);ctx.scale(s,s);fn(0,fn===drawToucan?64:100/s,w,h,t);ctx.restore();
+      ctx.fillStyle=carta?'#F5EFE0':'#14122B';ctx.font='600 12px system-ui,sans-serif';ctx.textAlign='center';ctx.fillText(name+' · '+t.nome,x0+cw/2,y0+134);
+    }
+  });
+}
+document.querySelectorAll('input[name=estilo]').forEach(i=>i.addEventListener('change',()=>{estilo=+i.value;paintScene();}));
+function loop(){paintZoom();paintGallery();requestAnimationFrame(loop);}
+paintScene();loop();
+</script></body></html>
