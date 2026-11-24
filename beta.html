@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.13 — Path of Sanira — Beta</title>
+<title>v 0.14 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
 #stage{position:absolute;width:844px;height:390px;transform-origin:0 0;overflow:hidden;background:#A9D8EE}
 #c{position:absolute;left:0;top:0;width:844px;height:390px}
 #tb{position:absolute;left:22px;bottom:22px;width:78px;height:78px;border-radius:50%;background:rgba(232,96,76,.9);border:2px solid rgba(255,255,255,.8);display:none;align-items:center;justify-content:center;flex-direction:column;font-size:12px;font-weight:700;letter-spacing:.06em;color:#fff;cursor:pointer;line-height:1.2}
-#jb{position:absolute;right:22px;bottom:22px;width:78px;height:78px;border-radius:50%;background:rgba(255,255,255,.55);border:2px solid rgba(62,53,82,.5);display:none;align-items:center;justify-content:center;font-size:12px;font-weight:700;letter-spacing:.08em;color:#3E3552;pointer-events:none}
+
 .scr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(20,18,43,.94);text-align:center}
 .off{display:none!important}
 h1{margin:0;font:600 34px Georgia,serif;letter-spacing:.04em}
@@ -55,17 +55,17 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <div id="rot">Gire o aparelho para a posição deitada</div>
 <div id="stage">
 <canvas id="c"></canvas>
-<div id="jb">PULAR</div>
+
 <div id="tb"><span style="font-size:22px">⚡</span>RAIO</div>
 <div id="menu" class="scr"><h1>Path of Sanira</h1><p>Escolha como deseja começar sua sessão.</p><button id="randomMode">Tiragem aleatória</button><button id="customMode" class="alt">Escolher poderes para testar</button></div>
 <div id="custom" class="scr off"><h2>Escolha três poderes</h2><p>Marque exatamente três cartas para esta sessão.</p><div id="customPowers" class="custom-powers"></div><p id="customHint" class="hint">0 de 3 selecionados</p><button id="customStart" disabled>Começar com estes poderes</button><button id="customBack" class="alt">Voltar</button></div>
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
 
-<div id="pause" class="scr off"><h2>Sessão de meditação pausada</h2><button id="resume">Continuar</button></div>
-<button id="pauseBtn" class="alt" style="position:absolute;right:112px;top:18px;display:none;padding:8px 12px;font-size:12px">Pausar</button>
+
+
 <button id="powerBtn" style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:none;border-radius:50%;width:66px;height:66px;padding:6px;font-size:11px">PODER</button>
-<button id="audioBtn" class="alt" style="position:absolute;right:16px;top:18px;display:none;padding:8px 10px;font-size:12px;white-space:nowrap">Áudio: ligado</button>
+
 </div>
 <script>
 const W=844,H=390,S0=0.55,SLOPE=0.15;
@@ -165,7 +165,7 @@ function showDraw(mode='random'){
   if(mode==='random')cards=drawCards();
   else cards=[...document.querySelectorAll('.custom-power:checked')].map(input=>CARDS.find(c=>c.id===input.value));
   state='draw';
-  $('menu').classList.add('off');$('custom').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('jb').style.display='none';$('tb').style.display='none';
+  $('menu').classList.add('off');$('custom').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('tb').style.display='none';
   const box=$('cards');box.innerHTML='';
   cards.forEach((c,i)=>{
     const el=document.createElement('div');el.className='card';
@@ -218,7 +218,7 @@ function startRun(){
   }
   S.finishWx=Math.max(...items.map(it=>it.wx))+900;
   $('tb').style.display='none';
-  $('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');$('jb').style.display='flex';PX=W/2;groundSlope=0;$('pauseBtn').style.display='block';$('powerBtn').style.display=P.torre?'block':'none';$('audioBtn').style.display='block';state='intro';S.intro=3;S.pauseUsed=false;last=performance.now();startMeditationAudio();
+  startMeditationAudio();$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;groundSlope=0;$('powerBtn').style.display=P.torre?'block':'none';state='intro';S.intro=3;last=performance.now();
 }
 function gy(x){return 190+groundSlope*x}
 function jump(){
@@ -235,8 +235,8 @@ $('tb').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault(
 $('go').onclick=startRun;
 function showMenu(){
   state='menu';$('menu').classList.remove('off');$('custom').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');
-  $('pause').classList.add('off');$('jb').style.display='none';$('tb').style.display='none';
-  $('pauseBtn').style.display='none';$('powerBtn').style.display='none';$('audioBtn').style.display='none';
+  $('tb').style.display='none';
+  $('powerBtn').style.display='none';
 }
 function updateCustomSelection(){
   const chosen=[...document.querySelectorAll('.custom-power:checked')].map(x=>x.value);
@@ -257,29 +257,31 @@ $('customStart').onclick=()=>showDraw('custom');
 $('customPowers').innerHTML=CARDS.map(c=>'<label><input class="custom-power" type="checkbox" value="'+c.id+'"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+c.cor+'"></span>'+c.nome+'</label>').join('');
 updateCustomSelection();
 
-let pausedFrom='play';
-$('pauseBtn').onclick=()=>{if((state==='play'||state==='intro')&&!S.pauseUsed){S.pauseUsed=true;pausedFrom=state;state='paused';$('pause').classList.remove('off');$('pauseBtn').style.display='none';}};
-$('resume').onclick=()=>{if(state==='paused'){$('pause').classList.add('off');state=pausedFrom;last=performance.now();$('pauseBtn').style.display='block';}};
 let audioOn=true,audioCtx=null,ambientNodes=null;
-function ensureAudio(){audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
 function startMeditationAudio(){
  try{
-  const ac=ensureAudio();if(ambientNodes)return;
-  const master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
-  const tones=[];
-  [[110,.018],[164.81,.012],[220,.006]].forEach(([freq,vol])=>{
-   const osc=ac.createOscillator(),gain=ac.createGain(),lfo=ac.createOscillator(),lfoGain=ac.createGain();
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  audioCtx=audioCtx||new AC();
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  if(ambientNodes)return;
+  const master=audioCtx.createGain();master.gain.value=0;master.connect(audioCtx.destination);
+  const voices=[];
+  [[220,.075],[329.63,.042],[440,.026],[110,.035]].forEach(([freq,vol],i)=>{
+   const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();
+   const lfo=audioCtx.createOscillator(),lfoGain=audioCtx.createGain();
    osc.type='sine';osc.frequency.value=freq;gain.gain.value=vol;
-   lfo.type='sine';lfo.frequency.value=.07+(freq/220)*.025;lfoGain.gain.value=vol*.22;
+   lfo.type='sine';lfo.frequency.value=.055+i*.012;lfoGain.gain.value=vol*.18;
    lfo.connect(lfoGain);lfoGain.connect(gain.gain);osc.connect(gain);gain.connect(master);
-   osc.start();lfo.start();tones.push(osc,lfo);
+   osc.start();lfo.start();voices.push(osc,lfo);
   });
-  master.gain.setTargetAtTime(audioOn?1:0,ac.currentTime,.8);ambientNodes={master,tones};
- }catch(e){}
+  master.gain.setTargetAtTime(.65,audioCtx.currentTime,1.2);
+  ambientNodes={master,voices};
+ }catch(e){console.warn('Não foi possível iniciar o áudio meditativo.',e);}
 }
-function setAudioEnabled(enabled){audioOn=enabled;$('audioBtn').textContent='Áudio: '+(audioOn?'ligado':'desligado');if(ambientNodes&&audioCtx)ambientNodes.master.gain.setTargetAtTime(audioOn?1:0,audioCtx.currentTime,.35);}
-function tone(f=440,d=.08){if(!audioOn)return;try{const ac=ensureAudio(),o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.setValueAtTime(.025,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
-$('audioBtn').onclick=()=>setAudioEnabled(!audioOn);
+function tone(f=440,d=.08){
+ if(!audioOn||!audioCtx)return;
+ try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.025,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d);}catch(e){}
+}
 function vibrate(ms=25){if(navigator.vibrate)navigator.vibrate(ms);}
 function hitRect(cx,cy,r,x,y,w,h){const nx=Math.max(x-w/2,Math.min(cx,x+w/2)),ny=Math.max(y-h,Math.min(cy,y));return (cx-nx)**2+(cy-ny)**2<r*r;}
 function takeHit(source='obstacle'){
@@ -295,7 +297,7 @@ function update(rdt){
   const dt=rdt*ts;S.t+=dt;
   if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;}
   let g=S.g;if(P.eremita&&holding&&S.vz<0&&S.z>0&&S.float<1.5){g*=0.25;S.float+=rdt;U.eremita+=rdt;}
-  if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';$('pauseBtn').style.display='block';}return;}
+  if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';}return;}
   if(S.z>0||S.vz>0){S.vz-=g*dt;S.z+=S.vz*dt;if(S.z<=0){S.z=0;S.vz=0;S.float=0;}}
   if(S.flash>0)S.flash-=rdt;if(S.invuln>0)S.invuln-=dt;if(S.face>0)S.face-=rdt;if(S.spin>0)S.spin=Math.max(0,S.spin-rdt);if(S.sacerCooldown>0)S.sacerCooldown=Math.max(0,S.sacerCooldown-dt);if(S.sacerAura>0)S.sacerAura=Math.max(0,S.sacerAura-rdt);
   
@@ -343,12 +345,12 @@ function usageText(c){
   case'sol':return U.sol+' colisões com inimigos com 0,5 de dano';}
 }
 function finish(){
-  state='end';$('jb').style.display='none';$('tb').style.display='none';
+  state='end';$('tb').style.display='none';
   const won=!S.dead;
   $('end').innerHTML='<div class="box"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score)+'</b><span>pontos</span></div><div class="stat"><b>'+(S.stars*10)+'</b><span>Sonhos</span></div><div class="stat"><b>'+S.lives+'</b><span>vida restante</span></div><div class="stat"><b>'+S.hits+'</b><span>colisões</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+
    cards.map((c,i)=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b> · '+c.poder+'<small>'+usageText(c)+'</small></div></div>').join('')+
    '<div style="display:flex;gap:10px;justify-content:center;margin-top:4px"><button id="backMenu">Voltar à tela inicial</button></div></div>';
-  $('end').classList.remove('off');$('pauseBtn').style.display='none';$('powerBtn').style.display='none';$('audioBtn').style.display='none';$('backMenu').onclick=showMenu;
+  $('end').classList.remove('off');$('powerBtn').style.display='none';$('backMenu').onclick=showMenu;
   const share=document.createElement('button');share.className='alt';share.textContent='Compartilhar resultado';share.onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · '+(S.stars*10)+' Sonhos';if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};$('end').querySelector('.box').appendChild(share);
 }
 
@@ -538,7 +540,6 @@ function render(){
 function loop(now){
   const rdt=Math.min(.033,(now-last)/1000);last=now;
   if(state==='play'||state==='intro'){update(rdt);render();}
-  if(state==='paused'){render();}
   requestAnimationFrame(loop);
 }
 S={dist:0,z:0,t:0,score:0,coins:0,face:0,invuln:0,slowE:2};
