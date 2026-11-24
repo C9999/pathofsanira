@@ -705,3 +705,14 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - HUD condicionado ao primeiro evento de interação definido.
 - Marco final e condição de encerramento adicionados.
 - Teste de gameplay em aparelho físico ainda não realizado; altura relativa do tucano e a diferença entre pulo simples/duplo precisam de confirmação visual em jogo.
+
+
+## Atualização — beta v0.13 (24/11/2026)
+
+- Segundo pulo de O Louco ampliado: impulso vertical de 1,5× o pulo normal, para permitir superar o tucano com folga. O pulo normal permanece inalterado.
+- Controles de pausa e áudio ficam disponíveis já durante a espera inicial; o controle PULAR também aparece durante esse período visualmente.
+- Botão de áudio movido para o canto superior direito, ao lado do controle de pausa, para evitar sair da área visível.
+- Adicionado ambiente sonoro meditativo sintetizado pela Web Audio API: camadas suaves de tons graves com pulsação lenta. O controle liga/desliga tanto o ambiente quanto os efeitos sonoros.
+- O áudio é iniciado ao começar a sessão, respeitando as restrições de reprodução automática dos navegadores.
+- Pausa durante a espera inicial preserva o estado de espera e retoma a contagem corretamente.
+- Validação sintática do JavaScript realizada. Não foi realizado teste físico em aparelho.
