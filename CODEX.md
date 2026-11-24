@@ -716,3 +716,13 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - O áudio é iniciado ao começar a sessão, respeitando as restrições de reprodução automática dos navegadores.
 - Pausa durante a espera inicial preserva o estado de espera e retoma a contagem corretamente.
 - Validação sintática do JavaScript realizada. Não foi realizado teste físico em aparelho.
+
+
+## Atualização — beta v0.14 (24/11/2026)
+
+- Removido o botão visual “PULAR”. A função de pulo foi mantida: toque na área do jogo e tecla Espaço continuam acionando o pulo, inclusive o pulo duplo de O Louco.
+- Removidos o botão de pausa e a tela de pausa; a sessão não oferece pausa nesta versão.
+- Removido o botão de áudio da tela de jogo. O ambiente meditativo continua ativo durante a sessão; o controle para ligar/desligar ficará para uma atualização futura da tela de título.
+- Corrigido o ambiente sonoro: os tons anteriores eram graves e muito baixos. Agora há camadas de tons senoidais em frequências mais audíveis, com modulação lenta e volume ambiente suave.
+- A inicialização do áudio ocorre diretamente no clique/toque de “Começar a meditar”, para atender à política de reprodução dos navegadores.
+- JavaScript validado sintaticamente. Não foi realizado teste físico em aparelho.
