@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.12 — Path of Sanira — Beta</title>
+<title>v 0.13 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -65,7 +65,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <div id="pause" class="scr off"><h2>Sessão de meditação pausada</h2><button id="resume">Continuar</button></div>
 <button id="pauseBtn" class="alt" style="position:absolute;right:112px;top:18px;display:none;padding:8px 12px;font-size:12px">Pausar</button>
 <button id="powerBtn" style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:none;border-radius:50%;width:66px;height:66px;padding:6px;font-size:11px">PODER</button>
-<div id="audioBtn" style="position:absolute;right:16px;bottom:16px;display:none;color:#3E3552;background:rgba(255,255,255,.7);padding:7px 10px;border-radius:12px;font-size:11px">Áudio: ligado</div>
+<button id="audioBtn" class="alt" style="position:absolute;right:16px;top:18px;display:none;padding:8px 10px;font-size:12px;white-space:nowrap">Áudio: ligado</button>
 </div>
 <script>
 const W=844,H=390,S0=0.55,SLOPE=0.15;
@@ -218,13 +218,13 @@ function startRun(){
   }
   S.finishWx=Math.max(...items.map(it=>it.wx))+900;
   $('tb').style.display='none';
-  $('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');$('jb').style.display='flex';PX=W/2;groundSlope=0;$('pauseBtn').style.display='none';$('powerBtn').style.display=P.torre?'block':'none';$('audioBtn').style.display='block';state='intro';S.intro=3;S.pauseUsed=false;last=performance.now();
+  $('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');$('jb').style.display='flex';PX=W/2;groundSlope=0;$('pauseBtn').style.display='block';$('powerBtn').style.display=P.torre?'block':'none';$('audioBtn').style.display='block';state='intro';S.intro=3;S.pauseUsed=false;last=performance.now();startMeditationAudio();
 }
 function gy(x){return 190+groundSlope*x}
 function jump(){
   if(state!=='play'||S.dead)return;S.hudVisible=true;tone(520,.05);vibrate(12);
   if(S.z<=0.01&&S.vz<=0){S.vz=S.v0;S.air=P.louco?1:0;S.float=0;if(P.forca)U.forca++;}
-  else if(P.louco&&S.air>0){S.air--;S.vz=S.v0*0.92;S.spin=0.34;U.louco++;}
+  else if(P.louco&&S.air>0){S.air--;S.vz=S.v0*1.5;S.spin=0.34;U.louco++;}
 }
 stage.addEventListener('pointerdown',e=>{pointers.add(e.pointerId);if(state==='play')jump();});
 ['pointerup','pointercancel','pointerleave'].forEach(t=>stage.addEventListener(t,e=>pointers.delete(e.pointerId)));
@@ -256,12 +256,31 @@ $('customPowers').addEventListener('change',updateCustomSelection);
 $('customStart').onclick=()=>showDraw('custom');
 $('customPowers').innerHTML=CARDS.map(c=>'<label><input class="custom-power" type="checkbox" value="'+c.id+'"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+c.cor+'"></span>'+c.nome+'</label>').join('');
 updateCustomSelection();
-$('pauseBtn').onclick=()=>{if(state==='play'&&!S.pauseUsed){S.pauseUsed=true;state='paused';$('pause').classList.remove('off');$('pauseBtn').style.display='none';}};
-$('resume').onclick=()=>{if(state==='paused'){$('pause').classList.add('off');state='play';last=performance.now();}};
-let audioOn=true,audioCtx=null;function tone(f=440,d=.08){if(!audioOn)return;try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.025,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d);}catch(e){}}
-$('audioBtn').onclick=()=>{audioOn=!audioOn;$('audioBtn').textContent='Áudio: '+(audioOn?'ligado':'desligado');};function vibrate(ms=25){if(navigator.vibrate)navigator.vibrate(ms);}
-$('powerBtn').onclick=()=>{zap();tone(660,.12);vibrate(35);};
 
+let pausedFrom='play';
+$('pauseBtn').onclick=()=>{if((state==='play'||state==='intro')&&!S.pauseUsed){S.pauseUsed=true;pausedFrom=state;state='paused';$('pause').classList.remove('off');$('pauseBtn').style.display='none';}};
+$('resume').onclick=()=>{if(state==='paused'){$('pause').classList.add('off');state=pausedFrom;last=performance.now();$('pauseBtn').style.display='block';}};
+let audioOn=true,audioCtx=null,ambientNodes=null;
+function ensureAudio(){audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume();return audioCtx;}
+function startMeditationAudio(){
+ try{
+  const ac=ensureAudio();if(ambientNodes)return;
+  const master=ac.createGain();master.gain.value=0;master.connect(ac.destination);
+  const tones=[];
+  [[110,.018],[164.81,.012],[220,.006]].forEach(([freq,vol])=>{
+   const osc=ac.createOscillator(),gain=ac.createGain(),lfo=ac.createOscillator(),lfoGain=ac.createGain();
+   osc.type='sine';osc.frequency.value=freq;gain.gain.value=vol;
+   lfo.type='sine';lfo.frequency.value=.07+(freq/220)*.025;lfoGain.gain.value=vol*.22;
+   lfo.connect(lfoGain);lfoGain.connect(gain.gain);osc.connect(gain);gain.connect(master);
+   osc.start();lfo.start();tones.push(osc,lfo);
+  });
+  master.gain.setTargetAtTime(audioOn?1:0,ac.currentTime,.8);ambientNodes={master,tones};
+ }catch(e){}
+}
+function setAudioEnabled(enabled){audioOn=enabled;$('audioBtn').textContent='Áudio: '+(audioOn?'ligado':'desligado');if(ambientNodes&&audioCtx)ambientNodes.master.gain.setTargetAtTime(audioOn?1:0,audioCtx.currentTime,.35);}
+function tone(f=440,d=.08){if(!audioOn)return;try{const ac=ensureAudio(),o=ac.createOscillator(),g=ac.createGain();o.frequency.value=f;g.gain.setValueAtTime(.025,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+d);}catch(e){}}
+$('audioBtn').onclick=()=>setAudioEnabled(!audioOn);
+function vibrate(ms=25){if(navigator.vibrate)navigator.vibrate(ms);}
 function hitRect(cx,cy,r,x,y,w,h){const nx=Math.max(x-w/2,Math.min(cx,x+w/2)),ny=Math.max(y-h,Math.min(cy,y));return (cx-nx)**2+(cy-ny)**2<r*r;}
 function takeHit(source='obstacle'){
   if(S.invuln>0)return;S.hudVisible=true;S.hits++;S.face=1.5;tone(180,.16);vibrate(90);
