@@ -735,3 +735,13 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - **Musica.html v0.0:** nova sessão independente na central de testes para comparar cinco ambientes sintetizados: Serenidade original, Jardim Zen, Maré tranquila, Céu estrelado e Floresta interior. A seleção é feita por radio buttons; escolher outra faixa durante a reprodução troca a música imediatamente. Os controles permitem começar e parar a escuta.
 - A central de testes passa a apontar a beta v0.15 e inclui o acesso à sessão de músicas.
 - A reprodução depende do suporte do navegador à Web Audio API e da interação do usuário para liberar o áudio. A validação auditiva em aparelhos físicos ainda está pendente.
+
+
+## Atualização — beta v0.16: botão da Torre (24/11/2026)
+
+- O botão de ativação da Torre foi reposicionado para o centro superior da tela de jogo.
+- O botão é circular, mede 27 × 27 px (um pouco menor que o diâmetro externo aproximado de 30 px da estrela vermelha Sonho) e exibe somente o símbolo de raio.
+- O botão aparece durante a sessão quando A Torre está entre as cartas ativas e ainda não foi utilizada. Ao tocar, ativa o poder, remove os obstáculos visíveis conforme a regra existente e desaparece.
+- Se A Morte for ativada, os demais poderes são desativados e o botão da Torre desaparece imediatamente, mesmo que ainda não tenha sido usado.
+- O atalho de teclado T continua disponível. A central de testes aponta para a beta v0.16.
+- Validação por leitura do código e conferência dos arquivos publicados; teste visual em aparelho ainda pendente.
