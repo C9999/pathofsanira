@@ -500,7 +500,7 @@ function render(){
   ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(718,14,112,60,16);ctx.fill();
   ctx.textAlign='center';ctx.textBaseline='alphabetic';ctx.fillStyle='#6C5B9E';ctx.font='700 11px system-ui,sans-serif';ctx.fillText('PONTOS',774,32);
   ctx.fillStyle='#3E3552';ctx.font='700 30px system-ui,sans-serif';ctx.fillText(String(Math.round(S.score)),774,63);ctx.textAlign='left';
-  let x=14;cards.forEach(c=>{
+  let x=14;cards.filter(c=>P[c.id]).forEach(c=>{
     if(c.id==='sacer'&&S.sacerCooldown>0){
       ctx.font='12px system-ui,sans-serif';const w=ctx.measureText(c.nome).width+28,h=22;
       ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.fill();
