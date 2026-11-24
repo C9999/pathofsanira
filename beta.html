@@ -266,14 +266,14 @@ function takeHit(source='obstacle'){
   if(S.invuln>0)return;S.hits++;S.face=1.5;tone(180,.16);vibrate(90);
   const reduced=P.sol&&source==='enemy';S.lives-=reduced?0.5:1;if(reduced)U.sol++;
   if(S.lives>0){S.invuln=1;return;}
-  if(P.morte&&!S.morteUsed){S.morteUsed=true;U.morte++;S.lives=1;S.morteGray=true;S.invuln=3;Object.keys(P).forEach(id=>{if(id!=='morte')P[id]=false;});return;}
+  if(P.morte&&!S.morteUsed){S.morteUsed=true;U.morte++;S.lives=1;S.morteGray=true;S.invuln=3;S.speed=300;Object.keys(P).forEach(id=>{if(id!=='morte')P[id]=false;});return;}
   S.dead=true;S.ending=0.9;
 }
 function update(rdt){
   const holding=pointers.size>0;let ts=1;
   if(P.sacer){ts=1;}
   const dt=rdt*ts;S.t+=dt;
-  if(state!=='countdown'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;}
+  if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;}
   let g=S.g;if(P.eremita&&holding&&S.vz<0&&S.z>0&&S.float<1.5){g*=0.25;S.float+=rdt;U.eremita+=rdt;}
   if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';$('pauseBtn').style.display='block';}return;}
   if(S.z>0||S.vz>0){S.vz-=g*dt;S.z+=S.vz*dt;if(S.z<=0){S.z=0;S.vz=0;S.float=0;}}
