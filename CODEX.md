@@ -745,3 +745,18 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - Se A Morte for ativada, os demais poderes são desativados e o botão da Torre desaparece imediatamente, mesmo que ainda não tenha sido usado.
 - O atalho de teclado T continua disponível. A central de testes aponta para a beta v0.16.
 - Validação por leitura do código e conferência dos arquivos publicados; teste visual em aparelho ainda pendente.
+
+
+## Atualização de implementação — 24/11/2026
+
+### Beta v0.17
+- O botão ⚡ da Torre fica imediatamente ao lado do mostrador “Torre” no HUD, alinhado verticalmente ao indicador.
+- O botão só aparece durante a corrida, depois que o HUD é exibido; permanece oculto na tela inicial, na tiragem e no período de espera antes do início.
+- Ao ativar o poder da Torre, o botão desaparece e não retorna naquela sessão.
+- O botão também permanece oculto se A Morte desativar os demais poderes.
+- A central de testes aponta para a beta v0.17.
+
+### Sessão de músicas v0.1
+- A faixa 3, “Maré tranquila”, recebeu vozes triangulares e frequências médias adicionais para melhorar a audibilidade em alto-falantes de celulares.
+- As demais quatro faixas permaneceram inalteradas.
+- A alteração é um ajuste de síntese; a reprodução ainda precisa ser conferida auditivamente em aparelhos reais.
