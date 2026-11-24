@@ -726,3 +726,12 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - Corrigido o ambiente sonoro: os tons anteriores eram graves e muito baixos. Agora há camadas de tons senoidais em frequências mais audíveis, com modulação lenta e volume ambiente suave.
 - A inicialização do áudio ocorre diretamente no clique/toque de “Começar a meditar”, para atender à política de reprodução dos navegadores.
 - JavaScript validado sintaticamente. Não foi realizado teste físico em aparelho.
+
+
+## Atualização — áudio meditativo e central de músicas (24/11/2026)
+
+- **Beta v0.15:** a música ambiente começa no início do período de espera (`intro`), junto ao início da nova sessão, e é interrompida com transição curta assim que a rodada termina. Na próxima chamada de início, uma nova reprodução começa durante o novo período de espera.
+- O áudio contínuo usa Web Audio API e é encerrado por redução gradual de volume e parada dos osciladores; os efeitos sonoros permanecem independentes.
+- **Musica.html v0.0:** nova sessão independente na central de testes para comparar cinco ambientes sintetizados: Serenidade original, Jardim Zen, Maré tranquila, Céu estrelado e Floresta interior. A seleção é feita por radio buttons; escolher outra faixa durante a reprodução troca a música imediatamente. Os controles permitem começar e parar a escuta.
+- A central de testes passa a apontar a beta v0.15 e inclui o acesso à sessão de músicas.
+- A reprodução depende do suporte do navegador à Web Audio API e da interação do usuário para liberar o áudio. A validação auditiva em aparelhos físicos ainda está pendente.
