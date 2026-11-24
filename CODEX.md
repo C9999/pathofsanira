@@ -670,3 +670,38 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - Confirmar ausência de contagem regressiva e dos rótulos de posição na tiragem.
 - Confirmar que a movimentação e inclinação só começam depois dos 3 segundos.
 - Teste de gameplay em aparelho físico ainda não realizado.
+
+
+## Atualização — beta v0.12 (24/11/2026)
+
+### Alterações implementadas
+
+- **A Força:** nome do poder atualizado para **“Sua habilidade principal”** na tiragem e no catálogo de cartas.
+- **Tiragem:** cada carta revelada apresenta a barra com sua cor, número, nome e nome do poder. A explicação/descrição do poder não é exibida.
+- **HUD inicial:** permanece oculto durante a espera de 3 segundos e continua oculto quando a corrida começa. Aparece no primeiro pulo, uso do raio, dano recebido ou Sonho coletado.
+- **Tucano:** altura de voo aumentada em 20 px; a colisão acompanha a nova posição. A intenção de balanceamento é que o pulo simples alcance o tucano e o pulo duplo consiga passar por cima.
+- **Término da beta:** adicionado um marco visual “FIM” ao final do percurso. A sessão termina ao alcançar esse marco, em vez de encerrar ao coletar uma quantidade fixa de itens.
+- **HUD:** removidos o placar de pontos e o total de Sonhos durante a corrida.
+- **Vida:** contador substituído por círculos abaixo das cartas. A Força mostra três círculos laranjas; sem A Força, é exibido o número de vidas inicial correspondente. A Imperatriz acrescenta um círculo rosa. Dano de meia vida é representado por meio círculo. Após o renascimento da Morte, aparece somente um círculo cinza.
+
+### Versões
+
+- `beta.html`: **v0.12**.
+- `Cartas.html`: **v0.5**.
+- `teste.html`: central atualizada para exibir as versões acima.
+- `index.html` e versões beta anteriores permanecem intactas.
+
+### Commits
+
+- `b3b7525` — atualiza tiragem, HUD, vidas, tucano e término da beta v0.12.
+- `96f7255` — atualiza nome do poder da Força no catálogo.
+- `fe4d004` — atualiza central para beta v0.12 e cartas v0.5.
+
+### Validação
+
+- Sintaxe JavaScript da beta validada.
+- Tiragem contém barra de cor, número, nome e nome do poder, sem descrição.
+- HUD de pontos e total de Sonhos removidos da tela de jogo.
+- HUD condicionado ao primeiro evento de interação definido.
+- Marco final e condição de encerramento adicionados.
+- Teste de gameplay em aparelho físico ainda não realizado; altura relativa do tucano e a diferença entre pulo simples/duplo precisam de confirmação visual em jogo.
