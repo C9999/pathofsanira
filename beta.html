@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.14 — Path of Sanira — Beta</title>
+<title>v 0.15 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -278,6 +278,11 @@ function startMeditationAudio(){
   ambientNodes={master,voices};
  }catch(e){console.warn('Não foi possível iniciar o áudio meditativo.',e);}
 }
+function stopMeditationAudio(){
+ if(!ambientNodes||!audioCtx)return;
+ const active=ambientNodes;ambientNodes=null;
+ try{const now=audioCtx.currentTime;active.master.gain.cancelScheduledValues(now);active.master.gain.setTargetAtTime(0,now,.055);active.voices.forEach(node=>{try{node.stop(now+.32);}catch(e){}});}catch(e){}
+}
 function tone(f=440,d=.08){
  if(!audioOn||!audioCtx)return;
  try{const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.frequency.value=f;g.gain.setValueAtTime(.025,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+d);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+d);}catch(e){}
@@ -345,7 +350,7 @@ function usageText(c){
   case'sol':return U.sol+' colisões com inimigos com 0,5 de dano';}
 }
 function finish(){
-  state='end';$('tb').style.display='none';
+  stopMeditationAudio();state='end';$('tb').style.display='none';
   const won=!S.dead;
   $('end').innerHTML='<div class="box"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score)+'</b><span>pontos</span></div><div class="stat"><b>'+(S.stars*10)+'</b><span>Sonhos</span></div><div class="stat"><b>'+S.lives+'</b><span>vida restante</span></div><div class="stat"><b>'+S.hits+'</b><span>colisões</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+
    cards.map((c,i)=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b> · '+c.poder+'<small>'+usageText(c)+'</small></div></div>').join('')+
