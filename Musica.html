@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>v0.0 — Música meditativa — Path of Sanira</title>
+<style>
+:root{--bg:#14122B;--panel:#211C45;--panel2:#2E2760;--gold:#E8C46A;--cream:#F5EFE0;--muted:#CFC8E8;--line:#6B5FB5}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#30275d 0%,var(--bg) 65%);color:var(--cream);font:15px system-ui,sans-serif;padding:26px}
+main{max-width:760px;margin:auto}.back{display:inline-block;margin-bottom:18px;padding:9px 13px;border-radius:9px;background:var(--panel2);border:1px solid var(--line);color:var(--cream);text-decoration:none}
+h1{font:600 32px Georgia,serif;margin:8px 0}p{color:var(--muted);line-height:1.55}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;margin:18px 0}
+.option{display:flex;align-items:flex-start;gap:12px;padding:14px;border-radius:12px;background:var(--panel2);border:1px solid #51478f;margin:10px 0;cursor:pointer}
+.option:has(input:checked){border-color:var(--gold);background:#393064}
+input{accent-color:var(--gold);width:19px;height:19px;flex:none;margin-top:2px}
+.option strong{display:block;color:var(--gold);font-size:16px}.option small{display:block;color:var(--muted);margin-top:3px;line-height:1.4}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:10px;padding:12px 20px;background:var(--gold);color:var(--bg);font-weight:750;font-size:15px;cursor:pointer}
+button.secondary{background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+#status{margin-top:15px;color:var(--gold);min-height:24px}
+.note{font-size:13px}
+@media(max-width:520px){body{padding:16px}h1{font-size:27px}.panel{padding:15px}}
+</style></head>
+<body><main>
+<a class="back" href="teste.html">← Central de testes</a>
+<h1>Músicas de meditação</h1>
+<p>Escolha uma das cinco atmosferas e inicie a reprodução. As faixas são ambientes instrumentais sintetizados em tempo real, sem gravações externas.</p>
+<section class="panel">
+<h2>Selecione uma música</h2>
+<label class="option"><input type="radio" name="track" value="original" checked><span><strong>1. Serenidade original</strong><small>Camadas suaves e contínuas, com acordes abertos e movimento lento. É a música usada atualmente na beta.</small></span></label>
+<label class="option"><input type="radio" name="track" value="zen"><span><strong>2. Jardim Zen</strong><small>Timbres triangulares delicados, notas espaçadas e sensação de silêncio entre os sons.</small></span></label>
+<label class="option"><input type="radio" name="track" value="ocean"><span><strong>3. Maré tranquila</strong><small>Ondulações graves e acordes macios, com movimento amplo que lembra o vai e vem das ondas.</small></span></label>
+<label class="option"><input type="radio" name="track" value="stars"><span><strong>4. Céu estrelado</strong><small>Harmônicos mais agudos e brilhantes sobre uma base profunda e contemplativa.</small></span></label>
+<label class="option"><input type="radio" name="track" value="forest"><span><strong>5. Floresta interior</strong><small>Textura quente, pulsação muito lenta e acordes orgânicos com sensação acolhedora.</small></span></label>
+<div class="controls"><button id="play">▶ Começar a escutar</button><button id="stop" class="secondary">Parar</button></div>
+<div id="status" role="status">Pronto para reproduzir.</div>
+<p class="note">Dica: se não ouvir nada, confira o volume do aparelho e permita o áudio após tocar em “Começar a escutar”.</p>
+</section></main>
+<script>
+const presets={
+ original:{wave:'sine',voices:[[220,.075],[329.63,.042],[440,.026],[110,.035]],rate:.055,depth:.18,master:.65},
+ zen:{wave:'triangle',voices:[[196,.052],[293.66,.035],[392,.025],[587.33,.012]],rate:.035,depth:.13,master:.55},
+ ocean:{wave:'sine',voices:[[73.42,.085],[110,.06],[164.81,.035],[220,.018]],rate:.022,depth:.28,master:.7},
+ stars:{wave:'sine',voices:[[174.61,.035],[261.63,.025],[523.25,.035],[783.99,.012]],rate:.045,depth:.22,master:.58},
+ forest:{wave:'triangle',voices:[[130.81,.065],[196,.045],[261.63,.025],[329.63,.018]],rate:.018,depth:.16,master:.62}
+};
+let context=null,nodes=null,playing=false;
+const status=document.getElementById('status');
+function selected(){return document.querySelector('input[name="track"]:checked').value;}
+function stopMusic(){
+ if(!nodes||!context){playing=false;return;}
+ const old=nodes;nodes=null;playing=false;
+ const now=context.currentTime;
+ old.master.gain.cancelScheduledValues(now);old.master.gain.setTargetAtTime(0,now,.07);
+ old.oscs.forEach(o=>{try{o.stop(now+.45)}catch(e){}});
+ status.textContent='Reprodução interrompida.';
+}
+async function playMusic(){
+ stopMusic();
+ const cfg=presets[selected()],AC=window.AudioContext||window.webkitAudioContext;
+ if(!AC){status.textContent='Este navegador não oferece suporte à reprodução de áudio.';return;}
+ context=context||new AC();
+ try{if(context.state==='suspended')await context.resume();}catch(e){status.textContent='Não foi possível liberar o áudio neste navegador.';return;}
+ const master=context.createGain();master.gain.value=0;master.connect(context.destination);
+ const oscs=[];
+ cfg.voices.forEach(([freq,vol],i)=>{
+  const osc=context.createOscillator(),gain=context.createGain(),lfo=context.createOscillator(),lfoGain=context.createGain();
+  osc.type=cfg.wave;osc.frequency.value=freq;gain.gain.value=vol;
+  lfo.type='sine';lfo.frequency.value=cfg.rate+i*.006;lfoGain.gain.value=vol*cfg.depth;
+  lfo.connect(lfoGain);lfoGain.connect(gain.gain);osc.connect(gain);gain.connect(master);
+  osc.start();lfo.start();oscs.push(osc,lfo);
+ });
+ master.gain.setTargetAtTime(cfg.master,context.currentTime,.9);
+ nodes={master,oscs};playing=true;
+ const label=document.querySelector('input[name="track"]:checked').parentElement.querySelector('strong').textContent;
+ status.textContent='Tocando: '+label;
+}
+document.getElementById('play').addEventListener('click',playMusic);
+document.getElementById('stop').addEventListener('click',stopMusic);
+document.querySelectorAll('input[name="track"]').forEach(r=>r.addEventListener('change',()=>{if(playing)playMusic();else status.textContent='Selecionada: '+r.parentElement.querySelector('strong').textContent;}));
+window.addEventListener('pagehide',stopMusic);
+</script></body></html>
