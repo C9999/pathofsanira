@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.16 — Path of Sanira — Beta</title>
+<title>v 0.17 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
 #stage{position:absolute;width:844px;height:390px;transform-origin:0 0;overflow:hidden;background:#A9D8EE}
 #c{position:absolute;left:0;top:0;width:844px;height:390px}
-#tb{position:absolute;left:50%;top:8px;transform:translateX(-50%);width:27px;height:27px;padding:0;border-radius:50%;background:rgba(46,39,96,.94);border:1.5px solid #E8C46A;display:none;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#E8C46A;cursor:pointer;line-height:1;z-index:5;box-shadow:0 1px 5px rgba(20,18,43,.35)}
+ #tb{position:absolute;left:0;top:11px;transform:none;width:27px;height:27px;padding:0;border-radius:50%;background:rgba(46,39,96,.94);border:1.5px solid #E8C46A;display:none;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#E8C46A;cursor:pointer;line-height:1;z-index:5;box-shadow:0 1px 5px rgba(20,18,43,.35)}
 
 .scr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(20,18,43,.94);text-align:center}
 .off{display:none!important}
@@ -218,7 +218,7 @@ function startRun(){
   }
   S.finishWx=Math.max(...items.map(it=>it.wx))+900;
   $('tb').style.display='none';
-  startMeditationAudio();$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;groundSlope=0;$('tb').style.display=P.torre?'flex':'none';$('powerBtn').style.display='none';state='intro';S.intro=3;last=performance.now();
+  startMeditationAudio();$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;groundSlope=0;$('tb').style.display='none';$('powerBtn').style.display='none';state='intro';S.intro=3;last=performance.now();
 }
 function gy(x){return 190+groundSlope*x}
 function jump(){
@@ -525,6 +525,7 @@ function render(){
   if(S.sacerAura>0){ctx.strokeStyle='#6CC38A';ctx.lineWidth=5;ctx.globalAlpha=Math.min(1,S.sacerAura/0.25);ctx.beginPath();ctx.arc(PX,gyP-67-S.z,49,0,7);ctx.stroke();ctx.globalAlpha=1;}
   if(P.lua){const px=PX,py=gyP-67-S.z;const gr=ctx.createRadialGradient(px,py,110,px,py,330);gr.addColorStop(0,'rgba(20,18,43,0)');gr.addColorStop(1,'rgba(20,18,43,.82)');ctx.fillStyle=gr;ctx.fillRect(0,0,W,H);}
   if(S.flash>0){ctx.fillStyle='rgba(255,255,255,'+Math.min(.85,S.flash*3)+')';ctx.fillRect(0,0,W,H);}
+  $('tb').style.display='none';
   if(S.hudVisible){
   let x=14;cards.filter(c=>P[c.id]).forEach(c=>{
     if(c.id==='sacer'&&S.sacerCooldown>0){
@@ -533,7 +534,7 @@ function render(){
       ctx.save();ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.clip();
       ctx.fillStyle=c.cor;ctx.fillRect(x,14,w*(1-S.sacerCooldown/15),h);ctx.restore();
       x+=w+6;
-    }else{x+=pill(x,14,c.nome,c.cor)+6;}
+    }else{const pw=pill(x,14,c.nome,c.cor);if(c.id==='torre'&&state==='play'&&!S.torreUsed&&!S.morteGray){$('tb').style.left=(x+pw+5)+'px';$('tb').style.top='11px';$('tb').style.display='flex';}x+=pw+6;}
   });
 
   const lives=[];if(P.forca)for(let i=0;i<3;i++)lives.push('#F28C28');else lives.push('#F28C28');if(P.imper)lives.push('#F28FB1');
