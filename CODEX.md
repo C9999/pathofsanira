@@ -624,3 +624,14 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - Camada de aviso de rotação elevada para permanecer acima da interface.
 - Validada a sintaxe do JavaScript após a correção com compilação do script.
 - Ainda é necessária validação de interação em navegador Android real; o suporte à Fullscreen API depende do navegador e da interação do usuário.
+
+
+## Beta v0.10 — remoção de tela cheia e integração visual dos inimigos (24/11/2026)
+
+- Removido integralmente o botão de tela cheia da beta, incluindo estilos, eventos e chamadas à Fullscreen API. A experiência volta a depender somente dos controles de toque já existentes.
+- Integrados à beta os desenhos de jacaré, gado, tucano e inimigo genérico da branch `inimigos`, mantendo as dimensões de referência e as chamadas de renderização usadas pelos elementos do percurso.
+- A beta utiliza o estilo padrão dos desenhos. As variações temáticas continuam disponíveis no componente isolado para avaliação; não foi implementada seleção de estilo dentro da partida.
+- Atualizado `Inimigos.html` para v0.1 com galeria de estilos, alternativas visuais e ampliação dos desenhos, derivada do experimento da branch `inimigos`.
+- Atualizada a central `teste.html` para indicar beta v0.10 e componente Inimigos v0.1.
+- Os SVGs de cartas Tarot e o estudo de geração procedural da branch não foram integrados: são materiais independentes, e o CODEX mantém a escolha da arte das cartas e as regras de geração como decisões em aberto.
+- `index.html` e `v0.5.html` permanecem inalterados.
