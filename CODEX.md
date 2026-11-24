@@ -662,6 +662,8 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - `42bfc99` — atualiza regras das cartas Carro e Morte.
 - `53cb613` — atualiza central para beta v0.11 e cartas v0.4.
 
+- `a80874d` — corrige a descrição da carta O Carro na beta após o ajuste para +40%.
+
 ### Validação
 
 - Validar sintaxe JavaScript da beta.
