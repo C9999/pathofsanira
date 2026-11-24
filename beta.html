@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.10 — Path of Sanira — Beta</title>
+<title>v 0.11 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -61,14 +61,15 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <div id="custom" class="scr off"><h2>Escolha três poderes</h2><p>Marque exatamente três cartas para esta sessão.</p><div id="customPowers" class="custom-powers"></div><p id="customHint" class="hint">0 de 3 selecionados</p><button id="customStart" disabled>Começar com estes poderes</button><button id="customBack" class="alt">Voltar</button></div>
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
-<div id="countdown" class="scr off"><h2>Prepare-se para meditar</h2><div id="count" style="font:600 64px Georgia,serif;color:#E8C46A">5</div><p>Sanira começará a se mover em instantes</p></div>
+
 <div id="pause" class="scr off"><h2>Sessão de meditação pausada</h2><button id="resume">Continuar</button></div>
 <button id="pauseBtn" class="alt" style="position:absolute;right:112px;top:18px;display:none;padding:8px 12px;font-size:12px">Pausar</button>
 <button id="powerBtn" style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:none;border-radius:50%;width:66px;height:66px;padding:6px;font-size:11px">PODER</button>
 <div id="audioBtn" style="position:absolute;right:16px;bottom:16px;display:none;color:#3E3552;background:rgba(255,255,255,.7);padding:7px 10px;border-radius:12px;font-size:11px">Áudio: ligado</div>
 </div>
 <script>
-const W=844,H=390,PX=190,S0=0.55,SLOPE=0.15;
+const W=844,H=390,S0=0.55,SLOPE=0.15;
+let PX=190,groundSlope=0;
 const SVG_HEAD='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">';
 const SVG_AURA={forca:`<g id="aura-forca">
 <ellipse cx="120" cy="116" rx="94" ry="100" fill="#F9C784" opacity="0.35"/>
@@ -123,15 +124,15 @@ const CARDS=[
 {id:'mago',num:'I',nome:'O Mago',poder:'Ímã',desc:'Atrai Sonhos próximos.',cor:'#A78BDB'},
 {id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Atravessa automaticamente o próximo obstáculo sem colisão. Após ativar, recarrega em 15 segundos.',cor:'#6CC38A'},
 {id:'imper',num:'III',nome:'A Imperatriz',poder:'Vida extra',desc:'Acrescenta um nível de vida.',cor:'#F28FB1'},
-{id:'carro',num:'VII',nome:'O Carro',poder:'Arrancada',desc:'Velocidade +25%.',cor:'#3FBFA8'},
+{id:'carro',num:'VII',nome:'O Carro',poder:'Arrancada',desc:'Velocidade +40%.cor:'#3FBFA8'},
 {id:'forca',num:'VIII',nome:'A Força',poder:'Três vidas',desc:'Começa a sessão com 3 níveis de vida.',cor:'#F28C28'},
 {id:'eremita',num:'IX',nome:'O Eremita',poder:'Flutuação',desc:'Segure no ar para planar.',cor:'#5B8DEF'},
 {id:'roda',num:'X',nome:'A Roda da Fortuna',poder:'Sorte',desc:'Cada Sonho coletado vale 1,5.',cor:'#B5D96B'},
-{id:'morte',num:'XIII',nome:'A Morte',poder:'Renascimento',desc:'Ao perder todas as vidas, ganha uma vida extra e fica totalmente cinza.',cor:'#D95FD0'},
+{id:'morte',num:'XIII',nome:'A Morte',poder:'Renascimento',desc:'Ao perder todas as vidas, ganha uma vida extra, fica totalmente cinza e perde os outros poderes.',cor:'#D95FD0'},
 {id:'torre',num:'XVI',nome:'A Torre',poder:'Relâmpago',desc:'Limpa os obstáculos 1 vez, quando você tocar no ⚡.',cor:'#E8604C'},
 {id:'lua',num:'XVIII',nome:'A Lua',poder:'Noite eterna',desc:'Menos visão, pontos x1,5.',cor:'#E6E9F0'},
 {id:'sol',num:'XIX',nome:'O Sol',poder:'Proteção solar',desc:'Reduz em 0,5 o dano recebido em colisões com inimigos.',cor:'#F3C74F'}];
-const ROLES=['Principal · V do peito','Manga esquerda','Manga direita'];
+
 const $=id=>document.getElementById(id);
 const stage=$('stage'),cv=$('c'),ctx=cv.getContext('2d');
 let state='menu',cards=[],P={},S={},U={},items=[],imgs={},pointers=new Set(),last=0,scale=1;
@@ -168,7 +169,7 @@ function showDraw(mode='random'){
   const box=$('cards');box.innerHTML='';
   cards.forEach((c,i)=>{
     const el=document.createElement('div');el.className='card';
-    el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'"><div class="bar" style="background:'+c.cor+'"></div><div class="role">'+ROLES[i]+'</div><div class="num">'+c.num+'</div><div class="nm">'+c.nome+'</div><div class="pw">'+c.poder+'</div><div class="ds">'+c.desc+'</div></div></div>';
+    el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'"><div class="bar" style="background:'+c.cor+'"></div><div class="nm">'+c.nome+'</div></div></div>';
     box.appendChild(el);setTimeout(()=>el.classList.add('flip'),900+i*1100);
   });
   loadImgs().then(()=>setTimeout(()=>$('go').classList.remove('off'),900+2*1100+700));
@@ -179,7 +180,7 @@ function startRun(){
   U={forca:0,louco:0,mago:0,sacer:0,imper:0,carro:0,eremita:0,roda:0,morte:0,torre:0,lua:0,sol:0};
   const peak=70,g=1800;
   S={dist:0,z:0,vz:0,g,v0:Math.sqrt(2*g*peak),air:0,float:0,spin:0,score:0,coins:0,stars:0,flash:0,resolved:0,hits:0,lives:(P.forca?3:1)+(P.imper?1:0),invuln:0,face:0,
-     shield:false,shieldT:0,slowE:2,sacerFalls:2,sacerCooldown:0,sacerAura:0,morteUsed:false,morteGray:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,speed:300*(P.carro?1.25:1)};
+     shield:false,shieldT:0,slowE:2,sacerFalls:2,sacerCooldown:0,sacerAura:0,morteUsed:false,morteGray:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,speed:300*(P.carro?1.4:1)};
   const obstacleTypes=[
     {k:'r',w:40,h:46,weight:20},
     {k:'l',w:70,h:44,weight:15},
@@ -216,9 +217,9 @@ function startRun(){
     items.push({wx:target.wx+100+Math.random()*180,k:'s',coin:true,star:true,gold:false,air:true,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6});
   }
   $('tb').style.display='none';
-  $('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');$('jb').style.display='flex';$('countdown').classList.remove('off');$('count').textContent='5';$('pauseBtn').style.display='none';$('powerBtn').style.display=P.torre?'block':'none';$('audioBtn').style.display='block';state='countdown';S.countdown=5;S.pauseUsed=false;last=performance.now();
+  $('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');$('jb').style.display='flex';PX=W/2;groundSlope=0;$('pauseBtn').style.display='none';$('powerBtn').style.display=P.torre?'block':'none';$('audioBtn').style.display='block';state='intro';S.intro=3;S.pauseUsed=false;last=performance.now();
 }
-function gy(x){return 190+SLOPE*x}
+function gy(x){return 190+groundSlope*x}
 function jump(){
   if(state!=='play'||S.dead)return;tone(520,.05);vibrate(12);
   if(S.z<=0.01&&S.vz<=0){S.vz=S.v0;S.air=P.louco?1:0;S.float=0;if(P.forca)U.forca++;}
@@ -233,7 +234,7 @@ $('tb').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault(
 $('go').onclick=startRun;
 function showMenu(){
   state='menu';$('menu').classList.remove('off');$('custom').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');
-  $('countdown').classList.add('off');$('pause').classList.add('off');$('jb').style.display='none';$('tb').style.display='none';
+  $('pause').classList.add('off');$('jb').style.display='none';$('tb').style.display='none';
   $('pauseBtn').style.display='none';$('powerBtn').style.display='none';$('audioBtn').style.display='none';
 }
 function updateCustomSelection(){
@@ -265,7 +266,7 @@ function takeHit(source='obstacle'){
   if(S.invuln>0)return;S.hits++;S.face=1.5;tone(180,.16);vibrate(90);
   const reduced=P.sol&&source==='enemy';S.lives-=reduced?0.5:1;if(reduced)U.sol++;
   if(S.lives>0){S.invuln=1;return;}
-  if(P.morte&&!S.morteUsed){S.morteUsed=true;U.morte++;S.lives=1;S.morteGray=true;S.invuln=3;return;}
+  if(P.morte&&!S.morteUsed){S.morteUsed=true;U.morte++;S.lives=1;S.morteGray=true;S.invuln=3;Object.keys(P).forEach(id=>{if(id!=='morte')P[id]=false;});return;}
   S.dead=true;S.ending=0.9;
 }
 function update(rdt){
@@ -274,7 +275,7 @@ function update(rdt){
   const dt=rdt*ts;S.t+=dt;
   if(state!=='countdown'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;}
   let g=S.g;if(P.eremita&&holding&&S.vz<0&&S.z>0&&S.float<1.5){g*=0.25;S.float+=rdt;U.eremita+=rdt;}
-  if(state==='countdown'){S.countdown-=rdt;$('count').textContent=Math.max(1,Math.ceil(S.countdown));if(S.countdown<=0){state='play';$('countdown').classList.add('off');$('pauseBtn').style.display='block';}return;}
+  if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';$('pauseBtn').style.display='block';}return;}
   if(S.z>0||S.vz>0){S.vz-=g*dt;S.z+=S.vz*dt;if(S.z<=0){S.z=0;S.vz=0;S.float=0;}}
   if(S.flash>0)S.flash-=rdt;if(S.invuln>0)S.invuln-=dt;if(S.face>0)S.face-=rdt;if(S.spin>0)S.spin=Math.max(0,S.spin-rdt);if(S.sacerCooldown>0)S.sacerCooldown=Math.max(0,S.sacerCooldown-dt);if(S.sacerAura>0)S.sacerAura=Math.max(0,S.sacerAura-rdt);
   
@@ -313,7 +314,7 @@ function usageText(c){
   case'mago':return U.mago+(U.mago===1?' Sonho atraído':' Sonhos atraídos');
   case'sacer':return U.sacer+' obstáculos atravessados; recarga de 15 s';
   case'imper':return U.imper?'vida extra usada':'vida extra não foi necessária';
-  case'carro':return 'velocidade +25% o tempo todo';
+  case'carro':return 'velocidade +40% o tempo todo';
   case'eremita':return U.eremita.toFixed(1).replace('.',',')+' s planando';
   case'roda':return 'Sonhos com valor multiplicado por 1,5';
   case'morte':return U.morte?'renasceu 1 vez':'não precisou renascer';
@@ -489,7 +490,7 @@ function render(){
   if(img){
     ctx.save();
     if(S.invuln>0&&Math.floor(S.t*14)%2)ctx.globalAlpha=.45;
-    ctx.translate(PX,gyP-20-S.z-86*s);ctx.rotate(Math.atan(SLOPE)*0.6+(S.spin>0?(1-S.spin/0.34)*Math.PI*2:0));
+    ctx.translate(PX,gyP-20-S.z-86*s);ctx.rotate(Math.atan(groundSlope)*0.6+(S.spin>0?(1-S.spin/0.34)*Math.PI*2:0));
     if(S.morteGray)ctx.filter='grayscale(1)';
     ctx.drawImage(img,-120*s,-116*s,240*s,240*s);ctx.filter='none';ctx.restore();
   }
@@ -514,7 +515,7 @@ function render(){
 }
 function loop(now){
   const rdt=Math.min(.033,(now-last)/1000);last=now;
-  if(state==='play'||state==='countdown'){update(rdt);render();}
+  if(state==='play'||state==='intro'){update(rdt);render();}
   if(state==='paused'){render();}
   requestAnimationFrame(loop);
 }
