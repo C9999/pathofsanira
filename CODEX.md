@@ -635,3 +635,36 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - Atualizada a central `teste.html` para indicar beta v0.10 e componente Inimigos v0.1.
 - Os SVGs de cartas Tarot e o estudo de geração procedural da branch não foram integrados: são materiais independentes, e o CODEX mantém a escolha da arte das cartas e as regras de geração como decisões em aberto.
 - `index.html` e `v0.5.html` permanecem inalterados.
+
+
+## Atualização — beta v0.11 (24/11/2026)
+
+### Alterações implementadas
+
+- **Tiragem:** as cartas reveladas mostram somente o nome da carta; foram removidos da face revelada o número, o nome do poder, a descrição e os rótulos de posição (V do peito e mangas).
+- **O Carro:** aumento de velocidade atualizado de 25% para **40%**.
+- **A Morte:** quando concede a vida extra e deixa Sanira totalmente cinza, todos os demais poderes são desativados. O HUD passa a exibir somente A Morte como poder ativo e o aumento de velocidade de O Carro também é encerrado.
+- **Início da meditação:** removida a contagem regressiva visual. Após “Começar a meditar”, Sanira fica centralizada, o terreno permanece reto e a sessão imóvel por **3 segundos**. Ao fim da espera, Sanira retorna à posição de jogo, o terreno inclina e o movimento começa.
+- **Catálogo Cartas:** atualizado para refletir O Carro +40% e a desativação dos demais poderes pela Morte.
+
+### Versões
+
+- `beta.html`: **v0.11**.
+- `Cartas.html`: **v0.4**.
+- `teste.html`: central atualizada para exibir as versões acima.
+- `index.html` e versões beta anteriores permanecem intactas.
+
+### Commits
+
+- `f285490` — atualiza tiragem, poderes e início da meditação na beta v0.11.
+- `b4eacbd` — corrige espera imóvel e desativação completa dos poderes após a Morte.
+- `8c43875` — atualiza HUD para refletir poderes desativados pela Morte.
+- `42bfc99` — atualiza regras das cartas Carro e Morte.
+- `53cb613` — atualiza central para beta v0.11 e cartas v0.4.
+
+### Validação
+
+- Validar sintaxe JavaScript da beta.
+- Confirmar ausência de contagem regressiva e dos rótulos de posição na tiragem.
+- Confirmar que a movimentação e inclinação só começam depois dos 3 segundos.
+- Teste de gameplay em aparelho físico ainda não realizado.
