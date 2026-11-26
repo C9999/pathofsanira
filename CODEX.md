@@ -779,3 +779,24 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - Foram preservados os tamanhos, hitboxes, pesos de aparição, movimentos, colisões, dano e regras dos poderes. Rocha e tronco não recebem variação visual.
 - `beta.html` atualizado para v0.19 e `teste.html` aponta para a nova versão. A beta v0.18 permanece preservada no histórico do Git.
 - Integração realizada por inspeção dos trechos de criação e renderização. Teste visual e de jogabilidade em aparelho real ainda pendente.
+
+## Decisões consolidadas — Etapa 1 (26/11/2026)
+
+As decisões abaixo foram confirmadas pelo usuário e prevalecem sobre qualquer descrição divergente anterior neste documento. Esta atualização é documental: não altera a implementação da beta.
+
+1. **A Sacerdotisa — manter:** protege automaticamente contra o próximo obstáculo; não protege contra inimigos; após ativar, entra em recarga de 15 segundos; exibe aura verde por 1,5 segundo. Não depende de botão. Esta regra substitui descrições antigas sobre câmera lenta ou proteção limitada a quedas em buracos.
+2. **Acúmulo de vidas — manter:** A Força define 3 níveis de vida iniciais; sem A Força, Sanira começa com 1. A Imperatriz concede uma vida extra. A Morte concede uma vida extra ao perder todas as vidas.
+3. **O Sol — manter:** reduz em 0,5 o dano recebido em colisões com inimigos.
+4. **Velocidade máxima — manter a decisão atual:** a velocidade aumenta progressivamente a partir do nível 3 e existe um limite máximo, cujo valor continua pendente. O Carro aumenta a velocidade em 40%.
+5. **A Lua — manter:** entre 21h e 6h, recebe peso relativo de 1,4 no sorteio, equivalente a um aumento relativo de 40%. A regra de sorteio continua sujeita às demais restrições, incluindo não combinar A Lua com O Sol.
+6. **Acúmulo de poderes defensivos — manter:** poderes defensivos podem acumular entre si, respeitando os efeitos individuais de cada carta.
+7. **A Força — regra específica confirmada:** concede apenas 3 níveis de vida. Não aumenta a altura do pulo nem concede qualquer outro benefício. Sem A Força, a vida inicial é 1, conforme a regra geral de vidas.
+8. **A Imperatriz — manter:** concede uma vida extra.
+9. **A Morte — manter:** ao perder todas as vidas, concede uma vida extra; após o renascimento, os demais poderes são desativados.
+
+### Pendências que permanecem
+
+- Definir o valor numérico do limite máximo de velocidade.
+- Definir critérios de progressão e obtenção dos níveis.
+- Detalhar a interação matemática dos efeitos defensivos acumulados, caso seja necessário para a implementação e o balanceamento.
+- Validar no código da beta se todas as regras acima já estão implementadas; decisões documentadas não significam implementação concluída.
