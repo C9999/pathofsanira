@@ -956,3 +956,14 @@ Esta publicação substitui a orientação anterior de manter index.html intocad
 - O nível 5 continua infinito e não inicia transição para um sexto nível.
 - Ajuste restrito a `beta.html`; `index.html` permanece na v0.19.
 - Nova versão da beta: **v0.22**.
+
+
+## Ajuste — beta v0.23: transição inicial de 4 segundos (26/11/2026)
+
+- O primeiro trecho da transição entre níveis foi reduzido de **10 para 4 segundos**.
+- Permanecem inalterados os **3 segundos de dissolução visual com troca musical** e os **5 segundos finais** de percurso reto e vazio.
+- A transição completa agora dura **12 segundos**. Com os 12 segundos de corrida normal, cada nível de teste dura **24 segundos**.
+- O cronômetro geral continua rodando durante toda a transição. Inimigos, obstáculos e Sonhos continuam sem geração durante os três trechos.
+- O nível 5 continua infinito e não inicia transição para um sexto nível.
+- Alteração restrita à beta; a página principal `index.html` permanece na v0.19.
+- Nova versão da beta: **v0.23**.
