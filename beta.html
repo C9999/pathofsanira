@@ -238,15 +238,6 @@ function showMenu(){
   $('tb').style.display='none';
   $('powerBtn').style.display='none';
 }
-function updateCustomSelection(){
-  const chosen=[...document.querySelectorAll('.custom-power:checked')].map(x=>x.value);
-  const valid=chosen.length===3&&!(chosen.includes('lua')&&chosen.includes('sol'));
-  $('customHint').textContent=chosen.length+' de 3 selecionados'+(chosen.includes('lua')&&chosen.includes('sol')?' · A Lua e O Sol não podem sair juntos':'');
-  $('customStart').disabled=!valid;
-  document.querySelectorAll('.custom-power').forEach(input=>{
-    input.disabled=!input.checked&&chosen.length>=3;
-  });
-}
 $('randomMode').onclick=()=>showDraw('random');
 
 const MUSIC_TRACKS=[
@@ -287,7 +278,7 @@ function takeHit(source='obstacle'){
 function update(rdt){
  const holding=pointers.size>0,dt=rdt;S.t+=dt;
  if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';}return;}
- if(state==='play')S.elapsed+=dt;
+ if(state==='play'&&!S.dead&&!S.ending)S.elapsed+=dt;
  if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;S.levelElapsed+=dt;if(S.level===5&&!S.level5Boost&&S.levelElapsed>=60){S.level5Boost=true;applyLevelSpeed();}if(S.level<5&&!S.transitionPhase&&S.levelElapsed>=12)beginLevelTransition();advanceTransition(dt);spawnAhead();}
  let g=S.g;if(P.eremita&&holding&&S.vz<0&&S.z>0&&S.float<1.5){g*=.25;S.float+=rdt;U.eremita+=rdt;}
  if(S.z>0||S.vz>0){S.vz-=g*dt;S.z+=S.vz*dt;if(S.z<=0){S.z=0;S.vz=0;S.float=0;}}
