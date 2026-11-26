@@ -44,11 +44,7 @@ module.exports = async function handler(req, res) {
     await sheetsRequest('partidas!A:J', {
       method: 'POST',
       append: true,
-      body: {
-        values,
-        valueInputOption: 'RAW',
-        insertDataOption: 'INSERT_ROWS'
-      }
+      body: { values }
     });
     return res.status(201).json({ saved: true, duplicate: false });
   } catch (error) {
