@@ -1044,3 +1044,45 @@ As definições da Etapa 3 foram implementadas na beta, sem alterar a página pr
   - Criar e publicar o endpoint Apps Script com acesso autorizado à planilha.
   - Confirmar os cabeçalhos/estrutura da aba de ranking e a regra de ordenação/limite.
 - A integração não deve ser considerada publicada ou operacional até que as credenciais e o endpoint sejam configurados e testados.
+
+## Decisões atualizadas — autenticação e ranking online (26/11/2026)
+
+Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ranking fora do escopo, Apps Script ou ausência de contas.
+
+### Acesso e autenticação
+- O jogo terá login com Google.
+- Somente e-mails cadastrados na aba `jogadoras` da planilha poderão acessar o jogo.
+- O limite será de **50 jogadoras cadastradas**.
+- O backend será implementado com **Vercel Functions**, usando as credenciais de uma conta de serviço Google para acessar a Google Sheets API.
+- O backend deve validar o ID token do Google (assinatura, emissor, audiência, validade e e-mail verificado) e usar o identificador estável `sub` como identidade da conta.
+- A autorização será conferida no servidor consultando a aba `jogadoras`; não confiar em e-mail/nome enviados isoladamente pelo navegador.
+- A planilha permanece privada e compartilhada com a conta de serviço com permissão de Editor.
+- Segredos da conta de serviço ficam somente nas variáveis de ambiente da Vercel. Nunca devem ser versionados no Git.
+- O projeto Google Cloud atualmente usado é compartilhado com o aplicativo Contas da Casa por decisão temporária do usuário. Não remover nem alterar o cliente OAuth desse outro aplicativo.
+
+### Registro e classificação
+- Cada partida concluída será registrada individualmente na aba `partidas`.
+- O ranking exibirá **todas as partidas**, não apenas a melhor ou a última partida de cada jogadora.
+- Uma jogadora poderá aparecer várias vezes, uma vez por partida.
+- Ordenação: pontuação decrescente; em caso de empate, tempo de jogo decrescente (comparação pelo valor em milissegundos).
+- O histórico de partidas não deve ser limitado às 50 melhores; o limite de 50 se refere às jogadoras autorizadas, não ao número de partidas.
+- O registro deve incluir, no mínimo, data/hora, identificador Google (`sub`), e-mail autorizado, nome, pontuação, tempo em milissegundos, nível, Sonhos coletados e cartas sorteadas.
+- Prever identificador único da partida para evitar duplicidade em reenvios.
+- A estrutura real da aba `jogadoras` e seus cabeçalhos ainda precisa ser confirmada antes de implementar leitura e autorização. A aba `partidas` será inspecionada/criada conforme a planilha existente e sem sobrescrever dados.
+
+### Configuração já realizada pelo usuário
+- Conta de serviço criada no Google Cloud e chave JSON baixada e guardada localmente.
+- Planilha de ranking compartilhada com o e-mail da conta de serviço como Editor.
+- Variáveis `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_PRIVATE_KEY` e `GOOGLE_SHEET_ID` cadastradas na Vercel nos ambientes Production, Preview e Development.
+- Cliente OAuth Web criado com o nome `Path of Sanira — Login`.
+- `GOOGLE_CLIENT_ID` cadastrado na Vercel nos três ambientes.
+- Tela de consentimento configurada como Externo e em teste; e-mail do usuário adicionado como test user; escopos mínimos `openid`, `email` e `profile`.
+- Domínios autorizados incluem `pathofsanira.vercel.app` e `c82-casa.vercel.app`; a manutenção conjunta foi aceita temporariamente.
+- Ainda não foi realizado deploy nem teste de autenticação/backend.
+
+### Sequência de implementação e publicação
+1. Confirmar os cabeçalhos e a estrutura da aba `jogadoras), além da existência/estrutura da aba `partidas`.
+2. Implementar e testar endpoints Vercel para autenticação/autorização, leitura de ranking e gravação idempotente de partidas.
+3. Integrar o login e o envio/leitura do ranking à `beta.html), incrementando sua versão.
+4. Testar contas autorizadas e não autorizadas, persistência, duplicidade, ordenação e funcionamento do jogo.
+5. Somente após aprovação explícita do usuário, promover a beta validada para `index.html). Até lá, `index.html` permanece na v0.19.
