@@ -908,3 +908,17 @@ A música troca junto com a dissolução visual do cenário. A implementação d
 - A beta v0.19 permanece preservada no histórico.
 - A implementação da progressão, dos cenários, das transições, dos temas de inimigos/obstáculos e da seleção musical será registrada em nova versão da beta, com commits separados por página/componente conforme as regras do projeto.
 - A página original `index.html` não deve ser alterada.
+
+## Implementação — beta v0.20: progressão de cinco níveis (26/11/2026)
+
+- A beta passa a gerar obstáculos e Sonhos continuamente durante a sessão, sem linha de chegada fixa. A corrida termina quando Sanira morre; o nível 5 não tem limite de duração.
+- O cronômetro de cada nível usa tempo real. A transição começa aos 102 segundos e dura 18 segundos (10 segundos de percurso reto e vazio, 3 segundos de dissolução e troca musical, e 5 segundos de percurso reto e vazio), completando ciclos de aproximadamente 120 segundos. O cronômetro continua durante a transição; não há pausa manual.
+- No início da transição, a geração é interrompida e todos os obstáculos, inimigos e Sonhos pendentes são removidos. A geração é retomada ao fim dos 5 segundos posteriores à dissolução.
+- Cenários integrados na ordem: planície verde, floresta densa, fábricas, neve e espaço sideral. A dissolução combina o cenário anterior e o novo durante 3 segundos.
+- As cinco músicas de `Musica.html` foram reutilizadas na ordem existente. A faixa muda junto com a dissolução, com transição gradual de áudio de 3 segundos.
+- Os inimigos agora usam o tema correspondente ao nível: padrão, alternativa 1, alternativa 2, alternativa 3 e Cartas monocromático. A escolha deixa de ser aleatória por inimigo.
+- Nos níveis 1 a 3, rocha e tronco mantêm a arte original. No nível 4, viram iceberg e tronco congelado; no nível 5, asteroide e cometa. As dimensões e hitboxes permanecem as mesmas.
+- A frequência de obstáculos/inimigos é ajustada em +10% no nível 4 e +20% no nível 5; a frequência de Sonhos permanece constante entre níveis.
+- Velocidade: base até o nível 3, +15% no nível 4 e +30% no nível 5. O bônus de O Carro (+40%) é somado. O cálculo da velocidade também é reaplicado após o renascimento de A Morte.
+- A beta v0.19 permanece preservada no histórico. A central de testes foi atualizada para apontar a v0.20.
+- Validação realizada: sintaxe JavaScript aprovada e inspeção dos pontos principais da progressão, transição, áudio, temas e obstáculos. Ainda falta teste visual e de jogabilidade em navegador/aparelho real.
