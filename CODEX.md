@@ -1005,3 +1005,15 @@ As definições da Etapa 3 foram implementadas na beta, sem alterar a página pr
 - `teste.html` aponta para a beta v0.24.
 - `index.html` permanece na versão principal v0.19, sem alterações.
 - Validação realizada por inspeção dos trechos alterados e conferência das referências/controles. Ainda é necessário testar visualmente em navegador desktop e celular, principalmente fullscreen, áudio, layout responsivo, persistência do ranking e empate por milissegundos.
+
+
+## Ajustes — beta v0.25: Sacerdotisa e controles da tela inicial (26/11/2026)
+
+- Removido da tela inicial o texto **“Escolha como deseja começar sua sessão.”**.
+- Os botões de **tela cheia** e **música ligada/desligada** foram movidos da tela de tiragem para a tela inicial. O controle de música mantém o estado ligado por padrão e permite ligar/desligar a trilha.
+- A Sacerdotisa agora protege automaticamente contra a próxima colisão, tanto com obstáculos quanto com inimigos.
+- Ao ativar, inicia a recarga de **15 segundos**. Durante todo esse período, Sonhos não podem ser coletados; a coleta volta a ser permitida quando a recarga termina.
+- A descrição da carta foi atualizada para refletir a proteção contra inimigos e obstáculos e o bloqueio temporário de Sonhos.
+- Na tela **“Meditação interrompida”**, as explicações dos poderes agora ficam visíveis abaixo de cada carta; a regra CSS que as ocultava foi removida.
+- A versão da beta passa para **v0.25**. teste.html aponta para a nova versão. index.html não foi alterada.
+- Validação estática: JavaScript analisado sem erros de sintaxe; conferidos os seletores e as condições de colisão, recarga e coleta. Teste visual e de jogabilidade em navegador real ainda pendente.
