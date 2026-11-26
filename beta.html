@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.28 — Path of Sanira — Beta</title>
+<title>v 0.29 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -520,14 +520,17 @@ function render(){
   if(S.flash>0){ctx.fillStyle='rgba(255,255,255,'+Math.min(.85,S.flash*3)+')';ctx.fillRect(0,0,W,H);}
   $('tb').style.display='none';
   if(S.hudVisible){
-  let x=14;cards.filter(c=>P[c.id]).forEach(c=>{
+  let x=14;const activeCards=cards.filter(c=>P[c.id]);activeCards.forEach((c,index)=>{
     if(c.id==='sacer'&&S.sacerCooldown>0){
       ctx.font='12px system-ui,sans-serif';const w=ctx.measureText(c.nome).width+28,h=22;
       ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.fill();
       ctx.save();ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.clip();
       ctx.fillStyle=c.cor;ctx.fillRect(x,14,w*(1-S.sacerCooldown/15),h);ctx.restore();
       x+=w+6;
-    }else{const pw=pill(x,14,c.nome,c.cor);if(c.id==='torre'&&state==='play'&&!S.torreUsed&&!S.morteGray){$('tb').style.left=(x+pw+5)+'px';$('tb').style.top='11px';$('tb').style.display='flex';}x+=pw+6;}
+    }else{const pw=pill(x,14,c.nome,c.cor);x+=pw+6;}
+    if(index===2&&P.torre&&state==='play'&&!S.torreUsed&&!S.morteGray){
+      $('tb').style.left=x+'px';$('tb').style.top='11px';$('tb').style.display='flex';
+    }
   });
 
   const lives=[];if(P.forca)for(let i=0;i<3;i++)lives.push('#F28C28');else lives.push('#F28C28');if(P.imper)lives.push('#F28FB1');
