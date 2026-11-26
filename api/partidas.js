@@ -43,6 +43,7 @@ module.exports = async function handler(req, res) {
     ]];
     await sheetsRequest('partidas!A:J', {
       method: 'POST',
+      append: true,
       body: {
         values,
         valueInputOption: 'RAW',
