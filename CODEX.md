@@ -922,3 +922,17 @@ A música troca junto com a dissolução visual do cenário. A implementação d
 - Velocidade: base até o nível 3, +15% no nível 4 e +30% no nível 5. O bônus de O Carro (+40%) é somado. O cálculo da velocidade também é reaplicado após o renascimento de A Morte.
 - A beta v0.19 permanece preservada no histórico. A central de testes foi atualizada para apontar a v0.20.
 - Validação realizada: sintaxe JavaScript aprovada e inspeção dos pontos principais da progressão, transição, áudio, temas e obstáculos. Ainda falta teste visual e de jogabilidade em navegador/aparelho real.
+
+## Publicação da versão principal — v0.19 (26/11/2026)
+
+Por decisão explícita do usuário, a página principal foi atualizada com uma cópia integral da beta v0.19, incluindo os componentes, a arte Tarot da tiragem e os temas visuais aleatórios dos inimigos que faziam parte daquela versão.
+
+- **index.html:** agora contém a versão principal v0.19, com título `v 0.19 — Path of Sanira`.
+- **Origem do conteúdo:** beta v0.19 no commit `6eefcf31ace7f1416a6ba931d294c590a2b3a531`.
+- **beta.html:** permanece na v0.20 e continua sendo o ambiente de desenvolvimento das novas definições da Etapa 2.
+- **teste.html:** continua apontando para a beta v0.20.
+- As decisões de níveis, mundos, transições, músicas e variações de obstáculos/inimigos da Etapa 2 serão implementadas e validadas na beta. Não devem ser aplicadas automaticamente à página principal.
+- Quando uma nova versão da beta estiver validada e o usuário solicitar sua promoção, a página principal poderá receber uma cópia dessa versão, preservando a versão principal anterior no histórico do Git.
+- A versão principal anterior v0.1 permanece recuperável pelo histórico do Git.
+
+Esta publicação substitui a orientação anterior de manter index.html intocada: a página principal agora representa a versão estável promovida pelo usuário, enquanto beta.html concentra o desenvolvimento em andamento.
