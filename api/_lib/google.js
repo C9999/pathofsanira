@@ -24,7 +24,9 @@ async function sheetsRequest(range, options = {}) {
     '/values/' + encodeURIComponent(range);
   const url = options.append
     ? baseUrl + ':append?valueInputOption=RAW&insertDataOption=INSERT_ROWS'
-    : baseUrl;
+    : options.method === 'PUT'
+      ? baseUrl + '?valueInputOption=RAW'
+      : baseUrl;
   const response = await fetch(url, {
     method: options.method || 'GET',
     headers: {
