@@ -769,3 +769,13 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - `beta.html` atualizado para v0.18; `teste.html` atualizado para apontar a nova versão. `index.html` e beta v0.17 preservados no histórico do Git.
 - Validação realizada por inspeção do código e conferência da presença das 12 ilustrações SVG. Teste visual e de interação em aparelho real ainda pendente.
 
+
+
+## Atualização — beta v0.19: temas aleatórios dos inimigos (26/11/2026)
+
+- Cada inimigo recebe aleatoriamente um dos cinco temas visuais disponíveis para seu tipo no conjunto `THEMES`: Jacaré, Gado, Tucano e inimigo genérico.
+- A escolha é feita individualmente quando os inimigos são criados para a sessão; inimigos do mesmo tipo podem aparecer com aparências diferentes na mesma corrida.
+- Os temas incluem as variações já desenhadas no experimento: padrão, alternativas de cor/textura e tema inspirado nas cartas.
+- Foram preservados os tamanhos, hitboxes, pesos de aparição, movimentos, colisões, dano e regras dos poderes. Rocha e tronco não recebem variação visual.
+- `beta.html` atualizado para v0.19 e `teste.html` aponta para a nova versão. A beta v0.18 permanece preservada no histórico do Git.
+- Integração realizada por inspeção dos trechos de criação e renderização. Teste visual e de jogabilidade em aparelho real ainda pendente.
