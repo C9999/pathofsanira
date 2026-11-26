@@ -936,3 +936,13 @@ Por decisão explícita do usuário, a página principal foi atualizada com uma 
 - A versão principal anterior v0.1 permanece recuperável pelo histórico do Git.
 
 Esta publicação substitui a orientação anterior de manter index.html intocada: a página principal agora representa a versão estável promovida pelo usuário, enquanto beta.html concentra o desenvolvimento em andamento.
+
+
+## Correção — beta v0.21: inicialização da corrida e temas dos inimigos (26/11/2026)
+
+- Corrigida a falha que interrompia o loop de animação logo após o início da corrida. A beta v0.20 fazia referência a `THEMES` e às funções de desenho dos inimigos, mas o bloco que declarava esses temas e renderizadores havia sido perdido durante a implementação da progressão.
+- Restaurados na beta os dados dos cinco temas de cada tipo de inimigo (jacaré, gado, tucano e inimigo genérico) e suas funções de desenho, reaproveitados da versão v0.19.
+- Com a restauração, a geração inicial de obstáculos deixa de falhar por referência inexistente e o loop pode continuar atualizando a distância, o cenário, os obstáculos e os Sonhos.
+- A alteração está restrita a `beta.html`. A página principal `index.html` permanece na v0.19.
+- Nova versão da beta: **v0.21**.
+- Validação pendente: testar a tiragem, início após os 3 segundos, movimento do percurso, aparecimento de inimigos/obstáculos/Sonhos, colisões e transições em navegador real. A restauração resolve as referências ausentes identificadas no código, mas não substitui o teste de jogabilidade.
