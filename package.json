@@ -1,0 +1,9 @@
+{
+  "name": "path-of-sanira",
+  "version": "0.26.0",
+  "private": true,
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "google-auth-library": "^10.3.0"
+  }
+}
