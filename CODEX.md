@@ -967,3 +967,41 @@ Esta publicação substitui a orientação anterior de manter index.html intocad
 - O nível 5 continua infinito e não inicia transição para um sexto nível.
 - Alteração restrita à beta; a página principal `index.html` permanece na v0.19.
 - Nova versão da beta: **v0.23**.
+
+
+## Implementação — beta v0.24: encerramento, ranking e controles da tiragem (26/11/2026)
+
+As definições da Etapa 3 foram implementadas na beta, sem alterar a página principal `index.html`.
+
+### Tela de tiragem
+- O botão principal agora exibe **“Tirar a sorte através das cartas”**.
+- Removido o botão de seleção manual de poderes para teste e seu fluxo associado.
+- Adicionado controle de música ligada/desligada no canto inferior direito da tela de tiragem. O padrão é ligado.
+- Adicionado botão de tela cheia no canto superior direito. O controle solicita o modo fullscreen do navegador e permite sair dele.
+
+### Encerramento da sessão
+- A tela de encerramento apresenta duas colunas: resumo da sessão à esquerda e ranking à direita.
+- O resumo mostra **Pontos**, **Tempo meditando**, **Nível** em que a sessão terminou e a quantidade de Sonhos.
+- Removidos os indicadores de colisões e vida restante.
+- A lista de poderes exibe o nome e somente a descrição do efeito de cada carta; não mostra contagem de usos nem estatísticas de ativação.
+- O botão **“Voltar à tela inicial”** fica no rodapé da coluna esquerda.
+- O botão **“Compartilhar”** fica no rodapé da coluna direita e compartilha texto com pontuação, tempo, nível e cartas.
+
+### Ranking local
+- Cada sessão encerrada é registrada no armazenamento local do navegador (`localStorage`), limitado às 50 melhores entradas.
+- Até a futura integração com login Google, o nome exibido é **“Jogador”**.
+- Cada linha mostra nome, pontos, tempo em minutos e segundos e as três cartas como bolinhas coloridas.
+- A sessão recém-encerrada recebe destaque visual.
+- Ordenação: maior pontuação primeiro; em empate, maior tempo de meditação primeiro. O desempate compara o tempo em milissegundos, mesmo que a tela mostre apenas minutos e segundos.
+- O ranking é local ao navegador/dispositivo e ainda não sincroniza entre pessoas ou aparelhos. Login Google e ranking online permanecem pendentes.
+
+### Pontuação e dificuldade no nível 5
+- A pontuação acumulada continua preservada entre os níveis.
+- Após **60 segundos jogados no nível 5**, é aplicado uma única vez um novo aumento de dificuldade: velocidade +10%, frequência de inimigos/obstáculos +10% e frequência de Sonhos +20%.
+- A interpretação adotada para “após 1 minuto” é um único incremento aos 60 segundos do nível 5, sem novos incrementos a cada minuto adicional.
+
+### Versões e validação
+- `beta.html` passa para **v0.24**.
+- `teste.html` aponta para a beta v0.24.
+- `index.html` permanece na versão principal v0.19, sem alterações.
+- Validação realizada por inspeção dos trechos alterados e conferência das referências/controles. Ainda é necessário testar visualmente em navegador desktop e celular, principalmente fullscreen, áudio, layout responsivo, persistência do ranking e empate por milissegundos.
