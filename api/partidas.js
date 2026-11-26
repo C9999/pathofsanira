@@ -68,7 +68,7 @@ function colorFormatRequests(sheetId, rowNumber, colors) {
 
 function rowNumberFromAppend(result, fallback) {
   const range = result?.updates?.updatedRange || '';
-  const match = /![A-Z]+(\\d+):/.exec(range);
+  const match = /![A-Z]+(\d+):/.exec(range);
   return match ? Number(match[1]) : fallback;
 }
 
