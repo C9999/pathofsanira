@@ -760,3 +760,12 @@ As alterações abaixo foram aplicadas somente aos componentes isolados `Cartas.
 - A faixa 3, “Maré tranquila”, recebeu vozes triangulares e frequências médias adicionais para melhorar a audibilidade em alto-falantes de celulares.
 - As demais quatro faixas permaneceram inalteradas.
 - A alteração é um ajuste de síntese; a reprodução ainda precisa ser conferida auditivamente em aparelhos reais.
+
+## Beta v0.18 — arte Tarot na tiragem (26/11/2026)
+
+- Integradas à tela de tiragem as 12 ilustrações SVG do experimento `inimigos/Cartas-Tarot.html`, mantendo a paleta individual de cada carta, moldura e numeração romana.
+- Mantidos os nomes e os nomes dos poderes exatamente conforme a constante `CARDS` da beta. As descrições não foram substituídas pelo texto antigo do experimento; a tiragem continua exibindo apenas nome e poder, como na versão anterior.
+- A alteração é restrita à tiragem antes da corrida. O HUD, os poderes, a lógica de sorteio e as ilustrações de Sanira permanecem inalterados.
+- `beta.html` atualizado para v0.18; `teste.html` atualizado para apontar a nova versão. `index.html` e beta v0.17 preservados no histórico do Git.
+- Validação realizada por inspeção do código e conferência da presença das 12 ilustrações SVG. Teste visual e de interação em aparelho real ainda pendente.
+
