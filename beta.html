@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.23 — Path of Sanira — Beta</title>
+<title>v 0.24 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -48,7 +48,28 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 .custom-powers input{accent-color:#E8C46A;flex:none}
 #custom button:disabled{opacity:.4;cursor:not-allowed}
 @media(max-width:700px){.custom-powers{grid-template-columns:repeat(3,1fr);max-width:95%}}
-#end .box{width:640px;background:#211C45;border:1px solid #6B5FB5;border-radius:14px;padding:16px 20px;display:flex;flex-direction:column;gap:10px;text-align:left}
+#end{padding:12px 18px;align-items:stretch;justify-content:stretch;text-align:left;overflow:auto}
+#end .end-layout{width:100%;max-width:800px;min-height:100%;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
+#end .end-panel{min-width:0;background:#211C45;border:1px solid #6B5FB5;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:9px}
+#end .end-panel h2{text-align:left}
+#end .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#end .stat b{font-size:20px}
+#end .pu{font-size:12px;gap:7px;padding:4px 0}
+#end .pu small{display:none}
+#end .ranking{display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:0}
+#end .rank-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:7px;padding:7px 8px;border-radius:8px;background:#2E2760;font-size:12px}
+#end .rank-row.current{outline:2px solid #E8C46A;background:#40366F}
+#end .rank-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#end .rank-meta{color:#CFC8E8;font-size:10px}
+#end .rank-dots{display:flex;gap:3px;justify-content:flex-end}
+#end .rank-dots .dot{width:9px;height:9px}
+#end .end-actions{display:flex;justify-content:space-between;gap:8px;margin-top:auto;padding-top:8px}
+#end button{padding:9px 12px;font-size:12px}
+#drawControls{position:absolute;inset:0;pointer-events:none;display:none;z-index:8}
+#drawControls button{position:absolute;pointer-events:auto;padding:8px 12px;font-size:12px}
+#musicToggle{right:12px;bottom:12px}
+#fullscreenToggle{right:12px;top:12px}
+@media(max-width:700px){#end{padding:8px}#end .end-layout{gap:7px}#end .end-panel{padding:9px}#end .stats{gap:5px}#end .stat{padding:6px}#end .stat b{font-size:16px}#end .pu{font-size:10px}#end button{padding:7px 8px;font-size:10px}}
 .stats{display:flex;gap:10px}
 .stat{flex:1;background:#2E2760;border-radius:10px;padding:8px 10px}
 .stat b{display:block;font-size:22px}
@@ -67,10 +88,11 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <canvas id="c"></canvas>
 
 <button id="tb" aria-label="Ativar poder da Torre" title="Ativar poder da Torre">⚡</button>
-<div id="menu" class="scr"><h1>Path of Sanira</h1><p>Escolha como deseja começar sua sessão.</p><button id="randomMode">Tiragem aleatória</button><button id="customMode" class="alt">Escolher poderes para testar</button></div>
-<div id="custom" class="scr off"><h2>Escolha três poderes</h2><p>Marque exatamente três cartas para esta sessão.</p><div id="customPowers" class="custom-powers"></div><p id="customHint" class="hint">0 de 3 selecionados</p><button id="customStart" disabled>Começar com estes poderes</button><button id="customBack" class="alt">Voltar</button></div>
+<div id="menu" class="scr"><h1>Path of Sanira</h1><p>Escolha como deseja começar sua sessão.</p><button id="randomMode">Tirar a sorte através das cartas</button></div>
+
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
+<div id="drawControls"><button id="fullscreenToggle" class="alt">Tela cheia</button><button id="musicToggle" class="alt">Música: ligada</button></div>
 
 
 
@@ -146,7 +168,7 @@ const CARDS=[
 
 const $=id=>document.getElementById(id);
 const stage=$('stage'),cv=$('c'),ctx=cv.getContext('2d');
-let state='menu',cards=[],P={},S={},U={},items=[],imgs={},pointers=new Set(),last=0,scale=1;
+let state='menu',cards=[],P={},S={},U={},items=[],imgs={},pointers=new Set(),last=0,scale=1,currentRankId=null;
 
 function fit(){
   scale=Math.min(innerWidth/W,innerHeight/H);const dpr=Math.min(devicePixelRatio||1,2);
@@ -176,7 +198,7 @@ function showDraw(mode='random'){
   if(mode==='random')cards=drawCards();
   else cards=[...document.querySelectorAll('.custom-power:checked')].map(input=>CARDS.find(c=>c.id===input.value));
   state='draw';
-  $('menu').classList.add('off');$('custom').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('tb').style.display='none';
+  $('menu').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('tb').style.display='none';$('drawControls').style.display='block';
   const box=$('cards');box.innerHTML='';
   cards.forEach((c,i)=>{
     const el=document.createElement('div');el.className='card';
@@ -188,15 +210,15 @@ function showDraw(mode='random'){
 const OBSTACLE_TYPES=[{k:'r',w:40,h:46,weight:20},{k:'l',w:70,h:44,weight:15},{k:'alligator',w:76,h:38,weight:15},{k:'cattle',w:62,h:68,weight:15},{k:'toucan',w:52,h:42,weight:15},{k:'e',w:44,h:50,weight:8}];
 function makeDream(wx){return{wx,k:'s',coin:true,star:true,gold:false,air:Math.random()<.65,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};}
 function makeObstacle(wx){const pool=OBSTACLE_TYPES.filter(o=>o.k!==S.previousObstacle);let n=Math.random()*pool.reduce((a,o)=>a+o.weight,0),o=pool[0];for(const q of pool){n-=q.weight;if(n<=0){o=q;break;}}S.previousObstacle=o.k;const key=o.k==='alligator'?'alligator':o.k==='cattle'?'cattle':o.k==='toucan'?'toucan':'enemy';const it={wx,k:o.k,w:o.w,h:o.h,theme:THEMES[key][S.level-1],ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};if(o.k==='alligator'||o.k==='toucan')it.baseWx=wx;return it;}
-function spawnAhead(){if(S.transitionPhase||S.dead)return;const end=S.dist+W+760;while(S.nextObstacleWx<end){items.push(makeObstacle(S.nextObstacleWx));const f=S.level===4?1.1:S.level===5?1.2:1;S.nextObstacleWx+=(270+Math.random()*150)/f;}while(S.nextDreamWx<end){items.push(makeDream(S.nextDreamWx));S.nextDreamWx+=((930+Math.random()*240)/(P.roda?1.35:1));}}
-function applyLevelSpeed(){S.speed=300*(1+(S.level===4?.15:S.level===5?.30:0)+(P.carro?.40:0));}
+function spawnAhead(){if(S.transitionPhase||S.dead)return;const end=S.dist+W+760;while(S.nextObstacleWx<end){items.push(makeObstacle(S.nextObstacleWx));const f=(S.level===4?1.1:S.level===5?1.2:1)*(S.level===5&&S.level5Boost?1.1:1);S.nextObstacleWx+=(270+Math.random()*150)/f;}while(S.nextDreamWx<end){items.push(makeDream(S.nextDreamWx));S.nextDreamWx+=((930+Math.random()*240)/((P.roda?1.35:1)*(S.level===5&&S.level5Boost?1.2:1)));}}
+function applyLevelSpeed(){S.speed=300*(1+(S.level===4?.15:S.level===5?.30:0)+(P.carro?.40:0))*(S.level5Boost?1.1:1);}
 function beginLevelTransition(){if(S.transitionPhase||S.level>=5)return;S.transitionPhase='pre';S.transitionTimer=4;S.worldFrom=S.level;S.transitionProgress=0;items.length=0;groundSlope=0;S.nextObstacleWx=Infinity;S.nextDreamWx=Infinity;}
 function advanceTransition(dt){if(!S.transitionPhase)return;S.transitionTimer-=dt;if(S.transitionPhase==='dissolve')S.transitionProgress=Math.min(1,1-S.transitionTimer/3);if(S.transitionTimer>0)return;if(S.transitionPhase==='pre'){S.level=Math.min(5,S.level+1);applyLevelSpeed();changeMeditationTrack(S.level-1);S.transitionPhase='dissolve';S.transitionTimer=3;S.transitionProgress=0;}else if(S.transitionPhase==='dissolve'){S.transitionPhase='post';S.transitionTimer=5;S.transitionProgress=1;}else{S.transitionPhase=null;S.transitionTimer=0;S.levelElapsed=0;groundSlope=SLOPE;S.nextObstacleWx=S.dist+760;S.nextDreamWx=S.dist+1050;S.previousObstacle='';}}
 function startRun(){
  const has=id=>cards.some(c=>c.id===id);P={};CARDS.forEach(c=>P[c.id]=has(c.id));
  U={forca:0,louco:0,mago:0,sacer:0,imper:0,carro:0,eremita:0,roda:0,morte:0,torre:0,lua:0,sol:0};
- const peak=70,g=1800;S={dist:0,z:0,vz:0,g,v0:Math.sqrt(2*g*peak),air:0,float:0,spin:0,score:0,coins:0,stars:0,flash:0,resolved:0,hits:0,lives:(P.forca?3:1)+(P.imper?1:0),invuln:0,face:0,shield:false,shieldT:0,slowE:2,sacerFalls:2,sacerCooldown:0,sacerAura:0,morteUsed:false,morteGray:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,hudVisible:false,speed:300*(P.carro?1.4:1),level:1,levelElapsed:0,transitionPhase:null,transitionTimer:0,transitionProgress:0,worldFrom:1,nextObstacleWx:760,nextDreamWx:1120,previousObstacle:''};
- items=[];groundSlope=0;$('tb').style.display='none';startMeditationAudio(0);$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;$('powerBtn').style.display='none';state='intro';S.intro=3;last=performance.now();
+ const peak=70,g=1800;S={dist:0,z:0,vz:0,g,v0:Math.sqrt(2*g*peak),air:0,float:0,spin:0,score:0,coins:0,stars:0,flash:0,resolved:0,hits:0,lives:(P.forca?3:1)+(P.imper?1:0),invuln:0,face:0,shield:false,shieldT:0,slowE:2,sacerFalls:2,sacerCooldown:0,sacerAura:0,morteUsed:false,morteGray:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,hudVisible:false,speed:300*(P.carro?1.4:1),level:1,levelElapsed:0,transitionPhase:null,transitionTimer:0,transitionProgress:0,worldFrom:1,nextObstacleWx:760,nextDreamWx:1120,previousObstacle:'',elapsed:0,level5Boost:false};
+ items=[];groundSlope=0;currentRankId=null;$('tb').style.display='none';if(audioOn)startMeditationAudio(0);$('drawControls').style.display='none';$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;$('powerBtn').style.display='none';state='intro';S.intro=3;last=performance.now();
 }
 function gy(x){return 190+groundSlope*x}
 function jump(){
@@ -212,7 +234,7 @@ function zap(){if((state!=='play'&&state!=='intro')||!P.torre||S.torreUsed||S.de
 $('tb').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();zap();});
 $('go').onclick=startRun;
 function showMenu(){
-  state='menu';$('menu').classList.remove('off');$('custom').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');
+  state='menu';$('menu').classList.remove('off');$('draw').classList.add('off');$('end').classList.add('off');$('drawControls').style.display='none';
   $('tb').style.display='none';
   $('powerBtn').style.display='none';
 }
@@ -226,14 +248,6 @@ function updateCustomSelection(){
   });
 }
 $('randomMode').onclick=()=>showDraw('random');
-$('customMode').onclick=()=>{
-  $('menu').classList.add('off');$('custom').classList.remove('off');state='custom';updateCustomSelection();
-};
-$('customBack').onclick=showMenu;
-$('customPowers').addEventListener('change',updateCustomSelection);
-$('customStart').onclick=()=>showDraw('custom');
-$('customPowers').innerHTML=CARDS.map(c=>'<label><input class="custom-power" type="checkbox" value="'+c.id+'"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:'+c.cor+'"></span>'+c.nome+'</label>').join('');
-updateCustomSelection();
 
 const MUSIC_TRACKS=[
 {name:'Serenidade original',wave:'sine',voices:[[220,.075],[329.63,.042],[440,.026],[110,.035]],rate:.055,depth:.18,master:.65},
@@ -243,14 +257,19 @@ const MUSIC_TRACKS=[
 {name:'Floresta interior',wave:'triangle',voices:[[130.81,.065],[196,.045],[261.63,.025],[329.63,.018]],rate:.018,depth:.16,master:.62}
 ];
 let audioOn=true,audioCtx=null,ambientNodes=null;
+function refreshMusicButton(){$('musicToggle').textContent='Música: '+(audioOn?'ligada':'desligada');}
+$('musicToggle').addEventListener('click',()=>{audioOn=!audioOn;if(audioOn){if(state==='play'||state==='intro')startMeditationAudio(Math.max(0,(S.level||1)-1));}else stopMeditationAudio();refreshMusicButton();});
+$('fullscreenToggle').addEventListener('click',async()=>{try{if(!document.fullscreenElement){await document.documentElement.requestFullscreen();$('fullscreenToggle').textContent='Sair da tela cheia';}else{await document.exitFullscreen();$('fullscreenToggle').textContent='Tela cheia';}}catch(e){console.warn('Tela cheia indisponível neste navegador.',e);}});
+document.addEventListener('fullscreenchange',()=>{$('fullscreenToggle').textContent=document.fullscreenElement?'Sair da tela cheia':'Tela cheia';});
+refreshMusicButton();
 function createMusicTrack(index){
  const c=MUSIC_TRACKS[index],master=audioCtx.createGain(),voices=[];master.gain.value=0;master.connect(audioCtx.destination);
  c.voices.forEach(([freq,vol],i)=>{const o=audioCtx.createOscillator(),g=audioCtx.createGain(),l=audioCtx.createOscillator(),lg=audioCtx.createGain();o.type=c.wave;o.frequency.value=freq;g.gain.value=vol;l.type='sine';l.frequency.value=c.rate+i*.006;lg.gain.value=vol*c.depth;l.connect(lg);lg.connect(g.gain);o.connect(g);g.connect(master);o.start();l.start();voices.push(o,l);});
  return{master,voices,index};
 }
 function fadeAndStopTrack(t,d=.4){if(!t||!audioCtx)return;const n=audioCtx.currentTime;try{t.master.gain.cancelScheduledValues(n);t.master.gain.setValueAtTime(t.master.gain.value,n);t.master.gain.linearRampToValueAtTime(0,n+d);t.voices.forEach(o=>{try{o.stop(n+d+.08)}catch(e){}})}catch(e){}}
-async function startMeditationAudio(index=0){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')await audioCtx.resume();if(ambientNodes)fadeAndStopTrack(ambientNodes,.2);const t=createMusicTrack(index),n=audioCtx.currentTime;t.master.gain.setValueAtTime(0,n);t.master.gain.linearRampToValueAtTime(MUSIC_TRACKS[index].master,n+1.2);ambientNodes=t;}catch(e){console.warn('Não foi possível iniciar a música meditativa.',e)}}
-function changeMeditationTrack(index){if(!audioCtx||!ambientNodes){startMeditationAudio(index);return;}const old=ambientNodes,t=createMusicTrack(index),n=audioCtx.currentTime,d=3;t.master.gain.setValueAtTime(0,n);t.master.gain.linearRampToValueAtTime(MUSIC_TRACKS[index].master,n+d);old.master.gain.cancelScheduledValues(n);old.master.gain.setValueAtTime(old.master.gain.value,n);old.master.gain.linearRampToValueAtTime(0,n+d);old.voices.forEach(o=>{try{o.stop(n+d+.08)}catch(e){}});ambientNodes=t;}
+async function startMeditationAudio(index=0){if(!audioOn)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;audioCtx=audioCtx||new AC();if(audioCtx.state==='suspended')await audioCtx.resume();if(ambientNodes)fadeAndStopTrack(ambientNodes,.2);const t=createMusicTrack(index),n=audioCtx.currentTime;t.master.gain.setValueAtTime(0,n);t.master.gain.linearRampToValueAtTime(MUSIC_TRACKS[index].master,n+1.2);ambientNodes=t;}catch(e){console.warn('Não foi possível iniciar a música meditativa.',e)}}
+function changeMeditationTrack(index){if(!audioOn)return;if(!audioCtx||!ambientNodes){startMeditationAudio(index);return;}const old=ambientNodes,t=createMusicTrack(index),n=audioCtx.currentTime,d=3;t.master.gain.setValueAtTime(0,n);t.master.gain.linearRampToValueAtTime(MUSIC_TRACKS[index].master,n+d);old.master.gain.cancelScheduledValues(n);old.master.gain.setValueAtTime(old.master.gain.value,n);old.master.gain.linearRampToValueAtTime(0,n+d);old.voices.forEach(o=>{try{o.stop(n+d+.08)}catch(e){}});ambientNodes=t;}
 function stopMeditationAudio(){if(!ambientNodes||!audioCtx)return;const t=ambientNodes;ambientNodes=null;fadeAndStopTrack(t,.32);}
 function tone(f=440,d=.08){
  if(!audioOn||!audioCtx)return;
@@ -268,7 +287,8 @@ function takeHit(source='obstacle'){
 function update(rdt){
  const holding=pointers.size>0,dt=rdt;S.t+=dt;
  if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';}return;}
- if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;S.levelElapsed+=dt;if(S.level<5&&!S.transitionPhase&&S.levelElapsed>=12)beginLevelTransition();advanceTransition(dt);spawnAhead();}
+ if(state==='play')S.elapsed+=dt;
+ if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;S.levelElapsed+=dt;if(S.level===5&&!S.level5Boost&&S.levelElapsed>=60){S.level5Boost=true;applyLevelSpeed();}if(S.level<5&&!S.transitionPhase&&S.levelElapsed>=12)beginLevelTransition();advanceTransition(dt);spawnAhead();}
  let g=S.g;if(P.eremita&&holding&&S.vz<0&&S.z>0&&S.float<1.5){g*=.25;S.float+=rdt;U.eremita+=rdt;}
  if(S.z>0||S.vz>0){S.vz-=g*dt;S.z+=S.vz*dt;if(S.z<=0){S.z=0;S.vz=0;S.float=0;}}
  if(S.flash>0)S.flash-=rdt;if(S.invuln>0)S.invuln-=dt;if(S.face>0)S.face-=rdt;if(S.spin>0)S.spin=Math.max(0,S.spin-rdt);if(S.sacerCooldown>0)S.sacerCooldown=Math.max(0,S.sacerCooldown-dt);if(S.sacerAura>0)S.sacerAura=Math.max(0,S.sacerAura-rdt);
@@ -280,29 +300,30 @@ function update(rdt){
  items=items.filter(it=>!it.gone&&!it.taken);
  if(S.ending>0){S.ending-=rdt;if(S.ending<=0)finish();}
 }
-function usageText(c){
-  switch(c.id){
-  case'forca':return 'Sua habilidade principal';
-  case'louco':return U.louco+' pulos duplos';
-  case'mago':return U.mago+(U.mago===1?' Sonho atraído':' Sonhos atraídos');
-  case'sacer':return U.sacer+' obstáculos atravessados; recarga de 15 s';
-  case'imper':return U.imper?'vida extra usada':'vida extra não foi necessária';
-  case'carro':return 'velocidade +40% o tempo todo';
-  case'eremita':return U.eremita.toFixed(1).replace('.',',')+' s planando';
-  case'roda':return 'Sonhos com valor multiplicado por 1,5';
-  case'morte':return U.morte?'renasceu 1 vez':'não precisou renascer';
-  case'torre':return U.torre?'relâmpago ativado: limpou os obstáculos':'relâmpago não foi ativado';
-  case'lua':return '+'+Math.round(S.bonus)+' pontos de bônus';
-  case'sol':return U.sol+' colisões com inimigos com 0,5 de dano';}
+function formatTime(ms,withMillis=false){
+ const total=Math.max(0,ms),minutes=Math.floor(total/60000),seconds=Math.floor(total/1000)%60,millis=total%1000;
+ return String(minutes).padStart(2,'0')+':'+String(seconds).padStart(2,'0')+(withMillis?'.'+String(millis).padStart(3,'0'):'');
+}
+function readRanking(){
+ try{const data=JSON.parse(localStorage.getItem('sanira-ranking-v1')||'[]');return Array.isArray(data)?data:[];}catch(e){return[];}
+}
+function saveRanking(entry){
+ const list=readRanking();list.push(entry);
+ list.sort((a,b)=>(b.score-a.score)||(b.elapsedMs-a.elapsedMs));
+ const top=list.slice(0,50);
+ try{localStorage.setItem('sanira-ranking-v1',JSON.stringify(top));}catch(e){console.warn('Não foi possível salvar o ranking local.',e);}
+ return top;
 }
 function finish(){
-  stopMeditationAudio();state='end';$('tb').style.display='none';
-  const won=!S.dead;
-  $('end').innerHTML='<div class="box"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score)+'</b><span>pontos</span></div><div class="stat"><b>'+(S.stars*10)+'</b><span>Sonhos</span></div><div class="stat"><b>'+S.lives+'</b><span>vida restante</span></div><div class="stat"><b>'+S.hits+'</b><span>colisões</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+
-   cards.map((c,i)=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b> · '+c.poder+'<small>'+usageText(c)+'</small></div></div>').join('')+
-   '<div style="display:flex;gap:10px;justify-content:center;margin-top:4px"><button id="backMenu">Voltar à tela inicial</button></div></div>';
-  $('end').classList.remove('off');$('powerBtn').style.display='none';$('backMenu').onclick=showMenu;
-  const share=document.createElement('button');share.className='alt';share.textContent='Compartilhar resultado';share.onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · '+(S.stars*10)+' Sonhos';if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};$('end').querySelector('.box').appendChild(share);
+ stopMeditationAudio();state='end';$('tb').style.display='none';$('drawControls').style.display='none';
+ const won=!S.dead,elapsedMs=Math.round((S.elapsed||0)*1000),entry={id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),name:'Jogador',score:Math.round(S.score),elapsedMs,level:S.level,cards:cards.map(c=>c.cor),createdAt:new Date().toISOString()};
+ currentRankId=entry.id;
+ const ranking=saveRanking(entry);
+ const powers=cards.map(c=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b><small>'+c.desc+'</small></div></div>').join('');
+ const rows=ranking.map((r,i)=>'<div class="rank-row'+(r.id===currentRankId?' current':'')+'"><b>'+(i+1)+'.</b><div class="rank-name"><b>'+String(r.name||'Jogador').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))+'</b><div class="rank-meta">'+formatTime(r.elapsedMs)+' · Nível '+r.level+'</div></div><div style="text-align:right"><b>'+r.score.toLocaleString('pt-BR')+'</b><div class="rank-dots">'+(r.cards||[]).map(color=>'<span class="dot" style="background:'+color+'"></span>').join('')+'</div></div></div>').join('');
+ $('end').innerHTML='<div class="end-layout"><section class="end-panel"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score).toLocaleString('pt-BR')+'</b><span>Pontos</span></div><div class="stat"><b>'+formatTime(elapsedMs)+'</b><span>Tempo meditando</span></div><div class="stat"><b>'+S.level+'</b><span>Nível</span></div><div class="stat"><b>'+(S.stars*10).toLocaleString('pt-BR')+'</b><span>Sonhos</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+powers+'<div class="end-actions"><button id="backMenu">Voltar à tela inicial</button></div></section><section class="end-panel"><h2>Ranking</h2><div class="ranking">'+(rows||'<p>Nenhum resultado registrado.</p>')+'</div><div class="end-actions" style="justify-content:flex-end"><button id="shareResult" class="alt">Compartilhar</button></div></section></div>';
+ $('end').classList.remove('off');$('powerBtn').style.display='none';$('backMenu').onclick=showMenu;
+ $('shareResult').onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · Tempo meditando: '+formatTime(elapsedMs)+' · Nível '+S.level+' · Cartas: '+cards.map(c=>c.nome).join(', ');if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};
 }
 
 function mount(off,col,base,amp,seed){
