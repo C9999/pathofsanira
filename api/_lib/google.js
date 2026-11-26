@@ -1,6 +1,4 @@
 const { OAuth2Client, JWT } = require('google-auth-library');
-
-const oauthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 
 function requiredEnv() {
@@ -22,8 +20,11 @@ async function sheetsRequest(range, options = {}) {
   const auth = serviceAccount();
   const { token } = await auth.getAccessToken();
   if (!token) throw new Error('Não foi possível autenticar a conta de serviço.');
-  const url = 'https://sheets.googleapis.com/v4/spreadsheets/' + encodeURIComponent(SHEET_ID) +
+  const baseUrl = 'https://sheets.googleapis.com/v4/spreadsheets/' + encodeURIComponent(SHEET_ID) +
     '/values/' + encodeURIComponent(range);
+  const url = options.append
+    ? baseUrl + ':append?valueInputOption=RAW&insertDataOption=INSERT_ROWS'
+    : baseUrl;
   const response = await fetch(url, {
     method: options.method || 'GET',
     headers: {
@@ -48,6 +49,7 @@ async function verifyGoogleCredential(credential) {
     error.statusCode = 401;
     throw error;
   }
+  const oauthClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
   const ticket = await oauthClient.verifyIdToken({
     idToken: credential,
     audience: process.env.GOOGLE_CLIENT_ID
