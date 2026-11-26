@@ -1086,3 +1086,34 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 3. Integrar o login e o envio/leitura do ranking à `beta.html), incrementando sua versão.
 4. Testar contas autorizadas e não autorizadas, persistência, duplicidade, ordenação e funcionamento do jogo.
 5. Somente após aprovação explícita do usuário, promover a beta validada para `index.html). Até lá, `index.html` permanece na v0.19.
+
+## Backend inicial — ranking online (26/11/2026)
+
+### Estrutura confirmada da planilha
+- Aba de autorização: `jogadoras`.
+- Cabeçalhos confirmados: `Email`, `Nome`, `Ativa`.
+- Os e-mails são normalizados com remoção de espaços e conversão para minúsculas.
+- Somente linhas com `Ativa = TRUE` autorizam login.
+- O limite de 50 se aplica ao total de cadastros preenchidos na aba, ativos ou inativos.
+- Aba de histórico: `partidas`.
+- Cabeçalhos confirmados: `ID_Partida`, `Data_Hora`, `Google_ID`, `Email`, `Nome`, `Pontuacao`, `Tempo_MS`, `Nivel`, `Sonhos`, `Cartas`.
+
+### Arquivos de backend adicionados
+- `package.json`: inclui `google-auth-library` para verificar ID tokens Google e autenticar a conta de serviço.
+- `api/_lib/google.js`: valida as variáveis de ambiente, verifica ID token (audience/assinatura/validade via biblioteca Google, emissor e e-mail verificado), consulta a aba `jogadoras` e autentica chamadas à Google Sheets API.
+- `api/auth.js`: POST para validar login e autorização.
+- `api/ranking.js`: GET autenticado para ler todas as partidas, ordenando pontuação decrescente e tempo em milissegundos decrescente.
+- `api/partidas.js`: POST autenticado para validar e acrescentar uma partida na planilha; consulta IDs existentes antes de gravar para evitar reenvio duplicado em tentativas comuns.
+
+### Contratos atuais dos endpoints
+- `POST /api/auth`: JSON `{ "credential": "<Google ID token>" }`; retorna `{ "user": { "sub", "email", "name" } }` quando autorizado.
+- `GET /api/ranking`: cabeçalho `Authorization: Bearer <Google ID token>`; retorna `{ "partidas": [...] }`.
+- `POST /api/partidas`: JSON `{ "credential": "<Google ID token>", "partida": { "id", "score", "elapsedMs", "level", "dreams", "cards" } }`.
+- A API não recebe nome/e-mail do jogador como fonte de identidade; usa os dados verificados do token e a linha autorizada na planilha.
+- O endpoint de partidas faz leitura prévia de IDs antes do append. Isso protege contra retries comuns, mas a consulta e o append não são uma operação atômica; concorrência simultânea excepcional ainda pode duplicar um ID. Avaliar mecanismo de idempotência transacional se necessário.
+
+### Estado e pendências
+- Backend inicial versionado na `main`; ainda não houve teste real contra Google Cloud/Sheets nem validação de deploy.
+- A interface da beta ainda usa ranking local em `localStorage`; a integração do login e a substituição desse fluxo pelo backend permanecem pendentes.
+- Antes de considerar operacional, validar a instalação de dependências na Vercel, configuração das quatro variáveis nos ambientes, acesso da conta de serviço à planilha e os três endpoints.
+- A página principal `index.html` continua sem alterações; a beta ainda não foi promovida.
