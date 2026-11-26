@@ -1138,3 +1138,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Testar gravação, consulta do ranking, ordenação e repetição de envio de ID.
 - A conta OAuth continua em modo Testing; somente contas adicionadas como test users conseguirão autenticar enquanto permanecer assim.
 - A biblioteca `google-auth-library` será instalada pela Vercel a partir do `package.json`; validar build após a instalação.
+
+
+## Ajuste — beta v0.28: remoção da saudação após login (26/11/2026)
+
+- Removida da tela inicial a frase personalizada exibida após a autorização Google (“Bem-vinda, ...! Você está autorizada.”).
+- Após login autorizado, o texto de status fica vazio; o botão Google é ocultado e o botão para iniciar a tiragem é liberado normalmente.
+- Mensagem para e-mail não autorizado permanece: **“Este e-mail não está autorizado a acessar o Path of Sanira.”**. A API retorna HTTP 403 e a interface apresenta o texto recebido.
+- A central `teste.html` aponta para a beta v0.28.
+- A página principal `index.html` permanece inalterada na v0.19.
+- Alteração visual ainda depende de conferência no navegador após o deploy.
