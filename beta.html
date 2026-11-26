@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.26 — Path of Sanira — Beta</title>
+<title>v 0.27 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -92,7 +92,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <canvas id="c"></canvas>
 
 <button id="tb" aria-label="Ativar poder da Torre" title="Ativar poder da Torre">⚡</button>
-<div id="menu" class="scr"><h1>Path of Sanira</h1><button id="randomMode">Tirar a sorte através das cartas</button></div>
+<div id="menu" class="scr"><h1>Path of Sanira</h1><p id="loginStatus">Entre com sua conta Google autorizada para jogar e participar do ranking.</p><div id="googleLogin"></div><button id="randomMode" class="off">Tirar a sorte através das cartas</button></div>
 
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
@@ -103,7 +103,10 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <button id="powerBtn" style="position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:none;border-radius:50%;width:66px;height:66px;padding:6px;font-size:11px">PODER</button>
 
 </div>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
+const GOOGLE_CLIENT_ID=window.PATH_OF_SANIRA_GOOGLE_CLIENT_ID||"";
+let googleCredential=null,authorizedPlayer=null;
 const W=844,H=390,S0=0.55,SLOPE=0.15;
 let PX=190,groundSlope=0;
 const SVG_HEAD='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">';
@@ -299,24 +302,45 @@ function formatTime(ms,withMillis=false){
  const total=Math.max(0,ms),minutes=Math.floor(total/60000),seconds=Math.floor(total/1000)%60,millis=total%1000;
  return String(minutes).padStart(2,'0')+':'+String(seconds).padStart(2,'0')+(withMillis?'.'+String(millis).padStart(3,'0'):'');
 }
-function readRanking(){
- try{const data=JSON.parse(localStorage.getItem('sanira-ranking-v1')||'[]');return Array.isArray(data)?data:[];}catch(e){return[];}
+async function apiRequest(url,options={}){
+ const response=await fetch(url,{...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw new Error(data.error||'Não foi possível comunicar com o servidor.');
+ return data;
 }
-function saveRanking(entry){
- const list=readRanking();list.push(entry);
- list.sort((a,b)=>(b.score-a.score)||(b.elapsedMs-a.elapsedMs));
- const top=list.slice(0,50);
- try{localStorage.setItem('sanira-ranking-v1',JSON.stringify(top));}catch(e){console.warn('Não foi possível salvar o ranking local.',e);}
- return top;
+async function handleGoogleCredential(response){
+ const status=$('loginStatus');status.textContent='Verificando autorização...';
+ try{
+  const result=await apiRequest('/api/auth',{method:'POST',body:JSON.stringify({credential:response.credential})});
+  googleCredential=response.credential;authorizedPlayer=result.user;
+  status.textContent='Bem-vinda, '+authorizedPlayer.name+'! Você está autorizada.';
+  $('googleLogin').classList.add('off');$('randomMode').classList.remove('off');
+ }catch(error){
+  googleCredential=null;authorizedPlayer=null;status.textContent=error.message;
+ }
 }
-function finish(){
+function initializeGoogleLogin(){
+ if(!window.google?.accounts?.id||!GOOGLE_CLIENT_ID){$('loginStatus').textContent='Login Google ainda não configurado nesta versão.';return;}
+ google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleCredential});
+ google.accounts.id.renderButton($('googleLogin'),{theme:'filled_black',size:'large',shape:'pill',text:'signin_with',locale:'pt-BR'});
+}
+window.addEventListener('load',()=>{const wait=()=>{if(window.google?.accounts?.id)initializeGoogleLogin();else setTimeout(wait,150);};wait();});
+async function finish(){
  stopMeditationAudio();state='end';$('tb').style.display='none';$('homeControls').style.display='none';
- const won=!S.dead,elapsedMs=Math.round((S.elapsed||0)*1000),entry={id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),name:'Jogador',score:Math.round(S.score),elapsedMs,level:S.level,cards:cards.map(c=>c.cor),createdAt:new Date().toISOString()};
+ const won=!S.dead,elapsedMs=Math.round((S.elapsed||0)*1000),entry={id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2)),score:Math.round(S.score),elapsedMs,level:S.level,dreams:Math.round((S.stars||0)*10),cards:cards.map(c=>c.cor)};
  currentRankId=entry.id;
- const ranking=saveRanking(entry);
  const powers=cards.map(c=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b><small>'+c.desc+'</small></div></div>').join('');
- const rows=ranking.map((r,i)=>'<div class="rank-row'+(r.id===currentRankId?' current':'')+'"><b>'+(i+1)+'.</b><div class="rank-name"><b>'+String(r.name||'Jogador').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))+'</b><div class="rank-meta">'+formatTime(r.elapsedMs)+' · Nível '+r.level+'</div></div><div style="text-align:right"><b>'+r.score.toLocaleString('pt-BR')+'</b><div class="rank-dots">'+(r.cards||[]).map(color=>'<span class="dot" style="background:'+color+'"></span>').join('')+'</div></div></div>').join('');
- $('end').innerHTML='<div class="end-layout"><section class="end-panel"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score).toLocaleString('pt-BR')+'</b><span>Pontos</span></div><div class="stat"><b>'+formatTime(elapsedMs)+'</b><span>Tempo meditando</span></div><div class="stat"><b>'+S.level+'</b><span>Nível</span></div><div class="stat"><b>'+(S.stars*10).toLocaleString('pt-BR')+'</b><span>Sonhos</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+powers+'<div class="end-actions"><button id="backMenu">Voltar à tela inicial</button></div></section><section class="end-panel"><h2>Ranking</h2><div class="ranking">'+(rows||'<p>Nenhum resultado registrado.</p>')+'</div><div class="end-actions" style="justify-content:flex-end"><button id="shareResult" class="alt">Compartilhar</button></div></section></div>';
+ let ranking=[],saveMessage='Resultado ainda não enviado.';
+ try{
+  if(!googleCredential)throw new Error('Entre com sua conta Google para registrar a partida.');
+  await apiRequest('/api/partidas',{method:'POST',body:JSON.stringify({credential:googleCredential,partida:entry})});
+  saveMessage='Partida registrada no ranking online.';
+  const result=await apiRequest('/api/ranking',{headers:{Authorization:'Bearer '+googleCredential}});
+  ranking=result.partidas||[];
+ }catch(error){saveMessage=error.message;}
+ const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const rows=ranking.map((r,i)=>'<div class="rank-row'+(r.id===currentRankId?' current':'')+'"><b>'+(i+1)+'.</b><div class="rank-name"><b>'+esc(r.name||'Jogadora')+'</b><div class="rank-meta">'+formatTime(r.elapsedMs)+' · Nível '+r.level+'</div></div><div style="text-align:right"><b>'+Number(r.score||0).toLocaleString('pt-BR')+'</b><div class="rank-dots">'+(r.cards||[]).map(color=>'<span class="dot" style="background:'+esc(color)+'"></span>').join('')+'</div></div></div>').join('');
+ $('end').innerHTML='<div class="end-layout"><section class="end-panel"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score).toLocaleString('pt-BR')+'</b><span>Pontos</span></div><div class="stat"><b>'+formatTime(elapsedMs)+'</b><span>Tempo meditando</span></div><div class="stat"><b>'+S.level+'</b><span>Nível</span></div><div class="stat"><b>'+(S.stars*10).toLocaleString('pt-BR')+'</b><span>Sonhos</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+powers+'<p id="saveStatus">'+esc(saveMessage)+'</p><div class="end-actions"><button id="backMenu">Voltar à tela inicial</button></div></section><section class="end-panel"><h2>Ranking online</h2><div class="ranking">'+(rows||'<p>Nenhum resultado registrado.</p>')+'</div><div class="end-actions" style="justify-content:flex-end"><button id="shareResult" class="alt">Compartilhar</button></div></section></div>';
  $('end').classList.remove('off');$('powerBtn').style.display='none';$('backMenu').onclick=showMenu;
  $('shareResult').onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · Tempo meditando: '+formatTime(elapsedMs)+' · Nível '+S.level+' · Cartas: '+cards.map(c=>c.nome).join(', ');if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};
 }
