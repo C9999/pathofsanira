@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.24 — Path of Sanira — Beta</title>
+<title>v 0.25 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -55,7 +55,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 #end .stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 #end .stat b{font-size:20px}
 #end .pu{font-size:12px;gap:7px;padding:4px 0}
-#end .pu small{display:none}
+#end .pu small{display:block}
 #end .ranking{display:flex;flex-direction:column;gap:6px;overflow:auto;min-height:0}
 #end .rank-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:7px;padding:7px 8px;border-radius:8px;background:#2E2760;font-size:12px}
 #end .rank-row.current{outline:2px solid #E8C46A;background:#40366F}
@@ -69,6 +69,10 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 #drawControls button{position:absolute;pointer-events:auto;padding:8px 12px;font-size:12px}
 #musicToggle{right:12px;bottom:12px}
 #fullscreenToggle{right:12px;top:12px}
+#homeControls{position:absolute;inset:0;pointer-events:none;display:flex;z-index:8}
+#homeControls button{position:absolute;pointer-events:auto;padding:8px 12px;font-size:12px}
+#homeMusicToggle{right:12px;bottom:12px}
+#homeFullscreenToggle{right:12px;top:12px}
 @media(max-width:700px){#end{padding:8px}#end .end-layout{gap:7px}#end .end-panel{padding:9px}#end .stats{gap:5px}#end .stat{padding:6px}#end .stat b{font-size:16px}#end .pu{font-size:10px}#end button{padding:7px 8px;font-size:10px}}
 .stats{display:flex;gap:10px}
 .stat{flex:1;background:#2E2760;border-radius:10px;padding:8px 10px}
@@ -88,11 +92,11 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <canvas id="c"></canvas>
 
 <button id="tb" aria-label="Ativar poder da Torre" title="Ativar poder da Torre">⚡</button>
-<div id="menu" class="scr"><h1>Path of Sanira</h1><p>Escolha como deseja começar sua sessão.</p><button id="randomMode">Tirar a sorte através das cartas</button></div>
+<div id="menu" class="scr"><h1>Path of Sanira</h1><button id="randomMode">Tirar a sorte através das cartas</button></div>
 
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
-<div id="drawControls"><button id="fullscreenToggle" class="alt">Tela cheia</button><button id="musicToggle" class="alt">Música: ligada</button></div>
+<div id="homeControls"><button id="homeFullscreenToggle" class="alt">Tela cheia</button><button id="homeMusicToggle" class="alt">Música: ligada</button></div>
 
 
 
@@ -155,7 +159,7 @@ const TAROT_ART={"louco":"<svg class=\"tarot-art\" viewBox=\"0 0 100 120\" aria-
 const CARDS=[
 {id:'louco',num:'0',nome:'O Louco',poder:'Pulo duplo',desc:'No segundo pulo, Sanira gira 360° rapidamente.',cor:'#5FCFE0'},
 {id:'mago',num:'I',nome:'O Mago',poder:'Ímã',desc:'Atrai Sonhos próximos.',cor:'#A78BDB'},
-{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Atravessa automaticamente o próximo obstáculo sem colisão. Após ativar, recarrega em 15 segundos.',cor:'#6CC38A'},
+{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Protege automaticamente contra uma colisão com obstáculo ou inimigo. Após ativar, recarrega em 15 segundos; durante a recarga, não é possível coletar Sonhos.',cor:'#6CC38A'},
 {id:'imper',num:'III',nome:'A Imperatriz',poder:'Vida extra',desc:'Acrescenta um nível de vida.',cor:'#F28FB1'},
 {id:'carro',num:'VII',nome:'O Carro',poder:'Arrancada',desc:'Velocidade +40%.',cor:'#3FBFA8'},
 {id:'forca',num:'VIII',nome:'A Força',poder:'Sua habilidade principal',desc:'Começa a sessão com 3 níveis de vida.',cor:'#F28C28'},
@@ -198,7 +202,7 @@ function showDraw(mode='random'){
   if(mode==='random')cards=drawCards();
   else cards=[...document.querySelectorAll('.custom-power:checked')].map(input=>CARDS.find(c=>c.id===input.value));
   state='draw';
-  $('menu').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('tb').style.display='none';$('drawControls').style.display='block';
+  $('menu').classList.add('off');$('end').classList.add('off');$('draw').classList.remove('off');$('go').classList.add('off');$('tb').style.display='none';$('homeControls').style.display='none';
   const box=$('cards');box.innerHTML='';
   cards.forEach((c,i)=>{
     const el=document.createElement('div');el.className='card';
@@ -218,7 +222,7 @@ function startRun(){
  const has=id=>cards.some(c=>c.id===id);P={};CARDS.forEach(c=>P[c.id]=has(c.id));
  U={forca:0,louco:0,mago:0,sacer:0,imper:0,carro:0,eremita:0,roda:0,morte:0,torre:0,lua:0,sol:0};
  const peak=70,g=1800;S={dist:0,z:0,vz:0,g,v0:Math.sqrt(2*g*peak),air:0,float:0,spin:0,score:0,coins:0,stars:0,flash:0,resolved:0,hits:0,lives:(P.forca?3:1)+(P.imper?1:0),invuln:0,face:0,shield:false,shieldT:0,slowE:2,sacerFalls:2,sacerCooldown:0,sacerAura:0,morteUsed:false,morteGray:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,hudVisible:false,speed:300*(P.carro?1.4:1),level:1,levelElapsed:0,transitionPhase:null,transitionTimer:0,transitionProgress:0,worldFrom:1,nextObstacleWx:760,nextDreamWx:1120,previousObstacle:'',elapsed:0,level5Boost:false};
- items=[];groundSlope=0;currentRankId=null;$('tb').style.display='none';if(audioOn)startMeditationAudio(0);$('drawControls').style.display='none';$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;$('powerBtn').style.display='none';state='intro';S.intro=3;last=performance.now();
+ items=[];groundSlope=0;currentRankId=null;$('tb').style.display='none';if(audioOn)startMeditationAudio(0);$('homeControls').style.display='none';$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;$('powerBtn').style.display='none';state='intro';S.intro=3;last=performance.now();
 }
 function gy(x){return 190+groundSlope*x}
 function jump(){
@@ -234,7 +238,7 @@ function zap(){if((state!=='play'&&state!=='intro')||!P.torre||S.torreUsed||S.de
 $('tb').addEventListener('pointerdown',e=>{e.stopPropagation();e.preventDefault();zap();});
 $('go').onclick=startRun;
 function showMenu(){
-  state='menu';$('menu').classList.remove('off');$('draw').classList.add('off');$('end').classList.add('off');$('drawControls').style.display='none';
+  state='menu';$('menu').classList.remove('off');$('draw').classList.add('off');$('end').classList.add('off');$('homeControls').style.display='flex';
   $('tb').style.display='none';
   $('powerBtn').style.display='none';
 }
@@ -248,10 +252,10 @@ const MUSIC_TRACKS=[
 {name:'Floresta interior',wave:'triangle',voices:[[130.81,.065],[196,.045],[261.63,.025],[329.63,.018]],rate:.018,depth:.16,master:.62}
 ];
 let audioOn=true,audioCtx=null,ambientNodes=null;
-function refreshMusicButton(){$('musicToggle').textContent='Música: '+(audioOn?'ligada':'desligada');}
-$('musicToggle').addEventListener('click',()=>{audioOn=!audioOn;if(audioOn){if(state==='play'||state==='intro')startMeditationAudio(Math.max(0,(S.level||1)-1));}else stopMeditationAudio();refreshMusicButton();});
-$('fullscreenToggle').addEventListener('click',async()=>{try{if(!document.fullscreenElement){await document.documentElement.requestFullscreen();$('fullscreenToggle').textContent='Sair da tela cheia';}else{await document.exitFullscreen();$('fullscreenToggle').textContent='Tela cheia';}}catch(e){console.warn('Tela cheia indisponível neste navegador.',e);}});
-document.addEventListener('fullscreenchange',()=>{$('fullscreenToggle').textContent=document.fullscreenElement?'Sair da tela cheia':'Tela cheia';});
+function refreshMusicButton(){$('homeMusicToggle').textContent='Música: '+(audioOn?'ligada':'desligada');}
+$('homeMusicToggle').addEventListener('click',()=>{audioOn=!audioOn;if(audioOn){startMeditationAudio(state==='play'||state==='intro'?Math.max(0,(S.level||1)-1):0);}else stopMeditationAudio();refreshMusicButton();});
+$('homeFullscreenToggle').addEventListener('click',async()=>{try{if(!document.fullscreenElement){await document.documentElement.requestFullscreen();$('homeFullscreenToggle').textContent='Sair da tela cheia';}else{await document.exitFullscreen();$('homeFullscreenToggle').textContent='Tela cheia';}}catch(e){console.warn('Tela cheia indisponível neste navegador.',e);}});
+document.addEventListener('fullscreenchange',()=>{$('homeFullscreenToggle').textContent=document.fullscreenElement?'Sair da tela cheia':'Tela cheia';});
 refreshMusicButton();
 function createMusicTrack(index){
  const c=MUSIC_TRACKS[index],master=audioCtx.createGain(),voices=[];master.gain.value=0;master.connect(audioCtx.destination);
@@ -285,8 +289,8 @@ function update(rdt){
  if(S.flash>0)S.flash-=rdt;if(S.invuln>0)S.invuln-=dt;if(S.face>0)S.face-=rdt;if(S.spin>0)S.spin=Math.max(0,S.spin-rdt);if(S.sacerCooldown>0)S.sacerCooldown=Math.max(0,S.sacerCooldown-dt);if(S.sacerAura>0)S.sacerAura=Math.max(0,S.sacerAura-rdt);
  const pcx=PX,pcy=gy(PX)-67-S.z;
  for(const it of items){if(it.gone||it.taken)continue;if(!it.coin&&it.k==='e'&&!S.dead)it.wx-=70*dt;const sx=PX+(it.wx-S.dist);
-  if(it.coin){let x=sx,y=gy(sx)-(it.star?115:(it.air?150:70));if(P.mago&&!it.att&&Math.hypot(sx-pcx,y-pcy)<150){it.att=true;it.mag=true;}if(it.att){const bx=sx+it.ox,by=y+it.oy,dx=pcx-bx,dy=pcy-by,d=Math.hypot(dx,dy)||1,st=Math.min(d,560*rdt);it.ox+=dx/d*st;it.oy+=dy/d*st;}x=sx+it.ox;y=y+it.oy;it.x=x;it.y=y;if(!S.dead&&Math.hypot(x-pcx,y-pcy)<39){S.hudVisible=true;it.taken=true;S.stars++;S.resolved++;const v=10*(P.roda?1.5:1)*(P.lua?1.5:1);S.score+=v;if(P.lua)S.bonus+=10*(P.roda?1.5:1)*.5;if(it.mag)U.mago++;}else if(sx<PX-70)it.gone=true;
-  }else{const y=gy(sx),bob=(it.k==='e'||it.k==='toucan')?Math.sin(S.t*4+it.bob)*10:0;it.x=sx;it.y=y;it.by=bob;if(it.k==='alligator')it.wx=it.baseWx+Math.sin(S.t*2.1+it.baseWx)*42;if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;if(!S.dead&&!S.transitionPhase&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?115:0),it.w,it.h)){const enemy=['alligator','cattle','toucan','enemy','e'].includes(it.k);if(P.sacer&&!enemy&&S.sacerCooldown<=0){S.sacerCooldown=15;S.sacerAura=1.5;U.sacer++;it.gone=true;}else takeHit(enemy?'enemy':'obstacle');}if(sx<-80)it.gone=true;}
+  if(it.coin){let x=sx,y=gy(sx)-(it.star?115:(it.air?150:70));if(P.mago&&!it.att&&Math.hypot(sx-pcx,y-pcy)<150){it.att=true;it.mag=true;}if(it.att){const bx=sx+it.ox,by=y+it.oy,dx=pcx-bx,dy=pcy-by,d=Math.hypot(dx,dy)||1,st=Math.min(d,560*rdt);it.ox+=dx/d*st;it.oy+=dy/d*st;}x=sx+it.ox;y=y+it.oy;it.x=x;it.y=y;if(!S.dead&&S.sacerCooldown<=0&&Math.hypot(x-pcx,y-pcy)<39){S.hudVisible=true;it.taken=true;S.stars++;S.resolved++;const v=10*(P.roda?1.5:1)*(P.lua?1.5:1);S.score+=v;if(P.lua)S.bonus+=10*(P.roda?1.5:1)*.5;if(it.mag)U.mago++;}else if(sx<PX-70)it.gone=true;
+  }else{const y=gy(sx),bob=(it.k==='e'||it.k==='toucan')?Math.sin(S.t*4+it.bob)*10:0;it.x=sx;it.y=y;it.by=bob;if(it.k==='alligator')it.wx=it.baseWx+Math.sin(S.t*2.1+it.baseWx)*42;if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;if(!S.dead&&!S.transitionPhase&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?115:0),it.w,it.h)){const enemy=['alligator','cattle','toucan','enemy','e'].includes(it.k);if(P.sacer&&S.sacerCooldown<=0){S.sacerCooldown=15;S.sacerAura=1.5;U.sacer++;it.gone=true;}else takeHit(enemy?'enemy':'obstacle');}if(sx<-80)it.gone=true;}
  }
  items=items.filter(it=>!it.gone&&!it.taken);
  if(S.ending>0){S.ending-=rdt;if(S.ending<=0)finish();}
@@ -306,7 +310,7 @@ function saveRanking(entry){
  return top;
 }
 function finish(){
- stopMeditationAudio();state='end';$('tb').style.display='none';$('drawControls').style.display='none';
+ stopMeditationAudio();state='end';$('tb').style.display='none';$('homeControls').style.display='none';
  const won=!S.dead,elapsedMs=Math.round((S.elapsed||0)*1000),entry={id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),name:'Jogador',score:Math.round(S.score),elapsedMs,level:S.level,cards:cards.map(c=>c.cor),createdAt:new Date().toISOString()};
  currentRankId=entry.id;
  const ranking=saveRanking(entry);
