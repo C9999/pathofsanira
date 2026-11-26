@@ -21,6 +21,21 @@ function hexToRgb(hex) {
   };
 }
 
+const CARD_NAMES = {
+  '#5FCFE0': 'O Louco',
+  '#A78BDB': 'O Mago',
+  '#6CC38A': 'A Sacerdotisa',
+  '#F28FB1': 'A Imperatriz',
+  '#3FBFA8': 'O Carro',
+  '#F28C28': 'A Força',
+  '#5B8DEF': 'O Eremita',
+  '#B5D96B': 'A Roda da Fortuna',
+  '#D95FD0': 'A Morte',
+  '#E8604C': 'A Torre',
+  '#E6E9F0': 'A Lua',
+  '#F3C74F': 'O Sol'
+};
+
 function colorsFromRow(row) {
   let cards = [];
   try {
@@ -29,6 +44,10 @@ function colorsFromRow(row) {
     cards = [];
   }
   return [0, 1, 2].map(index => normalizeHex(cards[index]));
+}
+
+function namesFromColors(colors) {
+  return colors.map(color => CARD_NAMES[color] || color);
 }
 
 function colorFormatRequests(sheetId, rowNumber, colors) {
@@ -113,12 +132,15 @@ module.exports = async function handler(req, res) {
 
     // Migra uma única vez as partidas antigas que ainda não têm as colunas visuais.
     const historicalRows = rows.slice(1);
-    const needsBackfill = historicalRows.some(row =>
-      row[9] && (!row[10] || !row[11] || !row[12])
-    );
+    const needsBackfill = historicalRows.some(row => {
+      if (!row[9]) return false;
+      const colors = colorsFromRow(row);
+      const names = namesFromColors(colors);
+      return names.some((name, index) => String(row[10 + index] || '') !== name);
+    });
     const sheetId = await getSheetId('partidas');
     if (needsBackfill) {
-      const values = historicalRows.map(row => colorsFromRow(row));
+      const values = historicalRows.map(row => namesFromColors(colorsFromRow(row)));
       await sheetsRequest('partidas!K2:M' + (historicalRows.length + 1), {
         method: 'PUT',
         body: { values }
@@ -142,9 +164,7 @@ module.exports = async function handler(req, res) {
       level,
       dreams,
       JSON.stringify(cards),
-      cardColors[0],
-      cardColors[1],
-      cardColors[2]
+      ...namesFromColors(cardColors)
     ]];
     const appendResult = await sheetsRequest('partidas!A:M', {
       method: 'POST',
