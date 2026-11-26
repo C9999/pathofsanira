@@ -1017,3 +1017,30 @@ As definições da Etapa 3 foram implementadas na beta, sem alterar a página pr
 - Na tela **“Meditação interrompida”**, as explicações dos poderes agora ficam visíveis abaixo de cada carta; a regra CSS que as ocultava foi removida.
 - A versão da beta passa para **v0.25**. teste.html aponta para a nova versão. index.html não foi alterada.
 - Validação estática: JavaScript analisado sem erros de sintaxe; conferidos os seletores e as condições de colisão, recarga e coleta. Teste visual e de jogabilidade em navegador real ainda pendente.
+
+
+---
+
+## Atualização de decisões e implementação — 26/11/2026
+
+### Beta v0.26 — sorteio de Sol e Lua
+
+- Removida a restrição que impedia **O Sol** e **A Lua** de aparecerem na mesma tiragem.
+- As duas cartas continuam sem repetição e participam do sorteio junto às demais cartas disponíveis.
+- Mantida a regra já existente de aumento relativo de 40% no peso da Lua entre 21h e 6h; fora desse período, todas as cartas disponíveis têm o mesmo peso.
+- A primeira carta continua seguindo a regra de 90% para A Força.
+- beta.html atualizada para v0.26; teste.html aponta para v0.26.
+- index.html permanece inalterada.
+
+### Ranking online com Google Sheets e login Google
+
+- Decisão aprovada: o ranking compartilhado usará a planilha Google Sheets indicada pelo usuário e autenticação com conta Google.
+- O ranking local atual é provisório e deverá ser substituído pela leitura e gravação remotas.
+- A identidade deve ser validada no servidor usando o token de ID do Google; não confiar em nome, e-mail ou identificador enviados isoladamente pelo navegador.
+- A planilha será o armazenamento dos resultados. O acesso de gravação deverá passar por um endpoint servidor (por exemplo, Google Apps Script vinculado à planilha), que valide o token e grave os resultados.
+- Pendências para concluir a integração:
+  - Definir se o login aceitará qualquer conta Google ou somente os cinco jogadores previstos inicialmente.
+  - Obter o OAuth Web Client ID do projeto Google Cloud.
+  - Criar e publicar o endpoint Apps Script com acesso autorizado à planilha.
+  - Confirmar os cabeçalhos/estrutura da aba de ranking e a regra de ordenação/limite.
+- A integração não deve ser considerada publicada ou operacional até que as credenciais e o endpoint sejam configurados e testados.
