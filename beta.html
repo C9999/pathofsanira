@@ -105,8 +105,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 </div>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
-const GOOGLE_CLIENT_ID=window.PATH_OF_SANIRA_GOOGLE_CLIENT_ID||"";
-let googleCredential=null,authorizedPlayer=null;
+let GOOGLE_CLIENT_ID='',googleCredential=null,authorizedPlayer=null;
 const W=844,H=390,S0=0.55,SLOPE=0.15;
 let PX=190,groundSlope=0;
 const SVG_HEAD='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">';
@@ -324,7 +323,7 @@ function initializeGoogleLogin(){
  google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleCredential});
  google.accounts.id.renderButton($('googleLogin'),{theme:'filled_black',size:'large',shape:'pill',text:'signin_with',locale:'pt-BR'});
 }
-window.addEventListener('load',()=>{const wait=()=>{if(window.google?.accounts?.id)initializeGoogleLogin();else setTimeout(wait,150);};wait();});
+window.addEventListener('load',async()=>{try{const config=await fetch('/api/config').then(r=>r.json());GOOGLE_CLIENT_ID=config.googleClientId||'';}catch(e){}const wait=()=>{if(window.google?.accounts?.id)initializeGoogleLogin();else setTimeout(wait,150);};wait();});
 async function finish(){
  stopMeditationAudio();state='end';$('tb').style.display='none';$('homeControls').style.display='none';
  const won=!S.dead,elapsedMs=Math.round((S.elapsed||0)*1000),entry={id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2)),score:Math.round(S.score),elapsedMs,level:S.level,dreams:Math.round((S.stars||0)*10),cards:cards.map(c=>c.cor)};
