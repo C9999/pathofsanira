@@ -1117,3 +1117,24 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A interface da beta ainda usa ranking local em `localStorage`; a integração do login e a substituição desse fluxo pelo backend permanecem pendentes.
 - Antes de considerar operacional, validar a instalação de dependências na Vercel, configuração das quatro variáveis nos ambientes, acesso da conta de serviço à planilha e os três endpoints.
 - A página principal `index.html` continua sem alterações; a beta ainda não foi promovida.
+
+## Integração de login e ranking na beta v0.27 (26/11/2026)
+
+- A versão beta foi incrementada de v0.26 para v0.27.
+- A tela inicial apresenta o botão Google Identity Services. O jogo só libera o início após resposta positiva de `POST /api/auth`.
+- O Client ID público é obtido por `GET /api/config`, evitando gravar o identificador no HTML.
+- Ao finalizar a sessão, a beta envia a partida para `POST /api/partidas` e consulta `GET /api/ranking`; o ranking exibido passa a vir da planilha e inclui todas as partidas.
+- O payload da partida usa ID UUID (quando disponível), pontuação, tempo em milissegundos, nível, Sonhos e cores das cartas sorteadas.
+- O status de gravação/erro é apresentado na tela final.
+- A central `teste.html` aponta para a beta v0.27.
+- Arquivo `api/config.js` criado para expor somente o Client ID público ao navegador.
+- `index.html` permanece na v0.19, sem alterações.
+
+### Validação pendente antes de considerar v0.27 operacional
+- Não foi possível confirmar deploy Vercel nem executar teste no navegador nesta etapa.
+- Verificar que o domínio `https://pathofsanira.vercel.app` está cadastrado em Authorized JavaScript origins no cliente OAuth usado.
+- Confirmar que `GOOGLE_CLIENT_ID`, `GOOGLE_SERVICE_ACCOUNT_EMAIL`, `GOOGLE_PRIVATE_KEY` e `GOOGLE_SHEET_ID` estão definidos no ambiente de produção da Vercel.
+- Testar `GET /api/config`, login com e-mail ativo e bloqueio de e-mail inativo/não cadastrado.
+- Testar gravação, consulta do ranking, ordenação e repetição de envio de ID.
+- A conta OAuth continua em modo Testing; somente contas adicionadas como test users conseguirão autenticar enquanto permanecer assim.
+- A biblioteca `google-auth-library` será instalada pela Vercel a partir do `package.json`; validar build após a instalação.
