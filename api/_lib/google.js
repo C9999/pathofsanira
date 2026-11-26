@@ -77,8 +77,9 @@ async function authorizePlayer(credential) {
   const user = await verifyGoogleCredential(credential);
   const data = await sheetsRequest('jogadoras!A:C');
   const rows = data.values || [];
-  const players = rows.slice(1).filter(row => String(row[0] || '').trim() && String(row[2] || '').toUpperCase() === 'TRUE');
-  if (players.length > 50) {
+  const registered = rows.slice(1).filter(row => String(row[0] || '').trim());
+  const players = registered.filter(row => String(row[2] || '').toUpperCase() === 'TRUE');
+  if (registered.length > 50) {
     const error = new Error('O cadastro ultrapassou o limite de 50 jogadoras ativas. Procure a administração.');
     error.statusCode = 503;
     throw error;
