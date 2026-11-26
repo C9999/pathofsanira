@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.27 — Path of Sanira — Beta</title>
+<title>v 0.28 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -312,7 +312,7 @@ async function handleGoogleCredential(response){
  try{
   const result=await apiRequest('/api/auth',{method:'POST',body:JSON.stringify({credential:response.credential})});
   googleCredential=response.credential;authorizedPlayer=result.user;
-  status.textContent='Bem-vinda, '+authorizedPlayer.name+'! Você está autorizada.';
+  status.textContent='';
   $('googleLogin').classList.add('off');$('randomMode').classList.remove('off');
  }catch(error){
   googleCredential=null;authorizedPlayer=null;status.textContent=error.message;
