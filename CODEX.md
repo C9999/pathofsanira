@@ -946,3 +946,13 @@ Esta publicação substitui a orientação anterior de manter index.html intocad
 - A alteração está restrita a `beta.html`. A página principal `index.html` permanece na v0.19.
 - Nova versão da beta: **v0.21**.
 - Validação pendente: testar a tiragem, início após os 3 segundos, movimento do percurso, aparecimento de inimigos/obstáculos/Sonhos, colisões e transições em navegador real. A restauração resolve as referências ausentes identificadas no código, mas não substitui o teste de jogabilidade.
+
+
+## Ajuste temporário — níveis de 30 segundos na beta v0.22 (26/11/2026)
+
+- A duração-alvo dos níveis 1 a 4 foi reduzida temporariamente de aproximadamente 120 para **30 segundos**, para acelerar os testes.
+- A corrida normal acontece durante os primeiros **12 segundos**. Em seguida começa a transição já definida, com **10 segundos** de percurso reto e vazio, **3 segundos** de dissolução/troca musical e **5 segundos** adicionais de percurso reto e vazio. Total: 30 segundos por nível.
+- O cronômetro geral continua rodando durante a transição. Ao final dos 18 segundos, o cronômetro do nível reinicia.
+- O nível 5 continua infinito e não inicia transição para um sexto nível.
+- Ajuste restrito a `beta.html`; `index.html` permanece na v0.19.
+- Nova versão da beta: **v0.22**.
