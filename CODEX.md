@@ -820,3 +820,91 @@ O usuário definiu as quatro pendências restantes da Etapa 1. Esta atualizaçã
 - A duração de aproximadamente dois minutos por nível é uma meta de tempo de jogo, não uma garantia exata; a geração de elementos continua aleatória.
 - A implementação deverá aplicar os aumentos de velocidade e de ocorrência de inimigos/obstáculos ao atingir os níveis indicados, preservando o sorteio aleatório dos elementos.
 - Estas decisões não autorizam alterar a altura ou a mecânica do pulo.
+
+## Decisões consolidadas — Etapa 2: evolução da corrida (26/11/2026)
+
+As decisões abaixo foram confirmadas pelo usuário e prevalecem sobre descrições anteriores divergentes deste documento. Este registro consolida o planejamento; a implementação na beta será feita em atualização própria.
+
+### 1. Níveis, duração e dificuldade
+
+- A corrida terá cinco níveis.
+- Cada nível terá duração aproximada de **dois minutos em tempo real**. O cronômetro continua rodando durante dano, invulnerabilidade e transições. O jogo não terá pausa manual.
+- Os níveis 1, 2 e 3 mantêm a velocidade e a frequência-base de obstáculos/inimigos.
+- No nível 4, a velocidade aumenta 15% sobre a velocidade-base e a frequência de obstáculos/inimigos aumenta 10%.
+- No nível 5, a velocidade total fica 30% acima da velocidade-base e a frequência de obstáculos/inimigos fica 20% acima da frequência-base. Esses valores permanecem fixos durante todo o nível 5, que é infinito; não existe nível 6.
+- O bônus de O Carro (+40%) é somado aos bônus de velocidade dos níveis: no nível 5, o total é +70% sobre a velocidade-base.
+- A geração continua aleatória. Não serão adicionados novos tipos de inimigos ou obstáculos nesta etapa.
+- Os Sonhos mantêm a mesma frequência em todos os níveis.
+
+### 2. Mundos e ordem dos níveis
+
+| Nível | Mundo |
+|---|---|
+| 1 | Planície verde |
+| 2 | Floresta densa |
+| 3 | Fábricas |
+| 4 | Neve |
+| 5 | Espaço sideral |
+
+Esta sequência substitui, para a estrutura de cinco níveis desta etapa, a sequência provisória de ambientes descrita anteriormente. Vulcão e outra dimensão não fazem parte dos cinco níveis agora definidos.
+
+### 3. Estilo visual dos inimigos
+
+O tema visual dos inimigos deixa de ser sorteado individualmente. O nível determina o estilo, para todos os inimigos daquele nível:
+
+| Nível | Estilo dos inimigos |
+|---|---|
+| 1 | Padrão |
+| 2 | Alternativa 1 |
+| 3 | Alternativa 2 |
+| 4 | Alternativa 3 |
+| 5 | Cartas — monocromático |
+
+As variações visuais existentes no conjunto de temas da beta devem ser reaproveitadas e mapeadas para esta progressão. O estilo muda junto com a transição visual do nível. Não alterar comportamento, hitboxes ou dimensões dos inimigos ao trocar o tema.
+
+### 4. Variação visual dos obstáculos
+
+- Nos níveis 1, 2 e 3, rocha e tronco mantêm a aparência atual.
+- No nível 4 (Neve):
+  - a rocha passa a ter aparência de iceberg;
+  - o tronco passa a ter aparência de tronco congelado.
+- No nível 5 (Espaço sideral):
+  - a rocha passa a ter aparência de pedra espacial/asteroide;
+  - o tronco passa a ter aparência de cometa.
+- As variações preservam exatamente as dimensões atuais de cada obstáculo, incluindo suas hitboxes.
+
+### 5. Transição entre níveis
+
+A mesma transição será usada em todas as mudanças de nível, inclusive do nível 4 para o 5:
+
+1. No início da transição, interromper imediatamente a geração de novos obstáculos, inimigos e Sonhos.
+2. Remover imediatamente todos os obstáculos, inimigos e Sonhos que ainda estiverem na tela ou pendentes no percurso.
+3. Manter o percurso reto e vazio por 10 segundos, com Sanira continuando a correr.
+4. Fazer uma dissolução visual de 3 segundos do cenário anterior para o cenário do próximo nível.
+5. A troca da música acontece simultaneamente à dissolução visual.
+6. Após a dissolução, manter o percurso reto e vazio por mais 5 segundos.
+7. Ao final dos 5 segundos, retomar a geração aleatória conforme as regras do novo nível.
+
+- Não exibir avisos ou mensagens de mudança de nível.
+- Não pausar Sanira durante a transição.
+- A dissolução visual escolhida é suave, com o cenário antigo desaparecendo gradualmente enquanto o novo surge.
+- A troca de estilo dos inimigos e de aparência dos obstáculos ocorre junto com a mudança de cenário.
+
+### 6. Músicas por nível
+
+Cada nível usa uma das cinco músicas existentes em `Musica.html`, na ordem atual da página:
+
+1. Nível 1 — Serenidade original.
+2. Nível 2 — Jardim Zen.
+3. Nível 3 — Maré tranquila.
+4. Nível 4 — Céu estrelado.
+5. Nível 5 — Floresta interior.
+
+A música troca junto com a dissolução visual do cenário. A implementação deverá reutilizar as composições/sínteses existentes, sem alterar a ordem nem substituir as faixas.
+
+### 7. Escopo e estado da implementação
+
+- As decisões acima definem o comportamento desejado, mas não significam que já estejam implementadas na beta.
+- A beta v0.19 permanece preservada no histórico.
+- A implementação da progressão, dos cenários, das transições, dos temas de inimigos/obstáculos e da seleção musical será registrada em nova versão da beta, com commits separados por página/componente conforme as regras do projeto.
+- A página original `index.html` não deve ser alterada.
