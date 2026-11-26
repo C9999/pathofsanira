@@ -1159,3 +1159,15 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A mudança está restrita ao backend e à aba `partidas`. A beta permanece na v0.28; `index.html` permanece na versão principal v0.19.
 - Os códigos hexadecimais originais são preservados. Se uma cor não estiver em formato hexadecimal válido, seu valor é mantido na coluna original, mas a célula visual correspondente não recebe preenchimento.
 - A formatação utiliza a Google Sheets API `spreadsheets.batchUpdate`. O primeiro teste real após o deploy deve confirmar a migração do histórico e a formatação de uma nova partida.
+
+
+## Melhorias — nomes das cartas, HUD da Torre e catálogo visual (26/11/2026)
+
+- Backend `api/partidas.js`: as colunas `Carta 1`, `Carta 2` e `Carta 3` agora gravam o nome correspondente à cor da carta, mantendo o preenchimento de fundo na cor original. A coluna `Cartas` continua preservando o JSON hexadecimal.
+- O backend migra também as linhas históricas: na próxima gravação de uma partida, substitui os códigos hexadecimais das três colunas auxiliares pelos nomes das cartas e reaplica os fundos coloridos.
+- O mapeamento atual corresponde às 12 cartas do baralho: O Louco, O Mago, A Sacerdotisa, A Imperatriz, O Carro, A Força, O Eremita, A Roda da Fortuna, A Morte, A Torre, A Lua e O Sol.
+- `beta.html` incrementada para v0.29. O botão ⚡ da Torre passa a ficar imediatamente à direita do terceiro nome de carta exibido no HUD, independentemente da posição da Torre na tiragem. Continua condicionado à presença da carta Torre e às regras de uso do poder.
+- `Cartas.html` incrementada para v0.6 e reconstruída com as mesmas ilustrações SVG, numeração, cores, nomes e poderes definidos em `beta.html`.
+- `teste.html` atualizado para indicar beta v0.29 e catálogo Cartas v0.6.
+- `index.html` permanece na v0.19, sem alterações. A beta não foi promovida para a página principal.
+- Validar após o deploy: gravação de nova partida, migração dos nomes nas linhas antigas, posição do botão ⚡ em tiragens com Torre em posições diferentes e correspondência visual do catálogo.
