@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.18 — Path of Sanira — Beta</title>
+<title>v 0.19 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -218,7 +218,9 @@ function startRun(){
   items=events.map((event,i)=>{
     wx+=270+Math.random()*150;
     if(event.type==='dream')return {wx,k:'s',coin:true,star:true,gold:false,air:Math.random()<.65,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};
-    const o=event.obstacle,it={wx,k:o.k,w:o.w,h:o.h,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};
+    const o=event.obstacle,themeKey=o.k==='alligator'?'alligator':o.k==='cattle'?'cattle':o.k==='toucan'?'toucan':'enemy';
+    const themeList=THEMES[themeKey],theme=themeList[Math.floor(Math.random()*themeList.length)];
+    const it={wx,k:o.k,w:o.w,h:o.h,theme,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};
     if(o.k==='alligator'||o.k==='toucan')it.baseWx=wx;
     return it;
   });
@@ -520,7 +522,7 @@ function render(){
     if(it.gone||it.taken)continue;
     if(it.coin){if(it.x===undefined)continue;(it.star?drawStar(it.x,it.y):drawCoin(it.x,it.y,it.gold));continue;}
     const sx=PX+(it.wx-S.dist),y=gy(sx);if(sx>W+80||sx<-80)continue;
-    if(it.k==='r')drawRock(sx,y,it.w,it.h);else if(it.k==='l')drawLog(sx,y,it.w,it.h);else if(it.k==='alligator')drawAlligator(sx,y,it.w,it.h);else if(it.k==='cattle')drawCattle(sx,y,it.w,it.h);else if(it.k==='toucan')drawToucan(sx,y-115,it.w,it.h);else drawEnemy(sx,y-(Math.sin(S.t*4+it.bob)*10),it.w,it.h);
+    if(it.k==='r')drawRock(sx,y,it.w,it.h);else if(it.k==='l')drawLog(sx,y,it.w,it.h);else if(it.k==='alligator')drawAlligator(sx,y,it.w,it.h,it.theme);else if(it.k==='cattle')drawCattle(sx,y,it.w,it.h,it.theme);else if(it.k==='toucan')drawToucan(sx,y-115,it.w,it.h,it.theme);else drawEnemy(sx,y-(Math.sin(S.t*4+it.bob)*10),it.w,it.h,it.theme);
   }
   if(S.finishWx>0){const fx=PX+(S.finishWx-S.dist);if(fx>-40&&fx<W+50){ctx.save();ctx.strokeStyle='#F5EFE0';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(fx,gy(fx)-112);ctx.lineTo(fx,gy(fx));ctx.stroke();ctx.fillStyle='#E8C46A';ctx.fillRect(fx,gy(fx)-112,42,24);ctx.fillStyle='#3E3552';ctx.font='700 12px system-ui,sans-serif';ctx.fillText('FIM',fx+8,gy(fx)-96);ctx.restore();}}
   const gyP=gy(PX),s=S0;
