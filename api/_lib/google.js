@@ -93,6 +93,49 @@ async function authorizePlayer(credential) {
   return { ...user, name: String(player[1] || user.name).trim() };
 }
 
+
+async function sheetsBatchUpdate(requests) {
+  const auth = serviceAccount();
+  const { token } = await auth.getAccessToken();
+  if (!token) throw new Error('Não foi possível autenticar a conta de serviço.');
+  const url = 'https://sheets.googleapis.com/v4/spreadsheets/' + encodeURIComponent(SHEET_ID) + ':batchUpdate';
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ requests })
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(data.error?.message || 'Erro ao formatar a planilha.');
+    error.statusCode = response.status;
+    throw error;
+  }
+  return data;
+}
+
+async function getSheetId(title) {
+  const auth = serviceAccount();
+  const { token } = await auth.getAccessToken();
+  if (!token) throw new Error('Não foi possível autenticar a conta de serviço.');
+  const url = 'https://sheets.googleapis.com/v4/spreadsheets/' + encodeURIComponent(SHEET_ID) +
+    '?fields=sheets.properties(sheetId,title)';
+  const response = await fetch(url, {
+    headers: { Authorization: 'Bearer ' + token }
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    const error = new Error(data.error?.message || 'Erro ao consultar a estrutura da planilha.');
+    error.statusCode = response.status;
+    throw error;
+  }
+  const sheet = (data.sheets || []).find(item => item.properties?.title === title);
+  if (!sheet) throw new Error('A aba ' + title + ' não foi encontrada.');
+  return sheet.properties.sheetId;
+}
+
 function sendError(res, error) {
   const status = error.statusCode || 500;
   if (status >= 500) console.error('[Path of Sanira API]', error);
@@ -101,4 +144,4 @@ function sendError(res, error) {
   });
 }
 
-module.exports = { authorizePlayer, sheetsRequest, sendError };
+module.exports = { authorizePlayer, sheetsRequest, sheetsBatchUpdate, getSheetId, sendError };
