@@ -787,7 +787,7 @@ As decisões abaixo foram confirmadas pelo usuário e prevalecem sobre qualquer 
 1. **A Sacerdotisa — manter:** protege automaticamente contra o próximo obstáculo; não protege contra inimigos; após ativar, entra em recarga de 15 segundos; exibe aura verde por 1,5 segundo. Não depende de botão. Esta regra substitui descrições antigas sobre câmera lenta ou proteção limitada a quedas em buracos.
 2. **Acúmulo de vidas — manter:** A Força define 3 níveis de vida iniciais; sem A Força, Sanira começa com 1. A Imperatriz concede uma vida extra. A Morte concede uma vida extra ao perder todas as vidas.
 3. **O Sol — manter:** reduz em 0,5 o dano recebido em colisões com inimigos.
-4. **Velocidade máxima — manter a decisão atual:** a velocidade aumenta progressivamente a partir do nível 3 e existe um limite máximo, cujo valor continua pendente. O Carro aumenta a velocidade em 40%.
+4. **Velocidade máxima e progressão — regra atualizada:** até o nível 3, a velocidade permanece igual. No nível 4, aumenta 15%; no nível 5, recebe mais 15% (total de +30% em relação à velocidade-base). O aumento de 40% de O Carro é somado a esses percentuais quando a carta estiver ativa; portanto, no nível 5 com O Carro, o aumento total é de 70% sobre a velocidade-base. O nível 5 representa o teto da progressão de velocidade definida nesta etapa.
 5. **A Lua — manter:** entre 21h e 6h, recebe peso relativo de 1,4 no sorteio, equivalente a um aumento relativo de 40%. A regra de sorteio continua sujeita às demais restrições, incluindo não combinar A Lua com O Sol.
 6. **Acúmulo de poderes defensivos — manter:** poderes defensivos podem acumular entre si, respeitando os efeitos individuais de cada carta.
 7. **A Força — regra específica confirmada:** como poder da carta, concede apenas 3 níveis de vida. A altura e a mecânica do pulo atual devem permanecer exatamente como estão; esta decisão não autoriza reduzir, aumentar ou modificar o pulo. A descrição da carta não deve mencionar aumento de pulo. Sem A Força, a vida inicial é 1, conforme a regra geral de vidas.
@@ -796,7 +796,27 @@ As decisões abaixo foram confirmadas pelo usuário e prevalecem sobre qualquer 
 
 ### Pendências que permanecem
 
-- Definir o valor numérico do limite máximo de velocidade.
-- Definir critérios de progressão e obtenção dos níveis.
-- Detalhar a interação matemática dos efeitos defensivos acumulados, caso seja necessário para a implementação e o balanceamento.
+- Definir a integração com Google Sheets para registrar os resultados dos cinco jogadores.
+- Definir como o aumento de 40% na chance da Lua entre 21h e 6h será calculado na implementação (o peso relativo de 1,4 já está definido).
+- Pesquisar referências de Tarot e escolher o baralho/sistema visual.
+- Definir como a sequência de ambientes se relaciona com níveis, duração e geração procedural.
+- Definir o formato de compartilhamento do resultado.
+- Definir os detalhes de áudio e vibração.
+- Validar no código da beta se as regras consolidadas de progressão, vida e poderes já estão implementadas; decisões documentadas não significam implementação concluída.
 - Validar no código da beta se todas as regras acima já estão implementadas; decisões documentadas não significam implementação concluída.
+
+
+## Decisões consolidadas — pendências da Etapa 1 (26/11/2026)
+
+O usuário definiu as quatro pendências restantes da Etapa 1. Esta atualização é documental e não altera o código da beta.
+
+1. **Limite e progressão da velocidade:** até o nível 3, a velocidade permanece igual. No nível 4, aumenta 15%; no nível 5, aumenta mais 15%, totalizando +30% sobre a velocidade-base. Se O Carro estiver ativo, seu bônus de +40% é somado aos aumentos dos níveis. Assim, no nível 5 com O Carro, o aumento total é de +70% sobre a velocidade-base. O nível 5 é o teto da progressão de velocidade definida nesta etapa.
+2. **Sistema de níveis e dificuldade:** cada nível deve durar aproximadamente dois minutos de jogo. A geração de inimigos e obstáculos permanece aleatória. No nível 4, a ocorrência de inimigos e obstáculos aumenta em 10%; no nível 5, aumenta em 20%. Esses percentuais descrevem o ajuste de dificuldade de cada nível, não uma sequência de bônus a somar entre os níveis.
+3. **Acúmulo de poderes defensivos:** manter o funcionamento atual, já testado extensivamente pelo usuário. Não alterar a interação existente nesta etapa.
+4. **Regra de dano e vidas:** manter a regra atual consolidada, sem alterações nesta etapa.
+
+### Observações para implementação futura
+
+- A duração de aproximadamente dois minutos por nível é uma meta de tempo de jogo, não uma garantia exata; a geração de elementos continua aleatória.
+- A implementação deverá aplicar os aumentos de velocidade e de ocorrência de inimigos/obstáculos ao atingir os níveis indicados, preservando o sorteio aleatório dos elementos.
+- Estas decisões não autorizam alterar a altura ou a mecânica do pulo.
