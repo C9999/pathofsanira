@@ -262,7 +262,7 @@ function takeHit(source='obstacle'){
   if(S.invuln>0)return;S.hudVisible=true;S.hits++;S.face=1.5;tone(180,.16);vibrate(90);
   const reduced=P.sol&&source==='enemy';S.lives-=reduced?0.5:1;if(reduced)U.sol++;
   if(S.lives>0){S.invuln=1;return;}
-  if(P.morte&&!S.morteUsed){S.morteUsed=true;U.morte++;S.lives=1;S.morteGray=true;S.invuln=3;S.speed=300;Object.keys(P).forEach(id=>{if(id!=='morte')P[id]=false;});$('tb').style.display='none';$('powerBtn').style.display='none';return;}
+  if(P.morte&&!S.morteUsed){S.morteUsed=true;U.morte++;S.lives=1;S.morteGray=true;S.invuln=3;applyLevelSpeed();Object.keys(P).forEach(id=>{if(id!=='morte')P[id]=false;});$('tb').style.display='none';$('powerBtn').style.display='none';return;}
   S.dead=true;S.ending=0.9;
 }
 function update(rdt){
