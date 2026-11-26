@@ -1148,3 +1148,14 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A central `teste.html` aponta para a beta v0.28.
 - A página principal `index.html` permanece inalterada na v0.19.
 - Alteração visual ainda depende de conferência no navegador após o deploy.
+
+
+## Melhoria — cores das cartas no histórico da planilha (26/11/2026)
+
+- A aba `partidas` mantém a coluna `Cartas` com o JSON original das cores hexadecimais.
+- Foram acrescentadas as colunas `Carta 1`, `Carta 2` e `Carta 3`, contendo os códigos hexadecimais individuais.
+- Ao registrar uma nova partida, o backend aplica a cor de fundo correspondente em cada uma das três células, permitindo visualizar as cartas diretamente na planilha.
+- Partidas antigas sem as colunas visuais são migradas automaticamente na próxima gravação de uma nova partida: os códigos são extraídos da coluna `Cartas` e as células recebem a formatação correspondente.
+- A mudança está restrita ao backend e à aba `partidas`. A beta permanece na v0.28; `index.html` permanece na versão principal v0.19.
+- Os códigos hexadecimais originais são preservados. Se uma cor não estiver em formato hexadecimal válido, seu valor é mantido na coluna original, mas a célula visual correspondente não recebe preenchimento.
+- A formatação utiliza a Google Sheets API `spreadsheets.batchUpdate`. O primeiro teste real após o deploy deve confirmar a migração do histórico e a formatação de uma nova partida.
