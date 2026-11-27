@@ -1682,3 +1682,11 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - As três cartas continuam sem repetição na mesma rodada; a ponderação noturna de A Lua permanece inalterada.
 - Principal e Beta permanecem funcionalmente idênticas; títulos atualizados para **v1.58**.
 - Arquivos alterados: `index.html`, `beta.html`, `api/ranking.js` e este `CODEX.md`.
+
+
+## Aba Ranking Secreto sempre disponível na tela inicial — v1.58 (27/11/2026)
+
+- No ranking aberto pela tela inicial, a aba **Ranking secreto** permanece sempre visível e habilitada, independentemente das cartas sorteadas na última rodada.
+- A pessoa pode alternar livremente entre **Ranking geral** e **Ranking secreto**; a lista secreta continua contendo somente partidas sem A Força, conforme o filtro da API.
+- A regra de habilitação do Ranking Secreto na tela final da rodada não foi alterada.
+- A mudança foi replicada em `index.html` e `beta.html`; a versão permanece **v1.58**.
