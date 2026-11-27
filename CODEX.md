@@ -1306,3 +1306,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - beta.html passa para **v0.43**. index.html permanece na **v0.19**, sem alterações.
 - Commits separados: implementação da beta e atualização deste documento.
 - Validação estática: conferida a condição de 60 segundos para os níveis 1 a 4, o gatilho de aumento adicional após 60 segundos no nível 5 e a manutenção da transição em 3 + 2 + 4 segundos. Teste visual/de jogabilidade em navegador real ainda necessário.
+
+## Promoção da beta v0.43 para a página principal (27/11/2026)
+
+- Após aprovação do usuário dos testes funcionais e visuais, o conteúdo integral de `beta.html` v0.43 foi promovido para `index.html`.
+- A página principal agora exibe o título **v 0.43 — Path of Sanira**, sem o sufixo Beta.
+- A implementação promovida mantém os recursos e regras da beta v0.43: autenticação Google, ranking e registro online de partidas, interpretação combinada do Tarot, compartilhamento da imagem, poderes, transições de 9 segundos e níveis 1 a 4 com 60 segundos, preservando a regra especial do nível 5.
+- `beta.html` foi mantida intacta na v0.43 como cópia independente para testes e referência.
+- A página principal anterior v0.19 foi substituída pelo conteúdo aprovado da beta; não foi mantida como página ativa separada.
+- Commit da promoção: `7f6f24cb302779958818d3a9343beec3165b6fc4` — `promove beta v0.43 para a pagina principal`.
+- A atualização desta documentação é registrada em commit separado.
