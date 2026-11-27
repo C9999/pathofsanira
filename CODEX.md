@@ -1619,3 +1619,15 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Commit: `f8192e96e0ebbc0ae4741c33ef6e78993e5e2951` — `sincroniza funcionalidades da beta com a principal v1.54`.
 - Regra de manutenção: toda alteração futura de funcionalidade na principal deve ser replicada na beta, com o mesmo número de versão, exceto quando o usuário pedir explicitamente uma diferença.
 - A beta continua sendo acessível em `/beta.html`; neste momento é funcionalmente equivalente à principal, não uma implementação separada mais antiga.
+
+
+## Teste individual de níveis pela central — v1.54 (27/11/2026)
+
+- Adicionada à `teste.html` uma seção **Teste de níveis**, com seletor dos níveis 1 a 5 e botão para iniciar o nível escolhido.
+- A central abre `index.html?testLevel=N`; a página principal reconhece o modo de teste, sorteia três cartas e inicia diretamente no nível selecionado, sem exigir autenticação Google.
+- O modo de teste encerra após 60 segundos do nível escolhido ou antes, caso a sessão termine por derrota. Não avança para o próximo nível.
+- Ao encerrar, o jogo retorna automaticamente para `teste.html`.
+- O fluxo de teste não envia partidas para `/api/partidas`, não consulta ranking e não altera o histórico online.
+- A mesma implementação foi aplicada a `beta.html`, mantendo o título com o sufixo `— Beta`; principal e beta permanecem funcionalmente equivalentes.
+- Número da versão mantido em **v1.54**, sem incremento nesta alteração.
+- Commits desta implementação: registrados separadamente para `index.html`, `beta.html`, `teste.html` e este `CODEX.md`.
