@@ -1294,3 +1294,15 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Pontuação, tempo e posição no ranking permanecem abaixo da interpretação. O rodapé é ancorado à parte inferior da imagem, que cresce conforme o texto.
 - beta.html passa para v0.42. index.html permanece na v0.19, sem alterações.
 - Validação por inspeção estática do código; a geração final do PNG deve ser conferida no navegador após o deploy, inclusive com uma mensagem longa.
+
+
+## Ajuste — beta v0.43: duração dos níveis (27/11/2026)
+
+- Os níveis 1, 2, 3 e 4 passam a ter **60 segundos de tempo de jogo antes da transição**. O cronômetro do nível continua contando em tempo real, inclusive durante dano e invulnerabilidade.
+- Ao completar os 60 segundos, começa a transição já definida: 3 segundos de percurso reto e vazio, 2 segundos de dissolução visual com troca simultânea da música e 4 segundos adicionais de percurso reto e vazio. A transição total permanece em **9 segundos**.
+- Portanto, cada ciclo dos níveis 1 a 4 dura aproximadamente **69 segundos**: 1 minuto de jogo mais 9 segundos de transição. A geração de obstáculos, inimigos e Sonhos fica interrompida durante toda a transição; os elementos existentes são removidos no início dela.
+- **Nível 5 mantém a regra anterior:** não tem transição para outro nível nem limite de duração. Após 60 segundos no nível 5, permanece o aumento adicional de velocidade de 10% já implementado (level5Boost), sem encerrar a sessão.
+- Esta definição substitui as durações anteriores de aproximadamente dois minutos por nível e a configuração antiga de 12 segundos que estava no código da beta. A transição de 9 segundos, os demais ajustes de velocidade/frequência, cenários, inimigos, obstáculos, músicas e regras de poderes permanecem inalterados.
+- beta.html passa para **v0.43**. index.html permanece na **v0.19**, sem alterações.
+- Commits separados: implementação da beta e atualização deste documento.
+- Validação estática: conferida a condição de 60 segundos para os níveis 1 a 4, o gatilho de aumento adicional após 60 segundos no nível 5 e a manutenção da transição em 3 + 2 + 4 segundos. Teste visual/de jogabilidade em navegador real ainda necessário.
