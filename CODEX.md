@@ -1210,3 +1210,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - O painel de pontuação e classificação foi reposicionado abaixo da lista vertical de cartas para evitar sobreposição.
 - beta.html passa para v0.33. index.html permanece na v0.19, sem alterações.
 - Validação estática por inspeção do HTML/CSS/JavaScript. Conferir em navegador real o encaixe da linha destacada em telas menores e a imagem PNG gerada.
+
+
+## Ajuste — beta v0.34: botão Compartilhar ao lado do nível (26/11/2026)
+
+- Na linha da partida atual em destaque no ranking, o botão **Compartilhar** foi movido para dentro da linha de metadados, imediatamente à direita do texto de tempo e nível (por exemplo, “Nível 3”).
+- O botão recebeu acabamento visual mais destacado em amarelo, com texto escuro, borda clara e leve realce.
+- O botão continua aparecendo somente na partida atual; pontuação e bolinhas das cartas permanecem nas colunas próprias.
+- `beta.html` passa para v0.34. `index.html` permanece na v0.19, sem alterações.
+- Validar visualmente em telas menores se o botão permanece legível e não comprime o texto do nível.
