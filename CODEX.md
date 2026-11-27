@@ -1382,3 +1382,15 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A seleção permite no máximo três cartas; as mensagens aparecem automaticamente quando exatamente três estão marcadas. Ao desmarcar ou trocar cartas, a consulta é atualizada.
 - As cores correspondem à paleta `CARDS` da página principal. O jogo, a beta e o banco JSON não foram alterados.
 - Commit da implementação: `034a3b38ff674fda82490f4e9a52ca62c5249b4a` — `troca seletores por checkboxes coloridos no teste do tarot`.
+
+
+## Interpretações do Tarot V2 (27/11/2026)
+
+- O arquivo `data/interpretacoes-tarot.json` foi substituído pelo JSON V2 anexado, com `versao: "2.0"`, mantendo as 12 cartas, as 220 combinações e as três mensagens por combinação. O conteúdo dos textos foi preservado exatamente como fornecido.
+- A V2 monta cada mensagem usando textos específicos dos pares de cartas (66 pares), combinando síntese do encontro, conselho do par e risco/sombra da terceira carta. Como os pares são independentes da posição, a leitura permanece invariável à ordem de saída das cartas.
+- O gerador original foi versionado sem alterações em `tools/gerar_interpretacoes_v2.py`. Para regenerar o JSON: `python3 tools/gerar_interpretacoes_v2.py /tmp/v2.json`.
+- Foi adicionado `tools/validar_interpretacoes_tarot_v2.js`, que valida as 220 chaves na ordem canônica, testa as 6 permutações de cada combinação (1.320 casos), confere os campos de cartas e verifica as 660 mensagens: três por combinação, únicas globalmente, sem chaves de placeholder, sem espaços duplos e terminadas em ponto.
+- Validação executada: 220/220 combinações, 1.320/1.320 permutações e 660/660 mensagens únicas. A geração do JSON com o script anexado foi comparada byte a byte com o JSON V2 anexado e resultou em conteúdo idêntico.
+- A inspeção de `index.html` confirmou que a chave do Tarot continua ordenada por `Object.keys(tarotData.cartas)`, que o sorteio entre as três mensagens e o fallback genérico permanecem presentes. Nenhuma lógica do jogo foi modificada.
+- Página principal atualizada somente no título para `v 0.48 — Path of Sanira`. `beta.html` permaneceu inalterado na v0.43.
+- Commits: `bd5263801deafb19ed4dc8727bc2f7a01c72970a` (JSON V2); `9566cdbfdcd3177045c296cf6f289959eefdac75` (gerador e validador); `63bfb2d47d81e31da86612c58315f172c91882c0` (título v0.48).
