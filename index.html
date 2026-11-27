@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.48 — Path of Sanira</title>
+<title>v 0.49 — Path of Sanira</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2225%22 fill=%22%23F28C28%22 stroke=%22%23F9C784%22 stroke-width=%224%22/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -73,7 +73,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 #fullscreenToggle{right:12px;top:12px}
 #homeControls{position:absolute;inset:0;pointer-events:none;display:flex;z-index:8}
 #homeControls button{position:absolute;pointer-events:auto;padding:8px 12px;font-size:12px}
-#homeMusicToggle{right:12px;bottom:12px}
+#homeMusicToggle{right:12px;bottom:48px}#homeRankingToggle{right:12px;bottom:12px}
 #homeFullscreenToggle{right:12px;top:12px}
 @media(max-width:700px){#end{padding:8px}#end .end-layout{gap:7px}#end .end-panel{padding:9px}#end .stats{gap:5px}#end .stat{padding:6px}#end .stat b{font-size:16px}#end .pu{font-size:10px}#end button{padding:7px 8px;font-size:10px}}
 .stats{display:flex;gap:10px}
@@ -98,7 +98,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
-<div id="homeControls"><button id="homeFullscreenToggle" class="alt">Tela cheia</button><button id="homeMusicToggle" class="alt">Música: ligada</button></div>
+<div id="homeControls"><button id="homeFullscreenToggle" class="alt">Tela cheia</button><button id="homeMusicToggle" class="alt">Música: ligada</button><button id="homeRankingToggle" class="alt">Ranking geral</button></div>
 
 
 
@@ -246,6 +246,18 @@ function showMenu(){
   $('tb').style.display='none';
   $('powerBtn').style.display='none';
 }
+$('homeRankingToggle').onclick=async()=>{
+ const button=$('homeRankingToggle');button.disabled=true;button.textContent='Carregando...';
+ try{
+  if(!googleCredential)throw new Error('Entre com sua conta Google autorizada para consultar o ranking geral.');
+  const result=await apiRequest('/api/ranking',{headers:{Authorization:'Bearer '+googleCredential}});
+  const ranking=result.partidas||[];
+  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const rows=ranking.map((r,i)=>{const podium=i===0?' podium-gold':i===1?' podium-silver':i===2?' podium-bronze':'';const dots=(r.cards||[]).map(color=>'<span class="dot" style="background:'+esc(color)+'"></span>').join('');return '<div class="rank-row'+podium+'" data-rank-index="'+i+'"><b>'+(i+1)+'.</b><div class="rank-name"><b>'+esc(r.name||'Jogadora')+'</b><div class="rank-meta"><span>'+formatTime(r.elapsedMs)+' · '+formatDate(r.createdAt)+' · Nível '+r.level+'</span></div></div><div style="text-align:right"><b>'+Number(r.score||0).toLocaleString('pt-BR')+'</b></div><div class="rank-current-dots rank-dots">'+dots+'</div></div>';}).join('');
+  $('menu').classList.add('off');$('homeControls').style.display='none';$('end').innerHTML='<div class="end-layout" style="grid-template-columns:minmax(0,1fr);max-width:680px"><section class="end-panel"><div class="ranking-heading"><h2>Ranking geral</h2></div><div class="ranking">'+(rows||'<p>Nenhum resultado registrado.</p>')+'</div><div class="end-actions"><button id="rankingBack">Voltar</button></div></section></div>';$('end').classList.remove('off');$('rankingBack').onclick=()=>{$('end').classList.add('off');showMenu();};
+ }catch(error){$('loginStatus').textContent=error.message;}
+ finally{button.disabled=false;button.textContent='Ranking geral';}
+};
 $('randomMode').onclick=()=>showDraw('random');
 
 const MUSIC_TRACKS=[
@@ -299,6 +311,7 @@ function update(rdt){
  items=items.filter(it=>!it.gone&&!it.taken);
  if(S.ending>0){S.ending-=rdt;if(S.ending<=0)finish();}
 }
+function formatDate(value){const d=new Date(value);return Number.isNaN(d.getTime())?'--/--/--':String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getFullYear()).slice(-2);}
 function formatTime(ms,withMillis=false){
  const total=Math.max(0,ms),minutes=Math.floor(total/60000),seconds=Math.floor(total/1000)%60,millis=total%1000;
  return String(minutes).padStart(2,'0')+':'+String(seconds).padStart(2,'0')+(withMillis?'.'+String(millis).padStart(3,'0'):'');
