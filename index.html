@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.52 — Path of Sanira</title>
+<title>v 0.53 — Path of Sanira</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2225%22 fill=%22%23F28C28%22 stroke=%22%23F9C784%22 stroke-width=%224%22/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -60,7 +60,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 #end .pu small{display:block}
 #end .ranking{display:flex;flex-direction:column;gap:6px;overflow-y:scroll;overflow-x:hidden;min-height:0;max-height:350px;scrollbar-width:thin;scrollbar-color:#8B80C8 #211C45;padding:2px 5px 2px 0;overscroll-behavior:contain}#end .ranking::-webkit-scrollbar{width:7px}#end .ranking::-webkit-scrollbar-track{background:#211C45;border-radius:8px}#end .ranking::-webkit-scrollbar-thumb{background:#8B80C8;border-radius:8px}#end .rank-row{min-height:44px;flex:none;grid-template-columns:24px minmax(0,1fr) auto auto}#end .rank-row.current{grid-template-columns:24px minmax(0,1fr) auto auto;gap:8px}#end .rank-meta{display:flex;align-items:center;gap:5px;color:#CFC8E8;font-size:10px;white-space:nowrap;min-width:0}#end .rank-current-share{flex:0 0 auto;padding:2px 5px!important;font-size:9px!important;line-height:1.1!important;font-weight:700!important;white-space:nowrap;background:#F3C74F!important;color:#34264F!important;border:1px solid #FFE08A!important;box-shadow:0 1px 5px rgba(243,199,79,.28)}#end .rank-current-share:active{background:#FFD96A!important;transform:translateY(1px)}#end .ranking-heading{display:flex;align-items:center;justify-content:center;min-height:30px}#end .ranking-heading h2{margin:0}#end #shareStatus{display:block;min-height:12px;text-align:center;color:#CFC8E8;font-size:10px}#end .rank-current-dots{display:flex;flex-wrap:nowrap;white-space:nowrap;gap:3px;justify-content:flex-end;align-items:center;min-width:max-content}#end .rank-current-dots .dot{width:9px;height:9px}
 #end .rank-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto auto;align-items:center;gap:7px;padding:7px 8px;border-radius:8px;background:#2E2760;font-size:12px}
-#end .rank-row.current{outline:2px solid #E8C46A;background:#40366F}#end .rank-row.podium-gold{border:1.5px solid #E8C46A;box-shadow:inset 3px 0 #E8C46A}#end .rank-row.podium-silver{border:1.5px solid #BFC7D5;box-shadow:inset 3px 0 #BFC7D5}#end .rank-row.podium-bronze{border:1.5px solid #B8794B;box-shadow:inset 3px 0 #B8794B}#end .end-panel .end-actions{position:sticky;bottom:0;justify-content:center;background:#211C45;padding:10px 0 2px;z-index:2}
+#end .rank-row{border:1.5px solid transparent}#end .rank-row.current{outline:none;background:#40366F;border-left:3px solid #55C98A;border-right:3px solid #55C98A;border-bottom:3px solid #55C98A}#end .rank-row.podium-gold{border-top:3px solid #E8C46A}#end .rank-row.podium-silver{border-top:3px solid #BFC7D5}#end .rank-row.podium-bronze{border-top:3px solid #B8794B}#end .end-panel .end-actions{position:sticky;bottom:0;justify-content:center;background:#211C45;padding:10px 0 2px;z-index:2}
 #end .rank-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #end .rank-meta{color:#CFC8E8;font-size:10px}
 #end .rank-dots{display:flex;gap:3px;justify-content:flex-end}
