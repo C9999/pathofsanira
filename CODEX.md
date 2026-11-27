@@ -1631,3 +1631,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A mesma implementação foi aplicada a `beta.html`, mantendo o título com o sufixo `— Beta`; principal e beta permanecem funcionalmente equivalentes.
 - Número da versão mantido em **v1.54**, sem incremento nesta alteração.
 - Commits desta implementação: registrados separadamente para `index.html`, `beta.html`, `teste.html` e este `CODEX.md`.
+
+
+## Recarga da Sacerdotisa ajustada para 10 segundos — v1.54 (27/11/2026)
+
+- A proteção automática da Sacerdotisa agora inicia uma recarga de **10 segundos** após interceptar uma colisão com obstáculo ou inimigo (antes: 15 segundos).
+- O bloqueio da coleta de Sonhos permanece ativo durante toda a recarga e termina quando os 10 segundos se completam.
+- A barra visual de recarga no HUD foi ajustada para representar corretamente o novo intervalo de 10 segundos.
+- A descrição da carta da Sacerdotisa foi atualizada para informar a recarga de 10 segundos.
+- A alteração foi replicada em `index.html` e `beta.html`, mantendo as funcionalidades equivalentes e a versão **v1.54**.
