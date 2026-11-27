@@ -177,6 +177,7 @@ const CARDS=[
 
 const $=id=>document.getElementById(id);
 const stage=$('stage'),cv=$('c'),ctx=cv.getContext('2d');
+const testLevel=Number(new URLSearchParams(location.search).get('testLevel'));const testMode=Number.isInteger(testLevel)&&testLevel>=1&&testLevel<=5;
 let state='menu',cards=[],P={},S={},U={},items=[],imgs={},pointers=new Set(),last=0,scale=1,currentRankId=null;
 
 function fit(){
@@ -230,7 +231,7 @@ function advanceTransition(dt){if(!S.transitionPhase)return;S.transitionTimer-=d
 function startRun(){
  const has=id=>cards.some(c=>c.id===id);P={};CARDS.forEach(c=>P[c.id]=has(c.id));
  U={forca:0,louco:0,mago:0,sacer:0,imper:0,carro:0,eremita:0,roda:0,morte:0,torre:0,lua:0,sol:0};
- const peak=70,g=1800;S={dist:0,z:0,vz:0,g,v0:Math.sqrt(2*g*peak),air:0,float:0,spin:0,score:0,coins:0,stars:0,flash:0,resolved:0,hits:0,lives:(P.forca?3:1)+(P.imper?1:0),invuln:0,face:0,shield:false,shieldT:0,slowE:2,sacerFalls:2,sacerCooldown:0,sacerAura:0,morteUsed:false,morteGray:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,hudVisible:false,speed:300*(P.carro?1.4:1),level:1,levelElapsed:0,transitionPhase:null,transitionTimer:0,transitionProgress:0,worldFrom:1,nextObstacleWx:760,nextDreamWx:1120,previousObstacle:'',elapsed:0,level5Boost:false,musicLabelUntil:3};
+ const peak=70,g=1800;S={dist:0,z:0,vz:0,g,v0:Math.sqrt(2*g*peak),air:0,float:0,spin:0,score:0,coins:0,stars:0,flash:0,resolved:0,hits:0,lives:(P.forca?3:1)+(P.imper?1:0),invuln:0,face:0,shield:false,shieldT:0,slowE:2,sacerFalls:2,sacerCooldown:0,sacerAura:0,morteUsed:false,morteGray:false,torreUsed:false,gold:0,bonus:0,ending:0,dead:false,t:0,hudVisible:false,speed:300*(1+(testMode&&testLevel===4?.15:testMode&&testLevel===5?.30:0)+(P.carro?.40:0)),level:testMode?testLevel:1,levelElapsed:0,transitionPhase:null,transitionTimer:0,transitionProgress:0,worldFrom:1,nextObstacleWx:760,nextDreamWx:1120,previousObstacle:'',elapsed:0,level5Boost:false,musicLabelUntil:3};
  items=[];groundSlope=0;currentRankId=null;resetMusicDeck();selectNextMusicTrack();$('tb').style.display='none';$('homeControls').style.display='none';$('menu').classList.add('off');$('draw').classList.add('off');$('end').classList.add('off');PX=W/2;$('powerBtn').style.display='none';state='intro';S.intro=3;last=performance.now();
 }
 function gy(x){return 190+groundSlope*x}
@@ -338,7 +339,7 @@ function update(rdt){
  const holding=pointers.size>0,dt=rdt;S.t+=dt;
  if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';}return;}
  if(state==='play'&&!S.dead&&!S.ending)S.elapsed+=dt;
- if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;S.levelElapsed+=dt;if(S.level===5&&!S.level5Boost&&S.levelElapsed>=60){S.level5Boost=true;applyLevelSpeed();}if(S.level<5&&!S.transitionPhase&&S.levelElapsed>=60)beginLevelTransition();advanceTransition(dt);spawnAhead();}
+ if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;S.levelElapsed+=dt;if(testMode&&S.levelElapsed>=60){S.ending=0.9;}else{if(S.level===5&&!S.level5Boost&&S.levelElapsed>=60){S.level5Boost=true;applyLevelSpeed();}if(S.level<5&&!S.transitionPhase&&S.levelElapsed>=60)beginLevelTransition();advanceTransition(dt);spawnAhead();}}
  let g=S.g;if(P.eremita&&holding&&S.vz<0&&S.z>0&&S.float<1.5){g*=.25;S.float+=rdt;U.eremita+=rdt;}
  if(S.z>0||S.vz>0){S.vz-=g*dt;S.z+=S.vz*dt;if(S.z<=0){S.z=0;S.vz=0;S.float=0;}}
  if(S.flash>0)S.flash-=rdt;if(S.invuln>0)S.invuln-=dt;if(S.face>0)S.face-=rdt;if(S.spin>0)S.spin=Math.max(0,S.spin-rdt);if(S.sacerCooldown>0)S.sacerCooldown=Math.max(0,S.sacerCooldown-dt);if(S.sacerAura>0)S.sacerAura=Math.max(0,S.sacerAura-rdt);
@@ -437,7 +438,9 @@ function createShareImage({score,elapsedMs,rankPosition,level,cards,won,interpre
  });
 }
 async function finish(){
- stopMeditationAudio();state='end';hasPlayedSession=true;$('tb').style.display='none';$('homeControls').style.display='none';
+ stopMeditationAudio();state='end';$('tb').style.display='none';$('homeControls').style.display='none';
+ if(testMode){window.location.replace('teste.html');return;}
+ hasPlayedSession=true;
  const won=!S.dead,elapsedMs=Math.round((S.elapsed||0)*1000),entry={id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2)),score:Math.round(S.score),elapsedMs,level:S.level,dreams:Math.round((S.stars||0)*10),cards:cards.map(c=>c.cor)};
  currentRankId=entry.id;
  const powers=cards.map(c=>'<div class="pu"><span class="dot" style="background:'+c.cor+'"></span><div><b>'+c.nome+'</b><small>'+c.desc+'</small></div></div>').join('');
@@ -685,6 +688,7 @@ function loop(now){
 }
 S={dist:0,z:0,t:0,score:0,coins:0,face:0,invuln:0,slowE:2};
 requestAnimationFrame(loop);
+if(testMode){cards=drawCards();loadImgs().then(()=>startRun());}
 </script>
 </body>
 </html>
