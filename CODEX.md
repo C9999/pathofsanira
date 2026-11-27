@@ -1403,3 +1403,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Incluído o botão **Ranking geral** na tela inicial, abaixo do botão de música. Ele consulta `/api/ranking` e abre uma tela exclusiva com a classificação completa, sem iniciar uma partida. A consulta exige login Google autorizado, conforme a proteção já aplicada ao endpoint.
 - A página principal passa para **v0.49**. `beta.html` permanece inalterada.
 - Validação estática: conferidos o uso de `createdAt`, a formatação da data, as classes de pódio, o botão de acesso e o fluxo de retorno à tela inicial. Teste visual e de interação em navegador real ainda necessário.
+
+
+## Correções do ranking — página principal v0.50 (27/11/2026)
+
+- Corrigido o destaque do pódio: as classes `podium-gold`, `podium-silver` e `podium-bronze` agora possuem regras CSS explícitas para borda e detalhe interno, tanto no ranking geral quanto no ranking da tela final.
+- O botão de retorno à tela inicial na tela de resultado/ranking fica centralizado horizontalmente no painel esquerdo e usa posicionamento `sticky` no rodapé do painel, permanecendo acessível durante a rolagem do conteúdo.
+- O botão **Ranking geral** foi movido para o canto inferior esquerdo. Ele começa oculto, aparece ao retornar ao menu depois que a primeira sessão termina e fica disponível durante a sessão atual da página. Uma recarga reinicia essa condição e o botão volta a ficar oculto até outra sessão terminar.
+- A disponibilidade é controlada apenas em memória (`hasPlayedSession`), sem persistência em `localStorage` ou `sessionStorage`.
+- Versão da página principal: **v0.50**. `beta.html` não foi alterada.
+- Validação estática: confirmadas as regras CSS, a posição do botão, a condição de exibição pós-sessão e o reset natural da variável ao recarregar. Validação visual/interativa em navegador real ainda necessária.
