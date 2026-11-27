@@ -1370,3 +1370,6 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A ferramenta é somente de consulta; não modifica o jogo, a página principal, a beta ou o JSON.
 - Análise de duplicidade no JSON: as 660 mensagens foram comparadas após normalização de espaços e caixa; foram encontradas **660 mensagens distintas e nenhuma repetida**.
 - Commits separados: página `TarotTeste.html` (`ac564e2a135635ebad131e34fbe31546a8c7e632`) e inclusão do acesso em `teste.html` (`7351ec895b25c415d37462ce695ce768bca7be7a`). A documentação é registrada em commit próprio.
+
+- Ajuste complementar da página de teste: os seletores desabilitam cartas já escolhidas nos outros campos e impedem duplicação ao alterar a seleção.
+- Commit do ajuste: `757e48c2187bbf331e5392aa7e20188b2b33b3eb` — `corrige selecao exclusiva de cartas no teste do tarot`.
