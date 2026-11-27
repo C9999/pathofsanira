@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.53 — Path of Sanira</title>
+<title>v 0.54 — Path of Sanira</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2225%22 fill=%22%23F28C28%22 stroke=%22%23F9C784%22 stroke-width=%224%22/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -213,7 +213,11 @@ function showDraw(mode='random'){
     el.innerHTML='<div class="inner"><div class="face back">✦</div><div class="face front'+(c.id==='forca'?' hit':'')+'" style="border-color:'+c.cor+'88"><div class="tarot-top" style="color:'+c.cor+'">'+c.num+'</div><div class="tarot-frame" style="color:'+c.cor+';border-color:'+c.cor+'88">'+TAROT_ART[c.id]+'</div><div class="tarot-name" style="color:'+c.cor+'">'+c.nome+'</div><div class="tarot-pw" style="color:'+c.cor+'">'+c.poder+'</div></div></div>';
     box.appendChild(el);setTimeout(()=>el.classList.add('flip'),900+i*1100);
   });
-  loadImgs().then(()=>setTimeout(()=>$('go').classList.remove('off'),900+2*1100+700));
+  $('draw').querySelector('h2').classList.remove('off');
+  loadImgs().then(()=>setTimeout(()=>{
+    $('draw').querySelector('h2').classList.add('off');
+    $('go').classList.remove('off');
+  },900+2*1100+600+1500));
 }
 const OBSTACLE_TYPES=[{k:'r',w:40,h:46,weight:20},{k:'l',w:70,h:44,weight:15},{k:'alligator',w:76,h:38,weight:15},{k:'cattle',w:62,h:68,weight:15},{k:'toucan',w:52,h:42,weight:15},{k:'e',w:44,h:50,weight:8}];
 function makeDream(wx){return{wx,k:'s',coin:true,star:true,gold:false,air:Math.random()<.65,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};}
