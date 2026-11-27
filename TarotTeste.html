@@ -59,24 +59,11 @@ let cardIds=[];
 function canonicalKey(ids){
  return [...ids].sort((a,b)=>cardIds.indexOf(a)-cardIds.indexOf(b)).join('_');
 }
-function updateOptions(){
- const chosen=selects.map(s=>s.value);
+function refreshOptions(){
  selects.forEach((select,index)=>{
-  const current=select.value;
-  select.innerHTML='';
-  cardIds.forEach(id=>{
-   const option=document.createElement('option');
-   option.value=id;
-   option.textContent=tarotData.cartas[id].nome;
-   const usedByOther=chosen.some((other,i)=>i!==index&&other===id);
-   option.disabled=usedByOther;
-   select.appendChild(option);
+  [...select.options].forEach(option=>{
+   option.disabled=selects.some((other,otherIndex)=>otherIndex!==index&&other.value===option.value);
   });
-  select.value=current&&!select.options[[...select.options].findIndex(o=>o.value===current)]?.disabled?current:'';
-  if(!select.value){
-   const available=[...select.options].find(o=>!o.disabled);
-   if(available)select.value=available.value;
-  }
  });
 }
 function render(){
@@ -110,32 +97,13 @@ function render(){
  });
  statusEl.textContent='Combinação: '+key+' · 3 mensagens encontradas';
 }
-function onSelectionChange(){
- const chosen=selects.map(s=>s.value);
- const changed=selects.findIndex(s=>!s.value);
- if(changed>=0){
-  updateOptions();
- }
- render();
-}
 async function init(){
  try{
   const response=await fetch('data/interpretacoes-tarot.json',{cache:'no-store'});
   if(!response.ok)throw new Error('HTTP '+response.status);
   tarotData=await response.json();
   cardIds=Object.keys(tarotData.cartas);
-  selects.forEach(select=>{
-   select.addEventListener('change',()=>{
-    const values=selects.map(s=>s.value);
-    const duplicates=values.filter((id,index)=>id&&values.indexOf(id)!==index);
-    if(duplicates.length){
-     updateOptions();
-    }
-    render();
-   });
-  });
   selects.forEach((select,index)=>{
-   select.innerHTML='';
    cardIds.forEach(id=>{
     const option=document.createElement('option');
     option.value=id;option.textContent=tarotData.cartas[id].nome;
@@ -143,7 +111,18 @@ async function init(){
    });
    select.value=cardIds[index];
   });
-  updateOptions();
+  const lastValues=selects.map(select=>select.value);
+  selects.forEach((select,index)=>{
+   select.addEventListener('change',()=>{
+    const candidate=select.value;
+    const alreadyUsed=selects.some((other,otherIndex)=>otherIndex!==index&&other.value===candidate);
+    if(alreadyUsed)select.value=lastValues[index];
+    else lastValues[index]=select.value;
+    refreshOptions();
+    render();
+   });
+  });
+  refreshOptions();
   render();
   statusEl.textContent='Banco carregado: '+cardIds.length+' cartas · '+Object.keys(tarotData.combinacoes).length+' combinações.';
  }catch(error){
