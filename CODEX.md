@@ -1282,3 +1282,15 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Mantida a lógica de interpretação: a combinação é identificada pelos IDs das três cartas, ordenados alfabeticamente; uma das três mensagens cadastradas para aquela combinação é escolhida aleatoriamente.
 - O banco JSON e a lógica de sorteio não foram alterados. A página principal `index.html` permanece na v0.19, sem alterações.
 - Validação estática da alteração no HTML/CSS/JavaScript; conferir visualmente em navegador real o encaixe das três etiquetas em telas menores.
+
+
+## Compartilhamento e tela inicial — beta v0.42 (26/11/2026)
+
+- O rodapé da imagem compartilhada passa a exibir exatamente **“desenvolvido por @Carlos_h5”**.
+- A imagem da Sanira na tela inicial foi deslocada um pouco para cima, aproximando-a do título sem alterar a arte original.
+- As três cartas na imagem compartilhada passam a ficar na mesma linha, centralizadas, em etiquetas horizontais com bolinha colorida e nome, seguindo o padrão compacto do HUD. O tamanho da fonte se ajusta se necessário para manter o conjunto dentro da largura disponível.
+- Abaixo das cartas, a imagem inclui uma caixa para a interpretação, com o mesmo fundo escuro translúcido usado no painel de pontos e tempo.
+- A interpretação é quebrada em linhas com largura máxima definida. A altura da caixa e a altura total do PNG são calculadas a partir da quantidade de linhas, evitando corte ou sobreposição mesmo em mensagens extensas; palavras excepcionalmente longas também são divididas.
+- Pontuação, tempo e posição no ranking permanecem abaixo da interpretação. O rodapé é ancorado à parte inferior da imagem, que cresce conforme o texto.
+- beta.html passa para v0.42. index.html permanece na v0.19, sem alterações.
+- Validação por inspeção estática do código; a geração final do PNG deve ser conferida no navegador após o deploy, inclusive com uma mensagem longa.
