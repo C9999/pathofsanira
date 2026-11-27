@@ -1640,3 +1640,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A barra visual de recarga no HUD foi ajustada para representar corretamente o novo intervalo de 10 segundos.
 - A descrição da carta da Sacerdotisa foi atualizada para informar a recarga de 10 segundos.
 - A alteração foi replicada em `index.html` e `beta.html`, mantendo as funcionalidades equivalentes e a versão **v1.54**.
+
+
+## Modal com as cartas usadas no ranking — v1.54 (27/11/2026)
+
+- No ranking geral, os três pontos coloridos de cada partida agora são clicáveis.
+- Ao tocar nos pontos, abre uma pequena modal com os nomes das três cartas utilizadas naquela partida, na mesma ordem da tiragem.
+- Qualquer novo clique/toque, dentro ou fora da modal, fecha a janela; não é necessário botão de fechar.
+- A API `/api/ranking` passou a consultar as colunas A:M da planilha e retornar também `cardNames` (colunas K:M), preservando as cores em `cards`. Há fallback no cliente para partidas antigas sem nomes preenchidos.
+- A funcionalidade foi aplicada em `index.html` e replicada integralmente em `beta.html`; ambas permanecem na versão **v1.54**.
