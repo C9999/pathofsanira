@@ -1413,3 +1413,14 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A disponibilidade é controlada apenas em memória (`hasPlayedSession`), sem persistência em `localStorage` ou `sessionStorage`.
 - Versão da página principal: **v0.50**. `beta.html` não foi alterada.
 - Validação estática: confirmadas as regras CSS, a posição do botão, a condição de exibição pós-sessão e o reset natural da variável ao recarregar. Validação visual/interativa em navegador real ainda necessária.
+
+
+## Músicas aleatórias por nível — página principal v0.51 (27/11/2026)
+
+- Integradas à biblioteca do jogo as cinco atmosferas do arquivo de referência: **6. Lago ao amanhecer**, **7. Chuva suave**, **8. Templo de bambu**, **9. Brisa de verão** e **10. Lua cheia**. Elas são sintetizadas em tempo real pela Web Audio API, assim como as cinco faixas anteriores; não exigem MP3/WAV nem arquivos externos.
+- A biblioteca agora possui dez músicas. No início de cada partida, a ordem é embaralhada; cada nível consome a próxima faixa da sequência, sem repetir música durante aquela rodada. Uma nova partida embaralha novamente a biblioteca.
+- A troca de faixa ocorre no início da transição entre níveis, com crossfade de três segundos. Se a música estiver desligada, a seleção continua avançando e a faixa atual é retomada ao religar o áudio.
+- Durante os três segundos iniciais da transição (transitionPhase: pre), o nome da música selecionada aparece em uma etiqueta discreta no canto superior direito.
+- A página principal passa para **v0.51**. beta.html não foi alterada.
+- Validação: sintaxe JavaScript verificada por análise de compilação (new Function), sem erro; inspeção estática confirmou as dez faixas, embaralhamento por partida, seleção na transição, crossfade e etiqueta de três segundos. Teste auditivo e visual em aparelho real ainda necessário.
+- Commits: 85329f8135a596231292e997c75fa968aa38210a (integração das músicas e lógica); commit subsequente (versão v0.51); esta documentação em commit separado.
