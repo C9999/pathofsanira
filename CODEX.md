@@ -1434,3 +1434,14 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A página principal `index.html` passa para **v0.52**. `beta.html` não foi alterada.
 - Validação: sintaxe JavaScript compilada sem erros em `index.html`, `Musica.html` e `teste.html`; verificação estática confirmou o temporizador inicial de 3 segundos, dez opções de música e texto atualizado na central. Teste de áudio/visual em dispositivo real ainda necessário.
 - Commits: `3d6f2b7a15d0734981c334a01735c13297b389f3` (rótulo inicial e v0.52); commit de `Musica.html` (central com dez faixas); `49a9812a6ec2fe8260a7c0db6b0d96e7ae1b0149` (cartão da central); documentação neste commit.
+
+
+## Destaques do ranking sem sobreposição — página principal v0.53 (27/11/2026)
+
+- O destaque do pódio foi simplificado para uma faixa somente na borda superior de cada linha: dourada no 1º lugar, prateada no 2º e bronzeada no 3º.
+- O destaque da partida atual passou a usar bordas verdes nas laterais esquerda e direita e na borda inferior, sem contorno externo e sem disputar a borda superior com o pódio.
+- Quando a partida atual também estiver no Top 3, os dois tratamentos são combinados: a borda superior mantém a cor da posição e as outras três bordas ficam verdes.
+- Mantidos o fundo da partida atual, a estrutura das linhas, as informações, o botão de compartilhamento e a lógica do ranking.
+- Página principal atualizada para **v0.53**. `beta.html` não foi alterada.
+- Validação: JavaScript compilado sem erros; conferidos os seletores CSS para os quatro casos (ouro, prata, bronze e partida atual combinada ou fora do pódio). Validação visual/interativa em aparelho real ainda necessária.
+- Commit da implementação: `84ffc9c8a39eb0de4c585415cd8eb160b8ffdc87` — `separa destaques do podio e da partida atual na v0.53`. A documentação é registrada em commit separado.
