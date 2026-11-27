@@ -164,7 +164,7 @@ const TAROT_ART={"louco":"<svg class=\"tarot-art\" viewBox=\"0 0 100 120\" aria-
 const CARDS=[
 {id:'louco',num:'0',nome:'O Louco',poder:'Pulo duplo',desc:'No segundo pulo, Sanira gira 360° rapidamente.',cor:'#5FCFE0'},
 {id:'mago',num:'I',nome:'O Mago',poder:'Ímã',desc:'Atrai Sonhos próximos.',cor:'#A78BDB'},
-{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Protege automaticamente contra uma colisão com obstáculo ou inimigo. Após ativar, recarrega em 15 segundos; durante a recarga, não é possível coletar Sonhos.',cor:'#6CC38A'},
+{id:'sacer',num:'II',nome:'A Sacerdotisa',poder:'Intuição',desc:'Protege automaticamente contra uma colisão com obstáculo ou inimigo. Após ativar, recarrega em 10 segundos; durante a recarga, não é possível coletar Sonhos.',cor:'#6CC38A'},
 {id:'imper',num:'III',nome:'A Imperatriz',poder:'Vida extra',desc:'Acrescenta um nível de vida.',cor:'#F28FB1'},
 {id:'carro',num:'VII',nome:'O Carro',poder:'Arrancada',desc:'Velocidade +40%.',cor:'#3FBFA8'},
 {id:'forca',num:'VIII',nome:'A Força',poder:'Sua habilidade principal',desc:'Começa a sessão com 3 níveis de vida.',cor:'#F28C28'},
@@ -346,7 +346,7 @@ function update(rdt){
  const pcx=PX,pcy=gy(PX)-67-S.z;
  for(const it of items){if(it.gone||it.taken)continue;if(!it.coin&&it.k==='e'&&!S.dead)it.wx-=70*dt;const sx=PX+(it.wx-S.dist);
   if(it.coin){let x=sx,y=gy(sx)-(it.star?115:(it.air?150:70));if(P.mago&&!it.att&&Math.hypot(sx-pcx,y-pcy)<150){it.att=true;it.mag=true;}if(it.att){const bx=sx+it.ox,by=y+it.oy,dx=pcx-bx,dy=pcy-by,d=Math.hypot(dx,dy)||1,st=Math.min(d,560*rdt);it.ox+=dx/d*st;it.oy+=dy/d*st;}x=sx+it.ox;y=y+it.oy;it.x=x;it.y=y;if(!S.dead&&S.sacerCooldown<=0&&Math.hypot(x-pcx,y-pcy)<39){S.hudVisible=true;it.taken=true;S.stars++;S.resolved++;const v=10*(P.roda?1.5:1)*(P.lua?1.5:1);S.score+=v;if(P.lua)S.bonus+=10*(P.roda?1.5:1)*.5;if(it.mag)U.mago++;}else if(sx<PX-70)it.gone=true;
-  }else{const y=gy(sx),bob=(it.k==='e'||it.k==='toucan')?Math.sin(S.t*4+it.bob)*10:0;it.x=sx;it.y=y;it.by=bob;if(it.k==='alligator')it.wx=it.baseWx+Math.sin(S.t*2.1+it.baseWx)*42;if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;if(!S.dead&&!S.transitionPhase&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?115:0),it.w,it.h)){const enemy=['alligator','cattle','toucan','enemy','e'].includes(it.k);if(P.sacer&&S.sacerCooldown<=0){S.sacerCooldown=15;S.sacerAura=1.5;U.sacer++;it.gone=true;}else takeHit(enemy?'enemy':'obstacle');}if(sx<-80)it.gone=true;}
+  }else{const y=gy(sx),bob=(it.k==='e'||it.k==='toucan')?Math.sin(S.t*4+it.bob)*10:0;it.x=sx;it.y=y;it.by=bob;if(it.k==='alligator')it.wx=it.baseWx+Math.sin(S.t*2.1+it.baseWx)*42;if(it.k==='toucan')it.wx=it.baseWx+Math.sin(S.t*2.8+it.baseWx)*22;if(!S.dead&&!S.transitionPhase&&sx>-80&&hitRect(pcx,pcy,26,sx,y-bob-(it.k==='toucan'?115:0),it.w,it.h)){const enemy=['alligator','cattle','toucan','enemy','e'].includes(it.k);if(P.sacer&&S.sacerCooldown<=0){S.sacerCooldown=10;S.sacerAura=1.5;U.sacer++;it.gone=true;}else takeHit(enemy?'enemy':'obstacle');}if(sx<-80)it.gone=true;}
  }
  items=items.filter(it=>!it.gone&&!it.taken);
  if(S.ending>0){S.ending-=rdt;if(S.ending<=0)finish();}
@@ -667,7 +667,7 @@ function render(){
       ctx.font='12px system-ui,sans-serif';const w=ctx.measureText(c.nome).width+28,h=22;
       ctx.fillStyle='rgba(255,255,255,.65)';ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.fill();
       ctx.save();ctx.beginPath();ctx.roundRect(x,14,w,h,11);ctx.clip();
-      ctx.fillStyle=c.cor;ctx.fillRect(x,14,w*(1-S.sacerCooldown/15),h);ctx.restore();
+      ctx.fillStyle=c.cor;ctx.fillRect(x,14,w*(1-S.sacerCooldown/10),h);ctx.restore();
       x+=w+6;
     }else{const pw=pill(x,14,c.nome,c.cor);x+=pw+6;}
     if(index===2&&P.torre&&state==='play'&&!S.torreUsed&&!S.morteGray){
