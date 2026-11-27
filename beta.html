@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.29 — Path of Sanira — Beta</title>
+<title>v 0.30 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -312,18 +312,45 @@ async function handleGoogleCredential(response){
  try{
   const result=await apiRequest('/api/auth',{method:'POST',body:JSON.stringify({credential:response.credential})});
   googleCredential=response.credential;authorizedPlayer=result.user;
-  status.textContent='';
-  $('googleLogin').classList.add('off');$('randomMode').classList.remove('off');
+  try{sessionStorage.setItem('pathofsanira_google_credential',googleCredential);}catch(e){}
+  status.textContent='';$('googleLogin').classList.add('off');$('randomMode').classList.remove('off');
  }catch(error){
-  googleCredential=null;authorizedPlayer=null;status.textContent=error.message;
+  googleCredential=null;authorizedPlayer=null;
+  try{sessionStorage.removeItem('pathofsanira_google_credential');}catch(e){}
+  status.textContent=error.message;
  }
 }
+function applyAuthorizedSession(user,credential){googleCredential=credential;authorizedPlayer=user;$('loginStatus').textContent='';$('googleLogin').classList.add('off');$('randomMode').classList.remove('off');}
 function initializeGoogleLogin(){
  if(!window.google?.accounts?.id||!GOOGLE_CLIENT_ID){$('loginStatus').textContent='Login Google ainda não configurado nesta versão.';return;}
- google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleCredential});
+ google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleCredential,auto_select:true});
  google.accounts.id.renderButton($('googleLogin'),{theme:'filled_black',size:'large',shape:'pill',text:'signin_with',locale:'pt-BR'});
 }
-window.addEventListener('load',async()=>{try{const config=await fetch('/api/config').then(r=>r.json());GOOGLE_CLIENT_ID=config.googleClientId||'';}catch(e){}const wait=()=>{if(window.google?.accounts?.id)initializeGoogleLogin();else setTimeout(wait,150);};wait();});
+window.addEventListener('load',async()=>{
+ try{const config=await fetch('/api/config',{cache:'no-store'}).then(r=>r.json());GOOGLE_CLIENT_ID=config.googleClientId||'';}catch(e){}
+ let restored=false,stored='';try{stored=sessionStorage.getItem('pathofsanira_google_credential')||'';}catch(e){}
+ if(stored){try{const result=await apiRequest('/api/auth',{method:'POST',body:JSON.stringify({credential:stored})});applyAuthorizedSession(result.user,stored);restored=true;}catch(e){try{sessionStorage.removeItem('pathofsanira_google_credential');}catch(_){}$('loginStatus').textContent='Sua sessão expirou. Entre novamente com o Google.';}}
+ const wait=()=>{if(window.google?.accounts?.id){initializeGoogleLogin();if(!restored&&stored)google.accounts.id.prompt();}else setTimeout(wait,150);};wait();
+});
+function createShareImage({score,rankPosition,level,cards,won}){
+ return new Promise((resolve,reject)=>{
+  const canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;const c=canvas.getContext('2d');
+  const worlds={1:{top:'#A9D8EE',mid:'#C8E7F1',ground:'#86B890',dark:'#6FA283'},2:{top:'#7FB6A0',mid:'#B5D5B5',ground:'#477B54',dark:'#315E46'},3:{top:'#A9B7C8',mid:'#D1D8DC',ground:'#747B82',dark:'#555D68'},4:{top:'#B8D9EA',mid:'#E8F5FA',ground:'#E9F3F5',dark:'#C6E0EA'},5:{top:'#11132F',mid:'#292451',ground:'#35365F',dark:'#202342'}};
+  const w=worlds[level]||worlds[1],grad=c.createLinearGradient(0,0,0,1350);grad.addColorStop(0,w.top);grad.addColorStop(.55,w.mid);grad.addColorStop(1,w.ground);c.fillStyle=grad;c.fillRect(0,0,1080,1350);
+  if(level===1||level===2){for(let i=0;i<9;i++){const x=i*150-40,h=120+(i%4)*45;c.fillStyle=level===1?'#A9B9DD':(i%2?'#3E704F':'#527F59');c.beginPath();c.moveTo(x,830);c.lineTo(x+75,830-h);c.lineTo(x+150,830);c.fill();}if(level===2){for(let i=0;i<8;i++){const x=i*150+35;c.fillStyle='#315C42';c.fillRect(x,470,22,390);c.beginPath();c.arc(x+11,485,65,0,Math.PI*2);c.fillStyle='#477B54';c.fill();}}}
+  else if(level===3){for(let i=0;i<8;i++){const x=i*145,h=150+(i%3)*65;c.fillStyle=i%2?'#697783':'#818B91';c.fillRect(x,830-h,100,h);c.fillStyle='#596674';c.fillRect(x+18,830-h-40,22,40);}}
+  else if(level===4){for(let i=0;i<7;i++){const x=i*190-80,h=210+(i%3)*70;c.fillStyle=i%2?'#A9C9DC':'#C5DDE8';c.beginPath();c.moveTo(x,850);c.lineTo(x+120,850-h);c.lineTo(x+240,850);c.fill();c.fillStyle='#F8FCFD';c.beginPath();c.moveTo(x+120,850-h);c.lineTo(x+90,850-h+70);c.lineTo(x+150,850-h+70);c.fill();}}
+  else if(level===5){for(let i=0;i<150;i++){const x=(i*137)%1080,y=(i*83)%850;c.fillStyle=i%4===0?'#F3D98B':'#E8E5FF';c.globalAlpha=.55;c.beginPath();c.arc(x,y,i%7===0?3:1.5,0,Math.PI*2);c.fill();}c.globalAlpha=1;c.fillStyle='#62559A';c.beginPath();c.arc(820,370,125,0,Math.PI*2);c.fill();c.strokeStyle='#8C83C9';c.lineWidth=18;c.globalAlpha=.6;c.beginPath();c.ellipse(820,370,185,48,-.25,0,Math.PI*2);c.stroke();c.globalAlpha=1;}
+  c.fillStyle=w.dark;c.fillRect(0,850,1080,500);c.fillStyle=w.ground;c.beginPath();c.moveTo(0,850);c.lineTo(1080,850);c.lineTo(1080,1350);c.lineTo(0,1350);c.fill();
+  c.fillStyle='rgba(20,18,43,.18)';c.fillRect(0,0,1080,1350);
+  c.textAlign='center';c.fillStyle='#F5EFE0';c.font='700 42px Georgia,serif';c.fillText('PATH OF SANIRA',540,105);c.font='500 24px system-ui,sans-serif';c.fillStyle='#E8C46A';c.fillText(won?'SESSÃO CONCLUÍDA':'MEDITAÇÃO INTERROMPIDA',540,155);
+  const palette=cards.map(x=>x.cor);palette.forEach((color,i)=>{c.beginPath();c.strokeStyle=color;c.lineWidth=18;c.globalAlpha=.9;c.arc(540,620,245+i*34,Math.PI*(.12+i*.06),Math.PI*(.88-i*.06));c.stroke();});c.globalAlpha=1;
+  if(imgs.feliz&&imgs.feliz.complete)c.drawImage(imgs.feliz,330,355,420,420);
+  palette.forEach((color,i)=>{const x=390+i*150;c.fillStyle=color;c.beginPath();c.roundRect(x-42,825,84,84,22);c.fill();c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=3;c.stroke();});
+  c.fillStyle='rgba(20,18,43,.82)';c.beginPath();c.roundRect(115,950,850,250,30);c.fill();c.fillStyle='#F5EFE0';c.font='700 82px system-ui,sans-serif';c.fillText(score.toLocaleString('pt-BR'),540,1055);c.font='500 25px system-ui,sans-serif';c.fillStyle='#CFC8E8';c.fillText('PONTOS',540,1095);c.font='700 32px system-ui,sans-serif';c.fillStyle='#E8C46A';c.fillText(rankPosition?'#'+rankPosition+' NO RANKING':'RANKING',540,1155);c.font='500 21px system-ui,sans-serif';c.fillStyle='#F5EFE0';c.textAlign='right';c.fillText('desenvolvimento por @carlos_h5',1040,1310);
+  canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Falha ao gerar a imagem.')),'image/png');
+ });
+}
 async function finish(){
  stopMeditationAudio();state='end';$('tb').style.display='none';$('homeControls').style.display='none';
  const won=!S.dead,elapsedMs=Math.round((S.elapsed||0)*1000),entry={id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2)),score:Math.round(S.score),elapsedMs,level:S.level,dreams:Math.round((S.stars||0)*10),cards:cards.map(c=>c.cor)};
@@ -339,9 +366,10 @@ async function finish(){
  }catch(error){saveMessage=error.message;}
  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
  const rows=ranking.map((r,i)=>'<div class="rank-row'+(r.id===currentRankId?' current':'')+'"><b>'+(i+1)+'.</b><div class="rank-name"><b>'+esc(r.name||'Jogadora')+'</b><div class="rank-meta">'+formatTime(r.elapsedMs)+' · Nível '+r.level+'</div></div><div style="text-align:right"><b>'+Number(r.score||0).toLocaleString('pt-BR')+'</b><div class="rank-dots">'+(r.cards||[]).map(color=>'<span class="dot" style="background:'+esc(color)+'"></span>').join('')+'</div></div></div>').join('');
- $('end').innerHTML='<div class="end-layout"><section class="end-panel"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score).toLocaleString('pt-BR')+'</b><span>Pontos</span></div><div class="stat"><b>'+formatTime(elapsedMs)+'</b><span>Tempo meditando</span></div><div class="stat"><b>'+S.level+'</b><span>Nível</span></div><div class="stat"><b>'+(S.stars*10).toLocaleString('pt-BR')+'</b><span>Sonhos</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+powers+'<p id="saveStatus">'+esc(saveMessage)+'</p><div class="end-actions"><button id="backMenu">Voltar à tela inicial</button></div></section><section class="end-panel"><h2>Ranking online</h2><div class="ranking">'+(rows||'<p>Nenhum resultado registrado.</p>')+'</div><div class="end-actions" style="justify-content:flex-end"><button id="shareResult" class="alt">Compartilhar</button></div></section></div>';
+ $('end').innerHTML='<div class="end-layout"><section class="end-panel"><h2>'+(won?'Sessão concluída':'Meditação interrompida')+'</h2><div class="stats"><div class="stat"><b>'+Math.round(S.score).toLocaleString('pt-BR')+'</b><span>Pontos</span></div><div class="stat"><b>'+formatTime(elapsedMs)+'</b><span>Tempo meditando</span></div><div class="stat"><b>'+S.level+'</b><span>Nível</span></div><div class="stat"><b>'+(S.stars*10).toLocaleString('pt-BR')+'</b><span>Sonhos</span></div></div><div style="font-size:13px;color:#CFC8E8">Poderes usados</div>'+powers+'<p id="saveStatus">'+esc(saveMessage)+'</p><div class="end-actions"><button id="backMenu">Voltar à tela inicial</button></div></section><section class="end-panel"><h2>Ranking online</h2><div class="ranking">'+(rows||'<p>Nenhum resultado registrado.</p>')+'</div><div class="end-actions" style="justify-content:flex-end"><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><button id="shareResult" class="alt">Compartilhar</button><small id="shareStatus" style="color:#CFC8E8;font-size:10px;text-align:right"></small></div></div></section></div>';
  $('end').classList.remove('off');$('powerBtn').style.display='none';$('backMenu').onclick=showMenu;
- $('shareResult').onclick=()=>{const text='Path of Sanira · '+Math.round(S.score)+' pontos · Tempo meditando: '+formatTime(elapsedMs)+' · Nível '+S.level+' · Cartas: '+cards.map(c=>c.nome).join(', ');if(navigator.share)navigator.share({title:'Path of Sanira',text}).catch(()=>{});else if(navigator.clipboard)navigator.clipboard.writeText(text);};
+ const rankIndex=ranking.findIndex(r=>r.id===currentRankId),rankPosition=rankIndex>=0?rankIndex+1:null;
+ $('shareResult').onclick=async()=>{const button=$('shareResult'),status=$('shareStatus');button.disabled=true;button.textContent='Preparando imagem...';try{const blob=await createShareImage({score:Math.round(S.score),rankPosition,level:S.level,cards,won});const file=new File([blob],'path-of-sanira-resultado.png',{type:'image/png'});const shareText='Path of Sanira · '+Math.round(S.score)+' pontos'+(rankPosition?' · '+rankPosition+'º no ranking':'')+' · Nível '+S.level;if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'Meu resultado no Path of Sanira',text:shareText});status.textContent='Imagem compartilhada.';}else if(navigator.share){await navigator.share({title:'Meu resultado no Path of Sanira',text:shareText});status.textContent='Seu navegador compartilhou o resumo em texto; não oferece envio de imagem.';}else{const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='path-of-sanira-resultado.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);status.textContent='Imagem salva no aparelho.';}}catch(error){if(error.name!=='AbortError')status.textContent='Não foi possível compartilhar: '+error.message;}finally{button.disabled=false;button.textContent='Compartilhar';}};
 }
 
 function mount(off,col,base,amp,seed){
