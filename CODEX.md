@@ -1394,3 +1394,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A inspeção de `index.html` confirmou que a chave do Tarot continua ordenada por `Object.keys(tarotData.cartas)`, que o sorteio entre as três mensagens e o fallback genérico permanecem presentes. Nenhuma lógica do jogo foi modificada.
 - Página principal atualizada somente no título para `v 0.48 — Path of Sanira`. `beta.html` permaneceu inalterado na v0.43.
 - Commits: `bd5263801deafb19ed4dc8727bc2f7a01c72970a` (JSON V2); `9566cdbfdcd3177045c296cf6f289959eefdac75` (gerador e validador); `63bfb2d47d81e31da86612c58315f172c91882c0` (título v0.48).
+
+
+## Ranking geral — página principal v0.49 (27/11/2026)
+
+- O primeiro, segundo e terceiro lugares recebem detalhes discretos de borda em ouro, prata e bronze, respectivamente, mantendo a estrutura e as colunas atuais das linhas.
+- A data da partida é exibida ao lado do tempo no formato **dd/mm/aa**. A API `api/ranking.js` já disponibiliza o campo `createdAt`; não foi necessário alterar o endpoint nem a planilha.
+- Incluído o botão **Ranking geral** na tela inicial, abaixo do botão de música. Ele consulta `/api/ranking` e abre uma tela exclusiva com a classificação completa, sem iniciar uma partida. A consulta exige login Google autorizado, conforme a proteção já aplicada ao endpoint.
+- A página principal passa para **v0.49**. `beta.html` permanece inalterada.
+- Validação estática: conferidos o uso de `createdAt`, a formatação da data, as classes de pódio, o botão de acesso e o fluxo de retorno à tela inicial. Teste visual e de interação em navegador real ainda necessário.
