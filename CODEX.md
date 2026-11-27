@@ -1228,3 +1228,11 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Na linha da partida atual do ranking, o botão **Compartilhar** fica mais compacto horizontalmente. As três bolinhas das cartas permanecem na mesma linha, sem quebra para uma linha inferior.
 - beta.html passa para v0.35. index.html permanece na v0.19, sem alterações.
 - Validar visualmente em telas menores o alinhamento da linha atual e a transição entre níveis.
+
+
+## Correção — beta v0.36: alinhamento das cartas em todas as linhas do ranking (26/11/2026)
+
+- Corrigida a grade CSS geral de `.rank-row`: agora todas as partidas, não apenas a partida atual, reservam quatro colunas para posição, dados da jogadora, pontuação e bolinhas das cartas.
+- As três bolinhas permanecem na quarta coluna, na mesma linha da partida. A regra específica da partida atual continua preservando o espaço do botão Compartilhar.
+- `beta.html` passa para v0.36. A transição permanece em 3 s + 2 s + 4 s (9 segundos no total). `index.html` continua na v0.19, sem alterações.
+- Validação estática do CSS e da estrutura de renderização do ranking; conferir em navegador real em diferentes larguras.
