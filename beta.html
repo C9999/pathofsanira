@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.37 — Path of Sanira — Beta</title>
+<title>v 0.38 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -14,6 +14,7 @@ html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:n
 .scr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(20,18,43,.94);text-align:center}
 .off{display:none!important}
 h1{margin:0;font:600 34px Georgia,serif;letter-spacing:.04em}
+#homeSanira{width:116px;height:116px;object-fit:contain;flex:none;animation:homeSaniraFloat 3.2s ease-in-out infinite;pointer-events:none}@keyframes homeSaniraFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 h2{margin:0;font:600 22px Georgia,serif}
 p{margin:0;font-size:14px;color:#CFC8E8}.hint{margin-top:10px;color:#E8C46A;font-size:13px}
 button{padding:11px 26px;border:0;border-radius:10px;background:#E8C46A;color:#14122B;font:700 15px system-ui,sans-serif;cursor:pointer}
@@ -92,7 +93,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <canvas id="c"></canvas>
 
 <button id="tb" aria-label="Ativar poder da Torre" title="Ativar poder da Torre">⚡</button>
-<div id="menu" class="scr"><h1>Path of Sanira</h1><p id="loginStatus">Entre com sua conta Google autorizada para jogar e participar do ranking.</p><div id="googleLogin"></div><button id="randomMode" class="off">Tirar a sorte através das cartas</button></div>
+<div id="menu" class="scr"><h1>Path of Sanira</h1><img id="homeSanira" src="assets/sanira/sanira-frente-modular.svg" alt="Sanira flutuando" draggable="false"><p id="loginStatus">Entre com sua conta Google autorizada para jogar e participar do ranking.</p><div id="googleLogin"></div><button id="randomMode" class="off">Tirar a sorte através das cartas</button></div>
 
 <div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
 <div id="end" class="scr off"></div>
