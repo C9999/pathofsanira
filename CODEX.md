@@ -1646,6 +1646,6 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 
 - No ranking geral, os três pontos coloridos de cada partida agora são clicáveis.
 - Ao tocar nos pontos, abre uma pequena modal com os nomes das três cartas utilizadas naquela partida, na mesma ordem da tiragem.
-- Qualquer novo clique/toque, dentro ou fora da modal, fecha a janela; não é necessário botão de fechar.
+- Qualquer novo clique/toque, dentro da modal ou em qualquer outra região da tela, fecha a janela; não é necessário botão de fechar.
 - A API `/api/ranking` passou a consultar as colunas A:M da planilha e retornar também `cardNames` (colunas K:M), preservando as cores em `cards`. Há fallback no cliente para partidas antigas sem nomes preenchidos.
 - A funcionalidade foi aplicada em `index.html` e replicada integralmente em `beta.html`; ambas permanecem na versão **v1.54**.
