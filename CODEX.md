@@ -1424,3 +1424,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A página principal passa para **v0.51**. beta.html não foi alterada.
 - Validação: sintaxe JavaScript verificada por análise de compilação (new Function), sem erro; inspeção estática confirmou as dez faixas, embaralhamento por partida, seleção na transição, crossfade e etiqueta de três segundos. Teste auditivo e visual em aparelho real ainda necessário.
 - Commits: 85329f8135a596231292e997c75fa968aa38210a (integração das músicas e lógica); commit subsequente (versão v0.51); esta documentação em commit separado.
+
+
+## Identificação inicial e central de músicas — v0.52 (27/11/2026)
+
+- Corrigida a identificação da faixa no começo da partida: a música sorteada para o nível 1 aparece no canto superior direito durante os primeiros **3 segundos**, mesmo sem existir transição de nível. Nas transições seguintes, o rótulo continua aparecendo durante os 3 segundos da inclinação (`transitionPhase: pre`).
+- A central de testes `Musica.html` foi atualizada para **v0.2** e agora oferece seleção e reprodução individual das **dez músicas**. As cinco faixas novas usam síntese procedural via Web Audio API, sem arquivos externos.
+- O cartão de músicas em `teste.html` agora informa que há dez atmosferas disponíveis.
+- A página principal `index.html` passa para **v0.52**. `beta.html` não foi alterada.
+- Validação: sintaxe JavaScript compilada sem erros em `index.html`, `Musica.html` e `teste.html`; verificação estática confirmou o temporizador inicial de 3 segundos, dez opções de música e texto atualizado na central. Teste de áudio/visual em dispositivo real ainda necessário.
+- Commits: `3d6f2b7a15d0734981c334a01735c13297b389f3` (rótulo inicial e v0.52); commit de `Musica.html` (central com dez faixas); `49a9812a6ec2fe8260a7c0db6b0d96e7ae1b0149` (cartão da central); documentação neste commit.
