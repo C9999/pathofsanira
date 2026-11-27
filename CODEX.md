@@ -1326,3 +1326,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A beta `beta.html` permanece na v0.43.
 - Commit da implementação: `dc3f90aa8c647edb9a89acb97e7aa6b03bb27e78` — `adiciona icone laranja da Forca na pagina principal v0.44`.
 - A atualização desta documentação é registrada em commit separado.
+
+## Botão do poder da Torre no canto inferior esquerdo — página principal v0.45 (27/11/2026)
+
+- O botão ⚡ do poder da carta **A Torre** foi reposicionado para o canto inferior esquerdo da área de jogo, com afastamento de 14 px das bordas inferior e esquerda.
+- Mantida integralmente a lógica anterior de disponibilidade e ativação: aparece somente durante a partida quando a Torre está entre as cartas ativas, após a exibição do HUD e enquanto o poder ainda não foi usado e não está bloqueado pelo estado da carta A Morte.
+- Ao tocar no botão, o poder continua limpando os obstáculos elegíveis uma única vez, incrementando o registro de uso e ocultando o botão. As condições de início, encerramento e reinício da partida também permanecem iguais.
+- A página principal `index.html` passa para **v0.45**. A beta `beta.html` permanece na v0.43.
+- Commit da implementação: `df1c1e7677d6e4e98d131a003e592babc52360de` — `move raio da Torre para o canto inferior esquerdo na v0.45`.
+- A atualização desta documentação é registrada em commit separado.
