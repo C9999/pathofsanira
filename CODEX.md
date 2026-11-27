@@ -1262,3 +1262,15 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Na arte-base `assets/sanira/sanira-frente-modular.svg`, a variável `--poder` passou de laranja para cinza escuro `#4A4A52`.
 - A alteração afeta somente as faixas das mangas e o V do peito, que compartilham essa variável no SVG. A silhueta, demais cores, formas e animação da tela inicial permanecem inalteradas.
 - `beta.html` atualizada para v0.39. `index.html` permanece inalterada.
+
+
+## Interpretação combinada do Tarot — beta v0.40 (26/11/2026)
+
+- Criado `data/interpretacoes-tarot.json`, com as 12 cartas do baralho, 220 combinações de três cartas sem distinção de ordem e três mensagens por combinação (660 textos no total).
+- As mensagens foram redigidas para o jogo em tom intermediário e reflexivo, sem tratar os resultados como previsões inevitáveis. A estrutura do banco mantém os textos separados do código da interface.
+- Ao terminar as vidas, a partida continua sendo registrada no backend e o jogo abre a modal **“Interpretação da sua tiragem”**, com as três bolinhas nas cores reais das cartas e uma das três mensagens escolhida aleatoriamente.
+- O botão **Continuar** leva ao ranking online já existente. A lista, o destaque da partida e o compartilhamento permanecem no fluxo atual.
+- A chave da combinação é formada pelos IDs das cartas em ordem alfabética, garantindo que a mesma trinca encontre o mesmo registro independentemente da ordem sorteada.
+- `beta.html` passa para v0.40. `index.html` permanece inalterada.
+- Fontes consultadas como referência conceitual: Personare (narrativa integrada em tiragens de três cartas), Learn Tarot/Joan Bunning (leitura como história), Biddy Tarot e Clube do Tarô. Os textos do JSON são originais, não transcrições dessas fontes.
+- Validação estática da integração; testar no navegador o carregamento do JSON, a escolha da mensagem, a modal e o avanço ao ranking.
