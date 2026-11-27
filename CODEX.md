@@ -1658,3 +1658,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A equivalência funcional foi preservada: `beta.html` continua sendo uma cópia integral de `index.html`, com diferença apenas no título.
 - As alterações recentes do ranking (nomes das três cartas na modal, fechamento por qualquer toque e retorno dos nomes pela API) permanecem incluídas na versão.
 - A publicação automática do Vercel depende da integração Git conectada à branch `main`. Como houve bloqueio por limite diário de deploy, não se deve presumir que uma tentativa recusada será repetida automaticamente após a janela de 24 horas; é necessário conferir o estado do deploy e, se não houver nova implantação, dispará-la manualmente.
+
+
+## Modal de cartas no ranking final e identificação por cor — v1.57 (27/11/2026)
+
+- A modal **Cartas utilizadas** agora também pode ser aberta ao tocar nas três bolinhas de cada partida no ranking online exibido ao final da sessão (tela de sessão concluída ou meditação interrompida).
+- A mesma modal permanece disponível no ranking geral acessado pela tela inicial.
+- Cada carta na modal é apresentada com sua bolinha colorida à esquerda do nome, usando a cor correspondente registrada para a carta e as mesmas cores do HUD.
+- A modal mantém o comportamento de fechamento ao tocar dentro ou fora dela.
+- A implementação foi aplicada à página principal e replicada integralmente na Beta; títulos atualizados para **v1.57**.
+- Arquivos alterados: `index.html`, `beta.html` e este `CODEX.md`.
