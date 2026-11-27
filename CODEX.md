@@ -1582,8 +1582,9 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - [x] `teste.html`: central de testes com acesso às ferramentas independentes.
 - [x] `TarotTeste.html`: consulta visual de combinações de três cartas usando o JSON de interpretações.
 - [x] `Musica.html`: central de teste individual das dez músicas, com seleção e reprodução.
-- [x] `beta.html`: página independente de testes, agora identificada no título como **v1.54 — Beta**.
-- [ ] A beta não está funcionalmente sincronizada com a página principal. Antes de promover mudanças da beta ou igualar as implementações, comparar os arquivos e definir explicitamente quais alterações devem ser promovidas.
+- [x] `beta.html`: cópia funcional integral de `index.html`, identificada no título como **v1.54 — Beta**.
+- [x] A beta contém as mesmas telas, estilos, mecânicas, cartas, poderes, inimigos, músicas, controles, APIs de login/ranking/partidas e correções da página principal. A única diferença intencional no arquivo é o sufixo **— Beta** no título.
+- [x] A partir desta sincronização, as próximas alterações de funcionalidades da principal também devem ser aplicadas à beta, mantendo o mesmo número de versão, salvo instrução explícita em contrário.
 - [ ] Validar visualmente as páginas auxiliares em celular e desktop.
 
 ## Pendências gerais — próxima etapa
@@ -1598,7 +1599,7 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 8. [ ] Revisar geração procedural e balanceamento de obstáculos/Sonhos.
 9. [ ] Testar o fluxo completo em Android, iPhone e navegadores móveis: login, tiragem, jogo, transições, poderes, áudio, tela cheia, resultado, ranking e compartilhamento.
 10. [ ] Avaliar PWA e funcionamento offline.
-11. [ ] Comparar a beta com a principal antes de qualquer promoção funcional.
+11. [x] Sincronizar a beta com a principal: concluído em 27/11/2026. Em futuras alterações, manter ambas funcionalmente equivalentes.
 12. [ ] Revisar e reconciliar as seções históricas antigas deste CODEX, que ainda contêm descrições de regras provisórias já substituídas por decisões mais recentes.
 
 ## Validações desta atualização v1.54
@@ -1607,3 +1608,14 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Nenhuma lógica do jogo foi modificada nesta atualização.
 - A beta recebeu apenas a atualização do número no título; não foi feita promoção ou sincronização funcional.
 - A validação de sintaxe e a confirmação do deploy serão registradas após a verificação dos arquivos publicados.
+
+
+## Sincronização funcional integral da beta — v1.54 (27/11/2026)
+
+- O usuário esclareceu que a beta deve possuir **todas as mesmas funcionalidades** da página principal, não apenas compartilhar o número da versão.
+- `beta.html` foi substituída pela implementação integral de `index.html`, preservando apenas o título com o sufixo `— Beta`.
+- Agora ambas compartilham as mesmas telas, estilos, controles, fluxo de tiragem, temporização de troca do título pelo botão, poderes, Sacerdotisa e recarga, bloqueio temporário da coleta de Sonhos, transições, músicas procedurais, resultados, interpretações, autenticação Google, ranking e compartilhamento.
+- A equivalência foi conferida comparando os arquivos após normalizar a única diferença intencional no título; o conteúdo restante é idêntico.
+- Commit: `f8192e96e0ebbc0ae4741c33ef6e78993e5e2951` — `sincroniza funcionalidades da beta com a principal v1.54`.
+- Regra de manutenção: toda alteração futura de funcionalidade na principal deve ser replicada na beta, com o mesmo número de versão, exceto quando o usuário pedir explicitamente uma diferença.
+- A beta continua sendo acessível em `/beta.html`; neste momento é funcionalmente equivalente à principal, não uma implementação separada mais antiga.
