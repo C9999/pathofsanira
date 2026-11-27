@@ -15,32 +15,30 @@ p{color:var(--muted);line-height:1.55}
 a,button{color:var(--bg);background:var(--gold);border:0;border-radius:10px;padding:11px 16px;text-decoration:none;font-weight:700;cursor:pointer}
 .back{display:inline-block;margin-bottom:16px;background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}
-.select-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-label{display:block;color:var(--muted);font-size:13px;font-weight:650}
-select{display:block;width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--cream);font:inherit}
-.cards{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
-.card-chip{display:flex;align-items:center;gap:9px;background:var(--panel2);border:1px solid var(--line);border-radius:24px;padding:8px 13px}
-.dot{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none;border:1px solid #ffffff66}
+.card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.card-option{display:flex;align-items:center;gap:9px;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:24px;background:var(--panel2);color:var(--cream);cursor:pointer;font-size:14px;font-weight:600}
+.card-option:has(input:checked){background:rgba(255,255,255,.72);color:#3E3552;border-color:#fff}
+.card-option input{width:16px;height:16px;margin:0;accent-color:var(--gold);flex:none}
+.dot{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none;border:1px solid #ffffffcc}
+.cards{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.card-chip{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:14px;background:rgba(255,255,255,.65);color:#3E3552;font:12px/1.2 system-ui,sans-serif;white-space:nowrap}
+.card-chip .dot{width:10px;height:10px;border:1px solid #ffffff}
 .message{background:var(--panel2);border:1px solid #51478f;border-radius:13px;padding:17px;margin:12px 0;line-height:1.65;color:var(--cream)}
 .message-head{display:flex;align-items:center;gap:10px;color:var(--gold);font-weight:700;margin-bottom:8px}
 .number{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#473d7d;color:var(--gold);font-size:13px}
 .status{font-size:13px;color:var(--muted)}
 .error{color:#FF9B9B}
-@media(max-width:600px){body{padding:15px}.panel{padding:14px}.select-grid{grid-template-columns:1fr}.cards{gap:7px}}
+@media(max-width:600px){body{padding:15px}.panel{padding:14px}.card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.card-option{font-size:13px;padding:8px 9px}.cards{gap:7px}}
 </style>
 </head>
 <body>
 <main>
 <a class="back" href="teste.html">← Central de testes</a>
 <h1>Interpretações do Tarot</h1>
-<p>Escolha três cartas para consultar as três mensagens cadastradas para essa combinação. A ordem de seleção não altera o resultado.</p>
+<p>Marque três cartas para consultar as mensagens cadastradas para essa combinação. A ordem de seleção não altera o resultado.</p>
 <section class="panel">
 <h2>Escolha as cartas</h2>
-<div class="select-grid">
-<label>Primeira carta<select id="card1"></select></label>
-<label>Segunda carta<select id="card2"></select></label>
-<label>Terceira carta<select id="card3"></select></label>
-</div>
+<div class="card-grid" id="cardChoices" role="group" aria-label="Selecione três cartas"></div>
 <div class="cards" id="selectedCards" aria-live="polite"></div>
 <p class="status" id="status" role="status">Carregando banco de interpretações...</p>
 </section>
@@ -50,36 +48,37 @@ select{display:block;width:100%;margin-top:8px;padding:12px;border-radius:10px;b
 </section>
 </main>
 <script>
-const selects=[document.getElementById('card1'),document.getElementById('card2'),document.getElementById('card3')];
+const choices=document.getElementById('cardChoices');
 const messages=document.getElementById('messages');
 const statusEl=document.getElementById('status');
 const chips=document.getElementById('selectedCards');
 let tarotData=null;
 let cardIds=[];
+const cardColors={
+ louco:'#5FCFE0',mago:'#A78BDB',sacer:'#6CC38A',imper:'#F28FB1',
+ carro:'#3FBFA8',forca:'#F28C28',eremita:'#5B8DEF',roda:'#B5D96B',
+ morte:'#D95FD0',torre:'#E8604C',lua:'#E6E9F0',sol:'#F3C74F'
+};
 function canonicalKey(ids){
  return [...ids].sort((a,b)=>cardIds.indexOf(a)-cardIds.indexOf(b)).join('_');
 }
-function refreshOptions(){
- selects.forEach((select,index)=>{
-  [...select.options].forEach(option=>{
-   option.disabled=selects.some((other,otherIndex)=>otherIndex!==index&&other.value===option.value);
-  });
- });
-}
 function render(){
  if(!tarotData)return;
- const ids=selects.map(s=>s.value);
- if(ids.some(id=>!id)||new Set(ids).size!==3)return;
- const key=canonicalKey(ids);
- const entry=tarotData.combinacoes[key];
+ const selected=[...choices.querySelectorAll('input:checked')].map(input=>input.value);
  chips.innerHTML='';
- ids.forEach(id=>{
-  const card=tarotData.cartas[id];
+ selected.forEach(id=>{
   const chip=document.createElement('span');chip.className='card-chip';
-  const dot=document.createElement('i');dot.className='dot';dot.style.background=card.cor;
-  const name=document.createElement('span');name.textContent=card.nome;
+  const dot=document.createElement('i');dot.className='dot';dot.style.background=cardColors[id];
+  const name=document.createElement('span');name.textContent=tarotData.cartas[id];
   chip.append(dot,name);chips.appendChild(chip);
  });
+ if(selected.length!==3){
+  messages.innerHTML='<p class="status">Selecione '+(3-selected.length)+' carta(s) para consultar as mensagens.</p>';
+  statusEl.textContent=selected.length+' de 3 cartas selecionadas.';
+  return;
+ }
+ const key=canonicalKey(selected);
+ const entry=tarotData.combinacoes[key];
  if(!entry||!Array.isArray(entry.mensagens)){
   messages.innerHTML='<p class="error">Não foi encontrada uma combinação correspondente no JSON.</p>';
   statusEl.textContent='Chave consultada: '+key;
@@ -103,28 +102,20 @@ async function init(){
   if(!response.ok)throw new Error('HTTP '+response.status);
   tarotData=await response.json();
   cardIds=Object.keys(tarotData.cartas);
-  selects.forEach((select,index)=>{
-   cardIds.forEach(id=>{
-    const option=document.createElement('option');
-    option.value=id;option.textContent=tarotData.cartas[id].nome;
-    select.appendChild(option);
-   });
-   select.value=cardIds[index];
-  });
-  const lastValues=selects.map(select=>select.value);
-  selects.forEach((select,index)=>{
-   select.addEventListener('change',()=>{
-    const candidate=select.value;
-    const alreadyUsed=selects.some((other,otherIndex)=>otherIndex!==index&&other.value===candidate);
-    if(alreadyUsed)select.value=lastValues[index];
-    else lastValues[index]=select.value;
-    refreshOptions();
+  cardIds.forEach(id=>{
+   const label=document.createElement('label');label.className='card-option';
+   const input=document.createElement('input');input.type='checkbox';input.value=id;
+   input.addEventListener('change',()=>{
+    const checked=choices.querySelectorAll('input:checked');
+    if(checked.length>3){input.checked=false;statusEl.textContent='Você pode selecionar no máximo três cartas.';}
     render();
    });
+   const dot=document.createElement('i');dot.className='dot';dot.style.background=cardColors[id];
+   const name=document.createElement('span');name.textContent=tarotData.cartas[id];
+   label.append(input,dot,name);choices.appendChild(label);
   });
-  refreshOptions();
   render();
-  statusEl.textContent='Banco carregado: '+cardIds.length+' cartas · '+Object.keys(tarotData.combinacoes).length+' combinações.';
+  statusEl.textContent='Banco carregado: '+cardIds.length+' cartas · '+Object.keys(tarotData.combinacoes).length+' combinações. Selecione três cartas.';
  }catch(error){
   console.error(error);
   statusEl.textContent='Não foi possível carregar o JSON de interpretações.';
