@@ -1236,3 +1236,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - As três bolinhas permanecem na quarta coluna, na mesma linha da partida. A regra específica da partida atual continua preservando o espaço do botão Compartilhar.
 - `beta.html` passa para v0.36. A transição permanece em 3 s + 2 s + 4 s (9 segundos no total). `index.html` continua na v0.19, sem alterações.
 - Validação estática do CSS e da estrutura de renderização do ranking; conferir em navegador real em diferentes larguras.
+
+
+## Compartilhamento — beta v0.37 (26/11/2026)
+
+- A imagem compartilhada agora apresenta **PONTOS** e **TEMPO DE MEDITAÇÃO** lado a lado, em duas colunas equilibradas e separadas por um divisor visual.
+- O tempo é exibido no formato **MM:SS**, usando o tempo total decorrido da sessão (elapsedMs).
+- A posição no ranking permanece centralizada abaixo das duas métricas.
+- O painel mantém o fundo escuro translúcido, com hierarquia visual consistente e leitura organizada.
+- A página beta foi atualizada para v0.37. A página principal `index.html` permanece inalterada.
