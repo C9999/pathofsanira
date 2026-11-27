@@ -1491,7 +1491,8 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - [x] Personagem Sanira levitando, com animação, inclinação acompanhando o terreno, expressões e auras.
 - [x] Estrutura de cinco níveis/ambientes atualmente implementada.
 - [x] Níveis 1 a 4 com duração de 60 segundos cada.
-- [x] Transição entre níveis com **9 segundos sem obstáculos, inimigos ou Sonhos**: 3 segundos de percurso reto antes da mudança, dissolução visual de 2 segundos com troca de música sincronizada e mais 4 segundos de percurso reto após a dissolução.
+- [x] A implementação atualmente presente no código ainda usa a configuração anterior de **9 segundos**: 3 segundos de percurso reto antes da mudança, dissolução visual de 2 segundos com troca de música sincronizada e mais 4 segundos de percurso reto após a dissolução. Durante esse intervalo, a tela fica sem obstáculos, inimigos e Sonhos.
+- [ ] **Atualização de transição já decidida e ainda pendente de implementação:** substituir a configuração anterior por 10 segundos de percurso reto sem obstáculos/inimigos/Sonhos, realizar a transição visual com dissolução de 3 segundos e manter mais 5 segundos de percurso reto e vazio após a troca. A troca de música deve acontecer junto da transição visual. A limpeza dos elementos que já estiverem na tela pode ser feita ao iniciar o intervalo.
 - [x] Os elementos que estavam na tela são limpos no início da transição; a geração de novos elementos fica suspensa até o fim.
 - [x] Nível 5 sem limite de duração; após 60 segundos nesse nível, a velocidade e a frequência de elementos recebem o aumento já implementado.
 - [x] Velocidade ajustada por nível e pelo poder de O Carro.
@@ -1591,13 +1592,14 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 2. [ ] Fechar o comportamento do Sol e o balanceamento dos poderes defensivos.
 3. [ ] Definir se a tela final deve mostrar descrição de todos os poderes sorteados ou apenas os efetivamente utilizados.
 4. [ ] Implementar buracos/armadilhas e retorno após queda.
-5. [ ] Definir progressão após o nível 5, mundos restantes e limite máximo de velocidade.
-6. [ ] Decidir se a corrida final será infinita e como a dificuldade escalará.
-7. [ ] Revisar geração procedural e balanceamento de obstáculos/Sonhos.
-8. [ ] Testar o fluxo completo em Android, iPhone e navegadores móveis: login, tiragem, jogo, transições, poderes, áudio, tela cheia, resultado, ranking e compartilhamento.
-9. [ ] Avaliar PWA e funcionamento offline.
-10. [ ] Comparar a beta com a principal antes de qualquer promoção funcional.
-11. [ ] Revisar e reconciliar as seções históricas antigas deste CODEX, que ainda contêm descrições de regras provisórias já substituídas por decisões mais recentes.
+5. [ ] Implementar a nova duração da transição entre níveis: 10 segundos de percurso vazio antes da troca, dissolução de 3 segundos com troca sincronizada de música e 5 segundos de percurso vazio depois. O código ainda está na configuração antiga de 3 + 2 + 4 segundos.
+6. [ ] Definir progressão após o nível 5, mundos restantes e limite máximo de velocidade.
+7. [ ] Decidir se a corrida final será infinita e como a dificuldade escalará.
+8. [ ] Revisar geração procedural e balanceamento de obstáculos/Sonhos.
+9. [ ] Testar o fluxo completo em Android, iPhone e navegadores móveis: login, tiragem, jogo, transições, poderes, áudio, tela cheia, resultado, ranking e compartilhamento.
+10. [ ] Avaliar PWA e funcionamento offline.
+11. [ ] Comparar a beta com a principal antes de qualquer promoção funcional.
+12. [ ] Revisar e reconciliar as seções históricas antigas deste CODEX, que ainda contêm descrições de regras provisórias já substituídas por decisões mais recentes.
 
 ## Validações desta atualização v1.54
 
