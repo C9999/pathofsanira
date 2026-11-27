@@ -1373,3 +1373,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 
 - Ajuste complementar da página de teste: os seletores desabilitam cartas já escolhidas nos outros campos e impedem duplicação ao alterar a seleção.
 - Commit do ajuste: `757e48c2187bbf331e5392aa7e20188b2b33b3eb` — `corrige selecao exclusiva de cartas no teste do tarot`.
+
+
+## Central de testes — seleção visual de cartas no Tarot (27/11/2026)
+
+- A página `TarotTeste.html` substitui os três campos de seleção por uma grade de checkboxes com as 12 cartas.
+- Cada opção exibe a bolinha com a cor oficial da carta e o nome, seguindo o padrão das etiquetas do HUD: fundo translúcido claro, texto escuro e marcador circular.
+- A seleção permite no máximo três cartas; as mensagens aparecem automaticamente quando exatamente três estão marcadas. Ao desmarcar ou trocar cartas, a consulta é atualizada.
+- As cores correspondem à paleta `CARDS` da página principal. O jogo, a beta e o banco JSON não foram alterados.
+- Commit da implementação: `034a3b38ff674fda82490f4e9a52ca62c5249b4a` — `troca seletores por checkboxes coloridos no teste do tarot`.
