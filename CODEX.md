@@ -1359,3 +1359,14 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - O arquivo `data/interpretacoes-tarot.json` permaneceu inalterado.
 - Commit da implementação: `ae3395e76f5650f924c9247746699fc28885429e` — `corrige chave das interpretacoes do tarot na v0.47`.
 - A atualização desta documentação é registrada em commit separado.
+
+
+## Central de testes — consulta das interpretações do Tarot (27/11/2026)
+
+- Criada a página independente `TarotTeste.html`, acessível pela Central de Testes em `teste.html`.
+- A página carrega diretamente `data/interpretacoes-tarot.json` e permite selecionar três cartas distintas em campos separados.
+- A consulta monta a chave pela ordem canônica de `Object.keys(tarotData.cartas)`, de modo que a ordem de seleção não altera a combinação.
+- São exibidas as três mensagens cadastradas para a combinação escolhida, junto aos nomes e cores das cartas.
+- A ferramenta é somente de consulta; não modifica o jogo, a página principal, a beta ou o JSON.
+- Análise de duplicidade no JSON: as 660 mensagens foram comparadas após normalização de espaços e caixa; foram encontradas **660 mensagens distintas e nenhuma repetida**.
+- Commits separados: página `TarotTeste.html` (`ac564e2a135635ebad131e34fbe31546a8c7e632`) e inclusão do acesso em `teste.html` (`7351ec895b25c415d37462ce695ce768bca7be7a`). A documentação é registrada em commit próprio.
