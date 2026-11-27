@@ -1200,3 +1200,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - O botão **Compartilhar** foi movido para a mesma linha do título **Ranking online**, centralizado horizontalmente no painel.
 - beta.html passa para v0.32. index.html permanece na v0.19, sem alterações.
 - Validação estática das alterações; conferir visualmente em navegador desktop e celular, especialmente a rolagem, o posicionamento inicial da partida atual e a transição entre níveis.
+
+
+## Ajuste — beta v0.33: botão compartilhar no ranking e cartas verticais (26/11/2026)
+
+- O botão **Compartilhar** foi retirado do cabeçalho do ranking e inserido somente na linha da partida atual em destaque. Na linha, fica depois da pontuação e imediatamente antes das três bolinhas coloridas das cartas, no espaço entre os dados da partida e as cartas.
+- A linha atual do ranking acomoda separadamente posição, nome/nível, pontuação, botão de compartilhamento e bolinhas das cartas. As demais partidas mantêm posição, nome/nível, pontuação e bolinhas.
+- Na imagem compartilhada, as três cartas agora são apresentadas verticalmente: uma bolinha colorida e o nome de cada carta em cada linha, uma abaixo da outra. O conjunto fica centralizado horizontalmente.
+- O painel de pontuação e classificação foi reposicionado abaixo da lista vertical de cartas para evitar sobreposição.
+- beta.html passa para v0.33. index.html permanece na v0.19, sem alterações.
+- Validação estática por inspeção do HTML/CSS/JavaScript. Conferir em navegador real o encaixe da linha destacada em telas menores e a imagem PNG gerada.
