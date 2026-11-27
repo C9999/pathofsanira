@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.42 — Path of Sanira — Beta</title>
+<title>v 0.43 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -286,7 +286,7 @@ function update(rdt){
  const holding=pointers.size>0,dt=rdt;S.t+=dt;
  if(state==='intro'){S.intro-=rdt;if(S.intro<=0){PX=190;groundSlope=SLOPE;state='play';}return;}
  if(state==='play'&&!S.dead&&!S.ending)S.elapsed+=dt;
- if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;S.levelElapsed+=dt;if(S.level===5&&!S.level5Boost&&S.levelElapsed>=60){S.level5Boost=true;applyLevelSpeed();}if(S.level<5&&!S.transitionPhase&&S.levelElapsed>=12)beginLevelTransition();advanceTransition(dt);spawnAhead();}
+ if(state==='play'&&!S.dead&&!S.ending){S.dist+=S.speed*dt;S.levelElapsed+=dt;if(S.level===5&&!S.level5Boost&&S.levelElapsed>=60){S.level5Boost=true;applyLevelSpeed();}if(S.level<5&&!S.transitionPhase&&S.levelElapsed>=60)beginLevelTransition();advanceTransition(dt);spawnAhead();}
  let g=S.g;if(P.eremita&&holding&&S.vz<0&&S.z>0&&S.float<1.5){g*=.25;S.float+=rdt;U.eremita+=rdt;}
  if(S.z>0||S.vz>0){S.vz-=g*dt;S.z+=S.vz*dt;if(S.z<=0){S.z=0;S.vz=0;S.float=0;}}
  if(S.flash>0)S.flash-=rdt;if(S.invuln>0)S.invuln-=dt;if(S.face>0)S.face-=rdt;if(S.spin>0)S.spin=Math.max(0,S.spin-rdt);if(S.sacerCooldown>0)S.sacerCooldown=Math.max(0,S.sacerCooldown-dt);if(S.sacerAura>0)S.sacerAura=Math.max(0,S.sacerAura-rdt);
