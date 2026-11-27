@@ -1346,3 +1346,16 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A página principal `index.html` passa para **v0.46**. A beta `beta.html` permanece na v0.43.
 - Commit da implementação: `cf05f9d42931169cc90e2159c179e0bedc8715b0` — `ajusta tamanho e posicao do raio da Torre na v0.46`.
 - A atualização desta documentação é registrada em commit separado.
+
+
+## Correção da correspondência das interpretações do Tarot — página principal v0.47 (27/11/2026)
+
+- Corrigida a montagem da chave das três cartas na página principal. A ordenação agora respeita a ordem canônica dos IDs no objeto `cartas` de `data/interpretacoes-tarot.json`, usando `Object.keys(tarotData.cartas)` como catálogo ordenado, em vez da ordenação lexicográfica de `sort()`.
+- A alteração corrige a incompatibilidade que fazia combinações válidas não encontrarem seus registros e recorrerem às mensagens genéricas de fallback.
+- Mantidos o JSON, as 220 combinações, as três mensagens por combinação, a seleção aleatória de uma mensagem e o fallback para falhas reais de carregamento ou ausência de registro.
+- Somente `index.html` foi alterado no código do jogo. `beta.html` permanece inalterada na v0.43.
+- A página principal passa para **v0.47**.
+- Validação automatizada do JSON: 12 cartas, 220 combinações, três mensagens em cada registro e todas as 1.320 permutações das combinações (6 por combinação) encontram a mesma chave canônica. Nenhuma combinação válida fica sem correspondência.
+- O arquivo `data/interpretacoes-tarot.json` permaneceu inalterado.
+- Commit da implementação: `ae3395e76f5650f924c9247746699fc28885429e` — `corrige chave das interpretacoes do tarot na v0.47`.
+- A atualização desta documentação é registrada em commit separado.
