@@ -269,6 +269,7 @@ $('homeRankingToggle').onclick=async()=>{
  finally{button.disabled=false;button.textContent='Ranking geral';}
 };
 $('randomMode').onclick=()=>showDraw('random');
+document.addEventListener('pointerdown',()=>{const openModal=$('rankCardsModal');if(openModal)openModal.remove();});
 
 const MUSIC_TRACKS=[
 {name:'Serenidade original',wave:'sine',voices:[[220,.075],[329.63,.042],[440,.026],[110,.035]],rate:.055,depth:.18,master:.65},
