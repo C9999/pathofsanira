@@ -1690,3 +1690,10 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A pessoa pode alternar livremente entre **Ranking geral** e **Ranking secreto**; a lista secreta continua contendo somente partidas sem A Força, conforme o filtro da API.
 - A regra de habilitação do Ranking Secreto na tela final da rodada não foi alterada.
 - A mudança foi replicada em `index.html` e `beta.html`; a versão permanece **v1.58**.
+
+
+## Atualização de versão para v1.59 — 27/11/2026
+
+- Atualizados os títulos de `index.html` e `beta.html` para **v1.59**.
+- Mantidas as funcionalidades existentes, incluindo a disponibilidade permanente da aba **Ranking secreto** no ranking acessado pela tela inicial.
+- Principal e Beta permanecem funcionalmente equivalentes; a única diferença entre os arquivos é o sufixo **— Beta** no título.
