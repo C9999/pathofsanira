@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>v0.1 — Música meditativa — Path of Sanira</title>
+<title>v0.2 — Música meditativa — Path of Sanira</title>
 <style>
 :root{--bg:#14122B;--panel:#211C45;--panel2:#2E2760;--gold:#E8C46A;--cream:#F5EFE0;--muted:#CFC8E8;--line:#6B5FB5}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#30275d 0%,var(--bg) 65%);color:var(--cream);font:15px system-ui,sans-serif;padding:26px}
@@ -23,59 +23,88 @@ button.secondary{background:var(--panel2);color:var(--cream);border:1px solid va
 <body><main>
 <a class="back" href="teste.html">← Central de testes</a>
 <h1>Músicas de meditação</h1>
-<p>Escolha uma das cinco atmosferas e inicie a reprodução. As faixas são ambientes instrumentais sintetizados em tempo real, sem gravações externas.</p>
+<p>Escolha uma das dez atmosferas e inicie a reprodução. Todas são ambientes instrumentais sintetizados em tempo real, sem gravações externas.</p>
 <section class="panel">
 <h2>Selecione uma música</h2>
-<label class="option"><input type="radio" name="track" value="original" checked><span><strong>1. Serenidade original</strong><small>Camadas suaves e contínuas, com acordes abertos e movimento lento. É a música usada atualmente na beta.</small></span></label>
-<label class="option"><input type="radio" name="track" value="zen"><span><strong>2. Jardim Zen</strong><small>Timbres triangulares delicados, notas espaçadas e sensação de silêncio entre os sons.</small></span></label>
-<label class="option"><input type="radio" name="track" value="ocean"><span><strong>3. Maré tranquila</strong><small>Ondulações graves e acordes macios, com movimento amplo que lembra o vai e vem das ondas.</small></span></label>
-<label class="option"><input type="radio" name="track" value="stars"><span><strong>4. Céu estrelado</strong><small>Harmônicos mais agudos e brilhantes sobre uma base profunda e contemplativa.</small></span></label>
-<label class="option"><input type="radio" name="track" value="forest"><span><strong>5. Floresta interior</strong><small>Textura quente, pulsação muito lenta e acordes orgânicos com sensação acolhedora.</small></span></label>
+<label class="option"><input type="radio" name="track" value="0" checked><span><strong>1. Serenidade original</strong><small>Camadas suaves e contínuas, com acordes abertos e movimento lento.</small></span></label>
+<label class="option"><input type="radio" name="track" value="1"><span><strong>2. Jardim Zen</strong><small>Timbres delicados, notas espaçadas e sensação de silêncio entre os sons.</small></span></label>
+<label class="option"><input type="radio" name="track" value="2"><span><strong>3. Maré tranquila</strong><small>Ondulações graves e acordes macios, lembrando o movimento das ondas.</small></span></label>
+<label class="option"><input type="radio" name="track" value="3"><span><strong>4. Céu estrelado</strong><small>Harmônicos agudos e brilhantes sobre uma base profunda.</small></span></label>
+<label class="option"><input type="radio" name="track" value="4"><span><strong>5. Floresta interior</strong><small>Textura quente, pulsação lenta e acordes orgânicos.</small></span></label>
+<label class="option"><input type="radio" name="track" value="5"><span><strong>6. Lago ao amanhecer</strong><small>Acordes amplos e luminosos, com notas suaves que surgem como reflexos na água.</small></span></label>
+<label class="option"><input type="radio" name="track" value="6"><span><strong>7. Chuva suave</strong><small>Ruído filtrado e delicado, criando uma camada contínua de chuva tranquila.</small></span></label>
+<label class="option"><input type="radio" name="track" value="7"><span><strong>8. Templo de bambu</strong><small>Timbres graves e notas espaçadas, com atmosfera contemplativa e minimalista.</small></span></label>
+<label class="option"><input type="radio" name="track" value="8"><span><strong>9. Brisa de verão</strong><small>Textura arejada com movimento lento e notas agudas discretas.</small></span></label>
+<label class="option"><input type="radio" name="track" value="9"><span><strong>10. Lua cheia</strong><small>Acordes noturnos e notas cristalinas sobre uma base serena.</small></span></label>
 <div class="controls"><button id="play">▶ Começar a escutar</button><button id="stop" class="secondary">Parar</button></div>
 <div id="status" role="status">Pronto para reproduzir.</div>
 <p class="note">Dica: se não ouvir nada, confira o volume do aparelho e permita o áudio após tocar em “Começar a escutar”.</p>
 </section></main>
 <script>
-const presets={
- original:{wave:'sine',voices:[[220,.075],[329.63,.042],[440,.026],[110,.035]],rate:.055,depth:.18,master:.65},
- zen:{wave:'triangle',voices:[[196,.052],[293.66,.035],[392,.025],[587.33,.012]],rate:.035,depth:.13,master:.55},
- ocean:{wave:'triangle',voices:[[110,.07],[164.81,.055],[220,.04],[293.66,.026],[329.63,.018]],rate:.022,depth:.2,master:.68},
- stars:{wave:'sine',voices:[[174.61,.035],[261.63,.025],[523.25,.035],[783.99,.012]],rate:.045,depth:.22,master:.58},
- forest:{wave:'triangle',voices:[[130.81,.065],[196,.045],[261.63,.025],[329.63,.018]],rate:.018,depth:.16,master:.62}
-};
+const presets=[
+ {wave:'sine',voices:[[220,.075],[329.63,.042],[440,.026],[110,.035]],rate:.055,depth:.18,master:.65},
+ {wave:'triangle',voices:[[196,.052],[293.66,.035],[392,.025],[587.33,.012]],rate:.035,depth:.13,master:.55},
+ {wave:'triangle',voices:[[110,.07],[164.81,.055],[220,.04],[293.66,.026],[329.63,.018]],rate:.022,depth:.2,master:.68},
+ {wave:'sine',voices:[[174.61,.035],[261.63,.025],[523.25,.035],[783.99,.012]],rate:.045,depth:.22,master:.58},
+ {wave:'triangle',voices:[[130.81,.065],[196,.045],[261.63,.025],[329.63,.018]],rate:.018,depth:.16,master:.62}
+];
+const newConfigs=[
+ {chords:[[50,57,62,66],[43,50,59,62],[47,54,61,64],[45,52,59,62]],scale:[74,76,78,81,83,86],wave:'sine',noise:0,filter:1800,interval:[5200,9000],noteVol:.035,master:.54},
+ {chords:[[45,52,55,59],[41,48,57,60],[43,50,55,59],[45,52,55,59]],scale:[81,83,86,88],wave:'sine',noise:.10,filter:2600,interval:[2800,6200],noteVol:.018,master:.48},
+ {chords:[[38,45,50,53],[41,48,53,57],[38,45,50,53]],scale:[62,65,67,69,72,74,77],wave:'triangle',noise:.035,filter:700,interval:[4000,8000],noteVol:.045,master:.52},
+ {chords:[[48,55,59,64],[41,48,57,60],[43,50,59,62]],scale:[84,86,88,91],wave:'sine',noise:.10,filter:850,interval:[6000,11000],noteVol:.015,master:.48},
+ {chords:[[41,48,57,64],[43,50,57,62],[41,48,55,64]],scale:[77,81,84,88],wave:'sine',noise:0,filter:1200,interval:[7000,12000],noteVol:.018,master:.50}
+];
+const names=['Serenidade original','Jardim Zen','Maré tranquila','Céu estrelado','Floresta interior','Lago ao amanhecer','Chuva suave','Templo de bambu','Brisa de verão','Lua cheia'];
 let context=null,nodes=null,playing=false;
 const status=document.getElementById('status');
-function selected(){return document.querySelector('input[name="track"]:checked').value;}
+function selected(){return Number(document.querySelector('input[name="track"]:checked').value);}
 function stopMusic(){
  if(!nodes||!context){playing=false;return;}
  const old=nodes;nodes=null;playing=false;
+ old.timers.forEach(clearInterval);
  const now=context.currentTime;
- old.master.gain.cancelScheduledValues(now);old.master.gain.setTargetAtTime(0,now,.07);
+ try{old.master.gain.cancelScheduledValues(now);old.master.gain.setTargetAtTime(0,now,.07);}catch(e){}
  old.oscs.forEach(o=>{try{o.stop(now+.45)}catch(e){}});
  status.textContent='Reprodução interrompida.';
 }
+function midi(n){return 440*Math.pow(2,(n-69)/12);}
+function playClassic(cfg,master,oscs){
+ cfg.voices.forEach(([freq,vol],i)=>{
+  const osc=context.createOscillator(),gain=context.createGain(),lfo=context.createOscillator(),lfoGain=context.createGain();
+  osc.type=cfg.wave;osc.frequency.value=freq;gain.gain.value=vol;lfo.type='sine';lfo.frequency.value=cfg.rate+i*.006;lfoGain.gain.value=vol*cfg.depth;
+  lfo.connect(lfoGain);lfoGain.connect(gain.gain);osc.connect(gain);gain.connect(master);osc.start();lfo.start();oscs.push(osc,lfo);
+ });
+}
+function playNew(cfg,master,oscs,timers){
+ const bus=context.createGain();bus.connect(master);
+ const pad=cfg.chords[0].slice(0,4).map((note,i)=>{const o=context.createOscillator(),g=context.createGain();o.type=cfg.wave;o.frequency.value=midi(note);o.detune.value=i%2?4:-4;g.gain.value=[.018,.014,.011,.008][i];o.connect(g);g.connect(bus);o.start();oscs.push(o);return o;});
+ let chord=0;
+ timers.push(setInterval(()=>{chord=(chord+1)%cfg.chords.length;cfg.chords[chord].slice(0,4).forEach((n,i)=>pad[i].frequency.setTargetAtTime(midi(n),context.currentTime,2.8));},18000));
+ if(cfg.noise){
+  const buffer=context.createBuffer(1,context.sampleRate*4,context.sampleRate),data=buffer.getChannelData(0);let last=0;
+  for(let i=0;i<data.length;i++){const white=Math.random()*2-1;last=(last+.025*white)/1.025;data[i]=last*3.2;}
+  const source=context.createBufferSource(),filter=context.createBiquadFilter(),gain=context.createGain();source.buffer=buffer;source.loop=true;filter.type=cfg===newConfigs[1]?'bandpass':'lowpass';filter.frequency.value=cfg.filter;filter.Q.value=.7;gain.gain.value=cfg.noise;source.connect(filter);filter.connect(gain);gain.connect(bus);source.start();oscs.push(source);
+  if(cfg===newConfigs[3]){const lfo=context.createOscillator(),lg=context.createGain();lfo.frequency.value=.07;lg.gain.value=380;lfo.connect(lg);lg.connect(filter.frequency);lfo.start();oscs.push(lfo);}
+ }
+ const note=()=>{const n=cfg.scale[Math.floor(Math.random()*cfg.scale.length)],o=context.createOscillator(),g=context.createGain(),t=context.currentTime;o.type=cfg.wave;o.frequency.value=midi(n);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(cfg.noteVol,t+.12);g.gain.exponentialRampToValueAtTime(.0001,t+2.2);o.connect(g);g.connect(bus);o.start(t);o.stop(t+2.3);oscs.push(o);};
+ timers.push(setInterval(note,cfg.interval[0]+Math.random()*(cfg.interval[1]-cfg.interval[0])));note();
+}
 async function playMusic(){
  stopMusic();
- const cfg=presets[selected()],AC=window.AudioContext||window.webkitAudioContext;
+ const index=selected(),AC=window.AudioContext||window.webkitAudioContext;
  if(!AC){status.textContent='Este navegador não oferece suporte à reprodução de áudio.';return;}
  context=context||new AC();
  try{if(context.state==='suspended')await context.resume();}catch(e){status.textContent='Não foi possível liberar o áudio neste navegador.';return;}
  const master=context.createGain();master.gain.value=0;master.connect(context.destination);
- const oscs=[];
- cfg.voices.forEach(([freq,vol],i)=>{
-  const osc=context.createOscillator(),gain=context.createGain(),lfo=context.createOscillator(),lfoGain=context.createGain();
-  osc.type=cfg.wave;osc.frequency.value=freq;gain.gain.value=vol;
-  lfo.type='sine';lfo.frequency.value=cfg.rate+i*.006;lfoGain.gain.value=vol*cfg.depth;
-  lfo.connect(lfoGain);lfoGain.connect(gain.gain);osc.connect(gain);gain.connect(master);
-  osc.start();lfo.start();oscs.push(osc,lfo);
- });
- master.gain.setTargetAtTime(cfg.master,context.currentTime,.9);
- nodes={master,oscs};playing=true;
- const label=document.querySelector('input[name="track"]:checked').parentElement.querySelector('strong').textContent;
- status.textContent='Tocando: '+label;
+ const oscs=[],timers=[];
+ if(index<5)playClassic(presets[index],master,oscs);else playNew(newConfigs[index-5],master,oscs,timers);
+ const volume=index<5?presets[index].master:newConfigs[index-5].master;
+ master.gain.setTargetAtTime(volume,context.currentTime,.9);
+ nodes={master,oscs,timers};playing=true;status.textContent='Tocando: '+names[index];
 }
 document.getElementById('play').addEventListener('click',playMusic);
 document.getElementById('stop').addEventListener('click',stopMusic);
-document.querySelectorAll('input[name="track"]').forEach(r=>r.addEventListener('change',()=>{if(playing)playMusic();else status.textContent='Selecionada: '+r.parentElement.querySelector('strong').textContent;}));
+document.querySelectorAll('input[name="track"]').forEach(r=>r.addEventListener('change',()=>{if(playing)playMusic();else status.textContent='Selecionada: '+names[Number(r.value)];}));
 window.addEventListener('pagehide',stopMusic);
 </script></body></html>
