@@ -1335,3 +1335,14 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A página principal `index.html` passa para **v0.45**. A beta `beta.html` permanece na v0.43.
 - Commit da implementação: `df1c1e7677d6e4e98d131a003e592babc52360de` — `move raio da Torre para o canto inferior esquerdo na v0.45`.
 - A atualização desta documentação é registrada em commit separado.
+
+
+## Ajuste de tamanho e posição do botão da Torre — página principal v0.46 (27/11/2026)
+
+- O botão ⚡ do poder da carta **A Torre** passou de 27 × 27 px para **32 × 32 px**, aproximando seu tamanho visual ao da estrela de Sonhos.
+- O botão foi deslocado um pouco para cima e para a direita: afastamento de **22 px** das bordas esquerda e inferior (antes, 14 px).
+- O ícone foi ampliado proporcionalmente para 20 px.
+- Nenhuma regra de disponibilidade, ativação, limpeza de obstáculos ou registro de uso do poder foi alterada.
+- A página principal `index.html` passa para **v0.46**. A beta `beta.html` permanece na v0.43.
+- Commit da implementação: `cf05f9d42931169cc90e2159c179e0bedc8715b0` — `ajusta tamanho e posicao do raio da Torre na v0.46`.
+- A atualização desta documentação é registrada em commit separado.
