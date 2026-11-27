@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.44 — Path of Sanira</title>
+<title>v 0.45 — Path of Sanira</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Ccircle cx=%2232%22 cy=%2232%22 r=%2225%22 fill=%22%23F28C28%22 stroke=%22%23F9C784%22 stroke-width=%224%22/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
 #stage{position:absolute;width:844px;height:390px;transform-origin:0 0;overflow:hidden;background:#A9D8EE}
 #c{position:absolute;left:0;top:0;width:844px;height:390px}
- #tb{position:absolute;left:0;top:11px;transform:none;width:27px;height:27px;padding:0;border-radius:50%;background:rgba(46,39,96,.94);border:1.5px solid #E8C46A;display:none;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#E8C46A;cursor:pointer;line-height:1;z-index:5;box-shadow:0 1px 5px rgba(20,18,43,.35)}
+ #tb{position:absolute;left:14px;bottom:14px;top:auto;transform:none;width:27px;height:27px;padding:0;border-radius:50%;background:rgba(46,39,96,.94);border:1.5px solid #E8C46A;display:none;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:#E8C46A;cursor:pointer;line-height:1;z-index:5;box-shadow:0 1px 5px rgba(20,18,43,.35)}
 
 .scr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(20,18,43,.94);text-align:center}
 .off{display:none!important}
@@ -610,7 +610,7 @@ function render(){
       x+=w+6;
     }else{const pw=pill(x,14,c.nome,c.cor);x+=pw+6;}
     if(index===2&&P.torre&&state==='play'&&!S.torreUsed&&!S.morteGray){
-      $('tb').style.left=x+'px';$('tb').style.top='11px';$('tb').style.display='flex';
+      $('tb').style.display='flex';
     }
   });
 
