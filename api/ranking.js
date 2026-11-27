@@ -22,7 +22,11 @@ module.exports = async function handler(req, res) {
       cards: (() => { try { return JSON.parse(row[9] || '[]'); } catch { return []; } })(),
       cardNames: [10, 11, 12].map(index => String(row[index] || ''))
     })).sort((a, b) => (b.score - a.score) || (b.elapsedMs - a.elapsedMs));
-    return res.status(200).json({ partidas });
+    const rankingSecreto = partidas.filter(partida =>
+      !(partida.cards || []).some(color => String(color).trim().toUpperCase() === '#F28C28') &&
+      !(partida.cardNames || []).some(name => String(name).trim().toLowerCase() === 'a força')
+    );
+    return res.status(200).json({ partidas, rankingSecreto });
   } catch (error) {
     return sendError(res, error);
   }
