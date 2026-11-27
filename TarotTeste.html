@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teste de interpretações do Tarot — Path of Sanira</title>
+<style>
+:root{--bg:#14122B;--panel:#211C45;--panel2:#2E2760;--gold:#E8C46A;--cream:#F5EFE0;--muted:#CFC8E8;--line:#6B5FB5}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--cream);font:15px system-ui,sans-serif;padding:24px}
+main{max-width:900px;margin:auto}
+h1,h2{font-family:Georgia,serif;font-weight:600}
+h1{font-size:clamp(26px,5vw,36px);margin:12px 0}
+p{color:var(--muted);line-height:1.55}
+a,button{color:var(--bg);background:var(--gold);border:0;border-radius:10px;padding:11px 16px;text-decoration:none;font-weight:700;cursor:pointer}
+.back{display:inline-block;margin-bottom:16px;background:var(--panel2);color:var(--cream);border:1px solid var(--line)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}
+.select-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+label{display:block;color:var(--muted);font-size:13px;font-weight:650}
+select{display:block;width:100%;margin-top:8px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--cream);font:inherit}
+.cards{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.card-chip{display:flex;align-items:center;gap:9px;background:var(--panel2);border:1px solid var(--line);border-radius:24px;padding:8px 13px}
+.dot{width:14px;height:14px;border-radius:50%;display:inline-block;flex:none;border:1px solid #ffffff66}
+.message{background:var(--panel2);border:1px solid #51478f;border-radius:13px;padding:17px;margin:12px 0;line-height:1.65;color:var(--cream)}
+.message-head{display:flex;align-items:center;gap:10px;color:var(--gold);font-weight:700;margin-bottom:8px}
+.number{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#473d7d;color:var(--gold);font-size:13px}
+.status{font-size:13px;color:var(--muted)}
+.error{color:#FF9B9B}
+@media(max-width:600px){body{padding:15px}.panel{padding:14px}.select-grid{grid-template-columns:1fr}.cards{gap:7px}}
+</style>
+</head>
+<body>
+<main>
+<a class="back" href="teste.html">← Central de testes</a>
+<h1>Interpretações do Tarot</h1>
+<p>Escolha três cartas para consultar as três mensagens cadastradas para essa combinação. A ordem de seleção não altera o resultado.</p>
+<section class="panel">
+<h2>Escolha as cartas</h2>
+<div class="select-grid">
+<label>Primeira carta<select id="card1"></select></label>
+<label>Segunda carta<select id="card2"></select></label>
+<label>Terceira carta<select id="card3"></select></label>
+</div>
+<div class="cards" id="selectedCards" aria-live="polite"></div>
+<p class="status" id="status" role="status">Carregando banco de interpretações...</p>
+</section>
+<section class="panel" aria-live="polite">
+<h2>Mensagens da combinação</h2>
+<div id="messages"><p class="status">Aguardando o carregamento do JSON.</p></div>
+</section>
+</main>
+<script>
+const selects=[document.getElementById('card1'),document.getElementById('card2'),document.getElementById('card3')];
+const messages=document.getElementById('messages');
+const statusEl=document.getElementById('status');
+const chips=document.getElementById('selectedCards');
+let tarotData=null;
+let cardIds=[];
+function canonicalKey(ids){
+ return [...ids].sort((a,b)=>cardIds.indexOf(a)-cardIds.indexOf(b)).join('_');
+}
+function updateOptions(){
+ const chosen=selects.map(s=>s.value);
+ selects.forEach((select,index)=>{
+  const current=select.value;
+  select.innerHTML='';
+  cardIds.forEach(id=>{
+   const option=document.createElement('option');
+   option.value=id;
+   option.textContent=tarotData.cartas[id].nome;
+   const usedByOther=chosen.some((other,i)=>i!==index&&other===id);
+   option.disabled=usedByOther;
+   select.appendChild(option);
+  });
+  select.value=current&&!select.options[[...select.options].findIndex(o=>o.value===current)]?.disabled?current:'';
+  if(!select.value){
+   const available=[...select.options].find(o=>!o.disabled);
+   if(available)select.value=available.value;
+  }
+ });
+}
+function render(){
+ if(!tarotData)return;
+ const ids=selects.map(s=>s.value);
+ if(ids.some(id=>!id)||new Set(ids).size!==3)return;
+ const key=canonicalKey(ids);
+ const entry=tarotData.combinacoes[key];
+ chips.innerHTML='';
+ ids.forEach(id=>{
+  const card=tarotData.cartas[id];
+  const chip=document.createElement('span');chip.className='card-chip';
+  const dot=document.createElement('i');dot.className='dot';dot.style.background=card.cor;
+  const name=document.createElement('span');name.textContent=card.nome;
+  chip.append(dot,name);chips.appendChild(chip);
+ });
+ if(!entry||!Array.isArray(entry.mensagens)){
+  messages.innerHTML='<p class="error">Não foi encontrada uma combinação correspondente no JSON.</p>';
+  statusEl.textContent='Chave consultada: '+key;
+  return;
+ }
+ messages.innerHTML='';
+ entry.mensagens.forEach((message,index)=>{
+  const article=document.createElement('article');article.className='message';
+  const head=document.createElement('div');head.className='message-head';
+  const number=document.createElement('span');number.className='number';number.textContent=String(index+1);
+  const label=document.createElement('span');label.textContent='Mensagem '+(index+1);
+  head.append(number,label);
+  const body=document.createElement('div');body.textContent=message;
+  article.append(head,body);messages.appendChild(article);
+ });
+ statusEl.textContent='Combinação: '+key+' · 3 mensagens encontradas';
+}
+function onSelectionChange(){
+ const chosen=selects.map(s=>s.value);
+ const changed=selects.findIndex(s=>!s.value);
+ if(changed>=0){
+  updateOptions();
+ }
+ render();
+}
+async function init(){
+ try{
+  const response=await fetch('data/interpretacoes-tarot.json',{cache:'no-store'});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  tarotData=await response.json();
+  cardIds=Object.keys(tarotData.cartas);
+  selects.forEach(select=>{
+   select.addEventListener('change',()=>{
+    const values=selects.map(s=>s.value);
+    const duplicates=values.filter((id,index)=>id&&values.indexOf(id)!==index);
+    if(duplicates.length){
+     updateOptions();
+    }
+    render();
+   });
+  });
+  selects.forEach((select,index)=>{
+   select.innerHTML='';
+   cardIds.forEach(id=>{
+    const option=document.createElement('option');
+    option.value=id;option.textContent=tarotData.cartas[id].nome;
+    select.appendChild(option);
+   });
+   select.value=cardIds[index];
+  });
+  updateOptions();
+  render();
+  statusEl.textContent='Banco carregado: '+cardIds.length+' cartas · '+Object.keys(tarotData.combinacoes).length+' combinações.';
+ }catch(error){
+  console.error(error);
+  statusEl.textContent='Não foi possível carregar o JSON de interpretações.';
+  statusEl.classList.add('error');
+  messages.innerHTML='<p class="error">Verifique se o arquivo data/interpretacoes-tarot.json está publicado.</p>';
+ }
+}
+init();
+</script>
+</body>
+</html>
