@@ -1464,3 +1464,144 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Mantida a versão **v0.54**, conforme solicitado; nenhuma atualização do número da versão.
 - beta.html permanece inalterada.
 - Commit da correção em index.html: f1f650d7886228d52b79d901e7bd543d267bef5b. Documentação registrada em commit separado.
+
+
+---
+
+# Revisão geral do projeto — v1.54 (27/11/2026)
+
+> Esta revisão consolida o estado conferido na branch `main` após a atualização dos títulos. Em caso de divergência com descrições antigas deste documento, esta seção representa o estado mais recente do código principal. A mudança para v1.54 é uma atualização de identificação/versionamento; não altera mecânicas do jogo.
+
+## Versões e escopo desta atualização
+
+- `index.html`: título atualizado de **v0.54** para **v1.54**.
+- `beta.html`: título atualizado de **v0.43 — Beta** para **v1.54 — Beta**, para manter o mesmo número visível da página principal.
+- A atualização da beta nesta tarefa foi **somente no título**. A implementação da beta continua sendo sua própria versão de testes e não foi sincronizada funcionalmente com todo o código de `index.html`.
+- Nenhuma regra de jogo, API, JSON, central de testes ou arquivo de áudio foi alterado nesta atualização.
+- Commits:
+  - `bfbcc51fe9a0e86564d0b77a8c2955358815e3c1` — atualização do título da página principal.
+  - `02fb4b8a85546557a4215a6046d1046ab3a9abb4` — sincronização do número da versão no título da beta.
+  - Este registro do `CODEX.md` é feito em commit separado.
+
+## Estado implementado na página principal (`index.html`)
+
+### Jogo, níveis e transições
+
+- [x] Jogo em HTML, CSS e JavaScript com Canvas 2D, loop de animação e controles por toque.
+- [x] Personagem Sanira levitando, com animação, inclinação acompanhando o terreno, expressões e auras.
+- [x] Estrutura de cinco níveis/ambientes atualmente implementada.
+- [x] Níveis 1 a 4 com duração de 60 segundos cada.
+- [x] Transição entre níveis com **9 segundos sem obstáculos, inimigos ou Sonhos**: 3 segundos de percurso reto antes da mudança, dissolução visual de 2 segundos com troca de música sincronizada e mais 4 segundos de percurso reto após a dissolução.
+- [x] Os elementos que estavam na tela são limpos no início da transição; a geração de novos elementos fica suspensa até o fim.
+- [x] Nível 5 sem limite de duração; após 60 segundos nesse nível, a velocidade e a frequência de elementos recebem o aumento já implementado.
+- [x] Velocidade ajustada por nível e pelo poder de O Carro.
+- [ ] Definir e implementar a progressão completa além do nível 5, incluindo os mundos vulcão e outra dimensão.
+- [ ] Transformar a estrutura limitada em endless run, caso essa decisão final continue sendo desejada para a versão definitiva.
+- [ ] Definir limite máximo de velocidade e critérios completos de progressão/dificuldade.
+
+### Obstáculos e inimigos
+
+- [x] Pedras e troncos.
+- [x] Jacaré com movimento horizontal.
+- [x] Gado parado.
+- [x] Tucano voador.
+- [x] Variações visuais dos inimigos por ambiente/nível e sorteio de tipos de obstáculos.
+- [x] Evita repetir o mesmo tipo de obstáculo imediatamente em sequência.
+- [x] Colisão com obstáculo ou inimigo causa dano, exceto quando um poder defensivo intercepta o contato.
+- [ ] Buracos/armadilhas de chão falso, queda e retorno a um ponto anterior.
+- [ ] Revisar o balanceamento da frequência e das hitboxes dos inimigos em aparelhos reais.
+
+### Sonhos, pontuação e vida
+
+- [x] Coletável representado por estrela vermelha, chamado **Sonho**.
+- [x] Cada Sonho acrescenta 10 pontos de Sonhos ao resultado.
+- [x] O Mago atrai Sonhos próximos.
+- [x] A Roda da Fortuna e A Lua aplicam seus multiplicadores atuais à pontuação.
+- [x] HUD com pontuação, Sonhos, vida e cartas/poderes ativos.
+- [x] A Força define três níveis de vida iniciais; sem A Força, começa com um. A Imperatriz acrescenta vida.
+- [ ] Revisar o sistema de vidas e a interação final entre todos os efeitos defensivos.
+- [ ] Definir e implementar bônus adicionais, se forem desejados; atualmente não há bônus adicionais além dos multiplicadores documentados.
+
+### Cartas e poderes
+
+- [x] Tiragem de três cartas sem repetição.
+- [x] A Força como primeira carta em 90% dos sorteios, conforme a regra atual.
+- [x] Cartas exibidas com animação individual.
+- [x] Após a terceira carta terminar de virar, aguarda 1 segundo; “Sua tiragem” é substituído por “Começar a meditar” **no mesmo espaço visual**.
+- [x] O Louco: pulo duplo.
+- [x] O Mago: atração de Sonhos próximos.
+- [x] A Sacerdotisa: proteção automática ao colidir com obstáculo ou inimigo. Ao interceptar uma colisão, ativa recarga de **15 segundos**, remove o elemento atingido e mostra aura verde por **1,5 segundo**. Durante a recarga, Sonhos não podem ser coletados; a coleta volta quando a barra de recarga termina.
+- [x] A Imperatriz: vida extra.
+- [x] O Carro: aumento de velocidade.
+- [x] A Força: três níveis de vida iniciais.
+- [x] O Eremita: planar ao manter o toque durante a descida, por até 1,5 segundo por pulo.
+- [x] A Roda da Fortuna: multiplicador de 1,5 na pontuação dos Sonhos.
+- [x] A Morte: renascimento/estado especial conforme a implementação atual.
+- [x] A Torre: botão de ativação e remoção dos obstáculos visíveis, com uso único na sessão.
+- [x] A Lua: visibilidade reduzida e multiplicador de pontuação x1,5.
+- [x] O Sol: manter registrado que a implementação atual ainda precisa ser comparada à regra final consolidada; o código-base contém estado de escudo e a regra de redução de dano pela metade deve ser validada antes de considerar este poder concluído.
+- [x] A tela de encerramento mostra a seção “Poderes usados”, com nome, cor e descrição dos poderes correspondentes às três cartas sorteadas.
+- [ ] Validar se a seção de encerramento deve listar somente poderes efetivamente ativados/utilizados ou sempre os três poderes sorteados; hoje a lista é montada a partir das três cartas.
+- [ ] Aplicar e testar as regras finais de sorteio: impedir Lua + Sol e aumentar em 40% a chance da Lua entre 21h e 6h.
+- [ ] Confirmar o comportamento final do Sol e a acumulação dos efeitos defensivos.
+- [ ] Rever o balanceamento geral das combinações de cartas.
+
+### Tela inicial, controles e áudio
+
+- [x] Removido o texto “Escolha como deseja começar sua sessão”.
+- [x] Fluxo de tiragem com botão “Começar a meditar”.
+- [x] Botão de tela cheia na tela inicial.
+- [x] Botão de música ligada/desligada na tela inicial, com atualização do rótulo conforme o estado.
+- [x] Música ambiente procedural via Web Audio API, sem depender de arquivos externos.
+- [x] Biblioteca principal com dez atmosferas musicais.
+- [x] Sorteio aleatório de músicas por nível, sem repetição durante a mesma partida; nova partida embaralha novamente.
+- [x] Troca de música sincronizada com a dissolução visual da transição.
+- [x] Nome da música exibido no canto superior direito nos três segundos iniciais da partida e durante a fase inicial das transições.
+- [x] Efeitos sonoros e vibração/háptica usados nas interações já implementadas.
+- [ ] Testar tela cheia, áudio, volume e vibração em diferentes navegadores e aparelhos. A disponibilidade de tela cheia pode variar conforme navegador/sistema operacional.
+- [ ] Avaliar se os controles de tela cheia e música também devem ficar disponíveis durante a sessão, pois os controles atuais são exibidos na tela inicial.
+
+### Resultado, Tarot e ranking
+
+- [x] Tela de encerramento com “Meditação interrompida” quando a sessão termina por morte, ou “Sessão concluída” quando termina normalmente.
+- [x] Exibe pontuação, tempo, nível, quantidade de Sonhos e descrições dos poderes.
+- [x] Interpretação de Tarot carregada de `data/interpretacoes-tarot.json`.
+- [x] JSON Tarot V2 com 12 cartas, 220 combinações e três mensagens por combinação (660 mensagens).
+- [x] Chave das combinações respeita a ordem canônica do catálogo; as 1.320 permutações foram validadas na implementação da V2/correção.
+- [x] Login Google e autorização por lista de jogadoras na planilha.
+- [x] Ranking online com registro individual das partidas, ordenação e destaque do Top 3.
+- [x] Destaque visual da partida atual sem sobrepor a cor da posição no pódio.
+- [x] Compartilhamento da partida destacada no ranking.
+- [x] Limite configurado de até 50 jogadoras autorizadas; a aba `jogadoras` da planilha é a fonte de autorização.
+- [ ] Fazer teste integrado de login, registro, ranking e compartilhamento com contas autorizadas em aparelhos reais.
+- [ ] Definir se haverá alteração na estrutura/limite de jogadoras ou na política de retenção do histórico.
+
+## Páginas auxiliares e beta
+
+- [x] `teste.html`: central de testes com acesso às ferramentas independentes.
+- [x] `TarotTeste.html`: consulta visual de combinações de três cartas usando o JSON de interpretações.
+- [x] `Musica.html`: central de teste individual das dez músicas, com seleção e reprodução.
+- [x] `beta.html`: página independente de testes, agora identificada no título como **v1.54 — Beta**.
+- [ ] A beta não está funcionalmente sincronizada com a página principal. Antes de promover mudanças da beta ou igualar as implementações, comparar os arquivos e definir explicitamente quais alterações devem ser promovidas.
+- [ ] Validar visualmente as páginas auxiliares em celular e desktop.
+
+## Pendências gerais — próxima etapa
+
+1. [ ] Revisar e fechar as regras finais de sorteio (Lua + Sol e ponderação noturna da Lua).
+2. [ ] Fechar o comportamento do Sol e o balanceamento dos poderes defensivos.
+3. [ ] Definir se a tela final deve mostrar descrição de todos os poderes sorteados ou apenas os efetivamente utilizados.
+4. [ ] Implementar buracos/armadilhas e retorno após queda.
+5. [ ] Definir progressão após o nível 5, mundos restantes e limite máximo de velocidade.
+6. [ ] Decidir se a corrida final será infinita e como a dificuldade escalará.
+7. [ ] Revisar geração procedural e balanceamento de obstáculos/Sonhos.
+8. [ ] Testar o fluxo completo em Android, iPhone e navegadores móveis: login, tiragem, jogo, transições, poderes, áudio, tela cheia, resultado, ranking e compartilhamento.
+9. [ ] Avaliar PWA e funcionamento offline.
+10. [ ] Comparar a beta com a principal antes de qualquer promoção funcional.
+11. [ ] Revisar e reconciliar as seções históricas antigas deste CODEX, que ainda contêm descrições de regras provisórias já substituídas por decisões mais recentes.
+
+## Validações desta atualização v1.54
+
+- Atualizados os títulos de `index.html` e `beta.html` para v1.54.
+- Nenhuma lógica do jogo foi modificada nesta atualização.
+- A beta recebeu apenas a atualização do número no título; não foi feita promoção ou sincronização funcional.
+- A validação de sintaxe e a confirmação do deploy serão registradas após a verificação dos arquivos publicados.
