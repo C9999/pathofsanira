@@ -1455,3 +1455,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Página principal atualizada para **v0.54**. Nenhuma alteração em `beta.html`.
 - Commits: `9fd0bee93421de461b8b332fe00c54a21c6ec7db` (implementação em `index.html`); documentação neste commit separado.
 - Validação estática: conferidos o título v0.54, a remoção do título após a espera e a exibição simultânea do botão; validação de sintaxe e publicação ainda pendentes.
+
+
+### Ajuste da troca do título pelo botão — correção da v0.54 (27/11/2026)
+
+- Reduzida de 1,5 s para **1 segundo** a espera após o término da animação de revelação da terceira carta.
+- O título **“Sua tiragem”** e o botão **“Começar a meditar”** agora compartilham o mesmo espaço de grade (#drawTitleSlot). Ao ocultar o título e exibir o botão, ambos ocupam a mesma posição visual.
+- Mantida a versão **v0.54**, conforme solicitado; nenhuma atualização do número da versão.
+- beta.html permanece inalterada.
+- Commit da correção em index.html: f1f650d7886228d52b79d901e7bd543d267bef5b. Documentação registrada em commit separado.
