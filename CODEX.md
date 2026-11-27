@@ -1697,3 +1697,10 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Atualizados os títulos de `index.html` e `beta.html` para **v1.59**.
 - Mantidas as funcionalidades existentes, incluindo a disponibilidade permanente da aba **Ranking secreto** no ranking acessado pela tela inicial.
 - Principal e Beta permanecem funcionalmente equivalentes; a única diferença entre os arquivos é o sufixo **— Beta** no título.
+
+
+## Sincronização da Beta — v1.59 (27/11/2026)
+
+- `beta.html` foi sincronizada integralmente com `index.html` da versão v1.59.
+- A única diferença intencional entre os arquivos é o sufixo `— Beta` no título da página.
+- As funcionalidades, correções e regras da versão principal permanecem espelhadas na Beta.
