@@ -1668,3 +1668,17 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A modal mantém o comportamento de fechamento ao tocar dentro ou fora dela.
 - A implementação foi aplicada à página principal e replicada integralmente na Beta; títulos atualizados para **v1.57**.
 - Arquivos alterados: `index.html`, `beta.html` e este `CODEX.md`.
+
+
+## Ranking secreto e restrição de tiragem de A Força — v1.58 (27/11/2026)
+
+- A tela de ranking passou a ter duas abas: **Ranking geral** e **Ranking secreto**, sem subtítulos.
+- O Ranking Geral inclui todas as partidas registradas.
+- O Ranking Secreto inclui somente partidas cuja tiragem não contém A Força. A API retorna a lista filtrada em `rankingSecreto`, sem duplicar registros na planilha.
+- Na tela final, quando A Força não foi sorteada, o Ranking Secreto é selecionado por padrão; quando A Força saiu, o Ranking Geral é selecionado e a aba secreta fica cinza e desabilitada.
+- A mesma regra de disponibilidade e seleção inicial é aplicada ao ranking aberto pela tela inicial, usando a tiragem mais recente da sessão.
+- Todas as partidas continuam sendo gravadas normalmente na aba existente `partidas`; as partidas com A Força nunca aparecem no Ranking Secreto.
+- A Força mantém 90% de chance de sair como primeira carta. Se não for a primeira, é excluída das possibilidades da segunda e terceira posições.
+- As três cartas continuam sem repetição na mesma rodada; a ponderação noturna de A Lua permanece inalterada.
+- Principal e Beta permanecem funcionalmente idênticas; títulos atualizados para **v1.58**.
+- Arquivos alterados: `index.html`, `beta.html`, `api/ranking.js` e este `CODEX.md`.
