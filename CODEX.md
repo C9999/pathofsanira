@@ -1255,3 +1255,10 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Nenhum elemento novo de cenário, moldura, partículas, halo ou botão foi acrescentado. A tela de tiragem e o fluxo de login permanecem inalterados.
 - `beta.html` atualizada para v0.38. `index.html` permanece inalterada.
 - Validação realizada por inspeção do HTML/CSS e conferência do caminho do SVG existente; teste visual em navegador real ainda pendente.
+
+
+## Sanira — beta v0.39: faixas e V em cinza escuro (26/11/2026)
+
+- Na arte-base `assets/sanira/sanira-frente-modular.svg`, a variável `--poder` passou de laranja para cinza escuro `#4A4A52`.
+- A alteração afeta somente as faixas das mangas e o V do peito, que compartilham essa variável no SVG. A silhueta, demais cores, formas e animação da tela inicial permanecem inalteradas.
+- `beta.html` atualizada para v0.39. `index.html` permanece inalterada.
