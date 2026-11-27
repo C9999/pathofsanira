@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>v 0.40 — Path of Sanira — Beta</title>
+<title>v 0.41 — Path of Sanira — Beta</title>
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:none;user-select:none;-webkit-user-select:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:#F5EFE0}
@@ -49,7 +49,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 .custom-powers input{accent-color:#E8C46A;flex:none}
 #custom button:disabled{opacity:.4;cursor:not-allowed}
 @media(max-width:700px){.custom-powers{grid-template-columns:repeat(3,1fr);max-width:95%}}
-#tarotInterpretation{width:min(92%,620px);margin:auto;background:#211C45;border:1px solid #6B5FB5;border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center}#tarotInterpretation h2{font:600 25px Georgia,serif;color:#F5EFE0;margin:0}#tarotInterpretation .tarot-result-dots{display:flex;justify-content:center;gap:14px}#tarotInterpretation .dot{width:17px;height:17px}#tarotInterpretation p{font:15px/1.65 Georgia,serif;color:#E9E1F4;max-width:520px}#tarotInterpretation button{min-width:150px}#end{padding:12px 18px;align-items:stretch;justify-content:stretch;text-align:left;overflow:auto}
+#tarotInterpretation{width:min(92%,620px);margin:auto;background:#211C45;border:1px solid #6B5FB5;border-radius:16px;padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center}#tarotInterpretation h2{font:600 25px Georgia,serif;color:#F5EFE0;margin:0}#tarotInterpretation .tarot-result-dots{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:8px}#tarotInterpretation .tarot-card-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:14px;background:rgba(255,255,255,.65);color:#3E3552;font:12px/1.2 system-ui,sans-serif;white-space:nowrap}#tarotInterpretation .tarot-card-pill .dot{width:10px;height:10px}#tarotInterpretation p{font:15px/1.65 Georgia,serif;color:#E9E1F4;max-width:520px}#tarotInterpretation button{min-width:150px}#end{padding:12px 18px;align-items:stretch;justify-content:stretch;text-align:left;overflow:auto}
 #end .end-layout{width:100%;max-width:800px;min-height:100%;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
 #end .end-panel{min-width:0;background:#211C45;border:1px solid #6B5FB5;border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:9px}
 #end .end-panel h2{text-align:left}
@@ -377,7 +377,7 @@ async function finish(){
   'As cartas sugerem uma passagem que pede equilíbrio entre intenção e realidade. Nem tudo está definido; suas escolhas ainda podem influenciar o caminho.'
  ];
  const interpretation=options[Math.floor(Math.random()*options.length)];
- const tarotDots=cards.map(c=>'<span class="dot" style="background:'+c.cor+'"></span>').join('');
+ const tarotDots=cards.map(c=>'<span class="tarot-card-pill"><span class="dot" style="background:'+c.cor+'"></span>'+c.nome+'</span>').join('');
  $('end').innerHTML='<div id="tarotInterpretation"><h2>Interpretação da sua tiragem</h2><div class="tarot-result-dots">'+tarotDots+'</div><p>'+interpretation+'</p><button id="continueToRanking">Continuar</button></div>';
  $('end').classList.remove('off');$('powerBtn').style.display='none';
  const showRanking=()=>{ const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
