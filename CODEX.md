@@ -1194,7 +1194,7 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 ## Ajustes — beta v0.32: compartilhamento, transição e ranking (26/11/2026)
 
 - A imagem compartilhada mantém os dados de pontuação e posição do ranking centralizados horizontalmente, independentemente do alinhamento usado na linha das cartas.
-- O tempo de transição entre níveis foi reduzido pela metade em todas as fases: preparação de 4 para 2 segundos, dissolução visual de 3 para 1,5 segundo e tela livre após a troca de 5 para 2,5 segundos. A transição completa passa de 12 para 6,5 segundos.
+- O tempo de transição entre níveis foi reduzido pela metade em todas as fases: preparação de 4 para 2 segundos, dissolução visual de 3 para 1,5 segundo e tela livre após a troca de 5 para 2,5 segundos. A transição completa passa de 12 para 6 segundos.
 - O ranking online mantém todas as partidas na lista e passa a ter rolagem vertical com barra visível.
 - Ao abrir o ranking, a lista é posicionada para destacar a partida atual no centro, mostrando três posições acima e três abaixo. Se a partida estiver entre as sete primeiras, a lista começa no topo e exibe as sete primeiras.
 - O botão **Compartilhar** foi movido para a mesma linha do título **Ranking online**, centralizado horizontalmente no painel.
