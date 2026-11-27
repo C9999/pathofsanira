@@ -274,7 +274,7 @@ $('homeRankingToggle').onclick=async()=>{
   if(!googleCredential)throw new Error('Entre com sua conta Google autorizada para consultar o ranking.');
   const result=await apiRequest('/api/ranking',{headers:{Authorization:'Bearer '+googleCredential}});
   const general=result.partidas||[],secret=result.rankingSecreto||[];
-  const secretEnabled=!cards.some(card=>card.id==='forca'),active=secretEnabled?'secret':'general';
+  const secretEnabled=true,active=cards.some(card=>card.id==='forca')?'general':'secret';
   $('menu').classList.add('off');$('homeControls').style.display='none';
   $('end').innerHTML='<div class="end-layout" style="grid-template-columns:minmax(0,1fr);max-width:680px"><section class="end-panel">'+rankingTabsMarkup(renderRankingRows(general,null,false,'general'),renderRankingRows(secret,null,false,'secret'),active,secretEnabled)+'<div class="end-actions"><button id="rankingBack">Voltar</button></div></section></div>';
   $('end').classList.remove('off');setupRankingTabs($('end'));bindRankingCardModals($('end'),general,secret);
