@@ -17,6 +17,7 @@ html,body{margin:0;height:100%;background:#14122B;overflow:hidden;touch-action:n
 h1{margin:0;font:600 34px Georgia,serif;letter-spacing:.04em}
 #homeSanira{width:116px;height:116px;object-fit:contain;flex:none;margin-top:-9px;margin-bottom:-5px;animation:homeSaniraFloat 3.2s ease-in-out infinite;pointer-events:none}@keyframes homeSaniraFloat{0%,100%{transform:translateY(-8px)}50%{transform:translateY(-14px)}}
 h2{margin:0;font:600 22px Georgia,serif}
+#drawTitleSlot{display:grid;place-items:center}#drawTitleSlot h2,#drawTitleSlot #go{grid-area:1/1;margin:0}
 p{margin:0;font-size:14px;color:#CFC8E8}.hint{margin-top:10px;color:#E8C46A;font-size:13px}
 button{padding:11px 26px;border:0;border-radius:10px;background:#E8C46A;color:#14122B;font:700 15px system-ui,sans-serif;cursor:pointer}
 button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
@@ -96,7 +97,7 @@ button.alt{background:#2E2760;color:#F5EFE0;border:1px solid #6B5FB5}
 <button id="tb" aria-label="Ativar poder da Torre" title="Ativar poder da Torre">⚡</button>
 <div id="menu" class="scr"><h1>Path of Sanira</h1><img id="homeSanira" src="assets/sanira/sanira-frente-modular.svg" alt="Sanira flutuando" draggable="false"><p id="loginStatus">Entre com sua conta Google autorizada para jogar e participar do ranking.</p><div id="googleLogin"></div><button id="randomMode" class="off">Tirar a sorte através das cartas</button></div>
 
-<div id="draw" class="scr off"><h2>Sua tiragem</h2><div id="cards"></div><button id="go" class="off">Começar a meditar</button></div>
+<div id="draw" class="scr off"><div id="drawTitleSlot"><h2>Sua tiragem</h2><button id="go" class="off">Começar a meditar</button></div><div id="cards"></div></div>
 <div id="end" class="scr off"></div>
 <div id="homeControls"><button id="homeFullscreenToggle" class="alt">Tela cheia</button><button id="homeMusicToggle" class="alt">Música: ligada</button><button id="homeRankingToggle" class="alt">Ranking geral</button></div>
 
@@ -217,7 +218,7 @@ function showDraw(mode='random'){
   loadImgs().then(()=>setTimeout(()=>{
     $('draw').querySelector('h2').classList.add('off');
     $('go').classList.remove('off');
-  },900+2*1100+600+1500));
+  },900+2*1100+600+1000));
 }
 const OBSTACLE_TYPES=[{k:'r',w:40,h:46,weight:20},{k:'l',w:70,h:44,weight:15},{k:'alligator',w:76,h:38,weight:15},{k:'cattle',w:62,h:68,weight:15},{k:'toucan',w:52,h:42,weight:15},{k:'e',w:44,h:50,weight:8}];
 function makeDream(wx){return{wx,k:'s',coin:true,star:true,gold:false,air:Math.random()<.65,ox:0,oy:0,att:false,mag:false,taken:false,gone:false,bob:Math.random()*6};}
