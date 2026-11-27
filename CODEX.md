@@ -1649,3 +1649,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Qualquer novo clique/toque, dentro da modal ou em qualquer outra região da tela, fecha a janela; não é necessário botão de fechar.
 - A API `/api/ranking` passou a consultar as colunas A:M da planilha e retornar também `cardNames` (colunas K:M), preservando as cores em `cards`. Há fallback no cliente para partidas antigas sem nomes preenchidos.
 - A funcionalidade foi aplicada em `index.html` e replicada integralmente em `beta.html`; ambas permanecem na versão **v1.54**.
+
+
+## Atualização de versão para v1.56 — 27/11/2026
+
+- Atualizados os títulos de `index.html` e `beta.html` para **v1.56**, mantendo o sufixo **— Beta** na página beta.
+- Nenhuma mecânica do jogo foi alterada nesta atualização; o incremento identifica o conjunto atual de funcionalidades e correções.
+- A equivalência funcional foi preservada: `beta.html` continua sendo uma cópia integral de `index.html`, com diferença apenas no título.
+- As alterações recentes do ranking (nomes das três cartas na modal, fechamento por qualquer toque e retorno dos nomes pela API) permanecem incluídas na versão.
+- A publicação automática do Vercel depende da integração Git conectada à branch `main`. Como houve bloqueio por limite diário de deploy, não se deve presumir que uma tentativa recusada será repetida automaticamente após a janela de 24 horas; é necessário conferir o estado do deploy e, se não houver nova implantação, dispará-la manualmente.
