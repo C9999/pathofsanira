@@ -1171,3 +1171,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - `teste.html` atualizado para indicar beta v0.29 e catálogo Cartas v0.6.
 - `index.html` permanece na v0.19, sem alterações. A beta não foi promovida para a página principal.
 - Validar após o deploy: gravação de nova partida, migração dos nomes nas linhas antigas, posição do botão ⚡ em tiragens com Torre em posições diferentes e correspondência visual do catálogo.
+
+
+## Atualização — beta v0.30 (26/11/2026)
+
+- O título da beta passa para v0.30; `index.html` permanece intocado.
+- A credencial Google é mantida em `sessionStorage` para sobreviver a recargas na mesma sessão do navegador. Ao abrir a página, o backend revalida a credencial antes de liberar o jogo; se estiver expirada/inválida, a sessão local é descartada e o Google Identity Services tenta oferecer seleção/autenticação automática (`auto_select`/One Tap), mantendo o botão manual disponível. O ID token não é gravado em `localStorage`.
+- O botão Compartilhar gera PNG vertical 1080×1350 com cenário correspondente ao nível final, Sanira renderizada com as cores das cartas, pontuação, posição na classificação online quando disponível e crédito `desenvolvimento por @carlos_h5` no rodapé à direita.
+- Em aparelhos/navegadores que suportam compartilhamento de arquivos, usa Web Share API com `File` PNG para abrir a folha nativa do sistema. Em ambientes sem suporte a compartilhamento de arquivos, oferece compartilhamento de texto quando disponível ou salva o PNG.
+- Pendente validar em aparelho Android/iOS real a folha nativa e o comportamento de autenticação após expiração do ID token.
