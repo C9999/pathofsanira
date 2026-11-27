@@ -343,10 +343,12 @@ function createShareImage({score,rankPosition,level,cards,won}){
   else if(level===5){for(let i=0;i<150;i++){const x=(i*137)%1080,y=(i*83)%850;c.fillStyle=i%4===0?'#F3D98B':'#E8E5FF';c.globalAlpha=.55;c.beginPath();c.arc(x,y,i%7===0?3:1.5,0,Math.PI*2);c.fill();}c.globalAlpha=1;c.fillStyle='#62559A';c.beginPath();c.arc(820,370,125,0,Math.PI*2);c.fill();c.strokeStyle='#8C83C9';c.lineWidth=18;c.globalAlpha=.6;c.beginPath();c.ellipse(820,370,185,48,-.25,0,Math.PI*2);c.stroke();c.globalAlpha=1;}
   c.fillStyle=w.dark;c.fillRect(0,850,1080,500);c.fillStyle=w.ground;c.beginPath();c.moveTo(0,850);c.lineTo(1080,850);c.lineTo(1080,1350);c.lineTo(0,1350);c.fill();
   c.fillStyle='rgba(20,18,43,.18)';c.fillRect(0,0,1080,1350);
-  c.textAlign='center';c.fillStyle='#F5EFE0';c.font='700 42px Georgia,serif';c.fillText('PATH OF SANIRA',540,105);c.font='500 24px system-ui,sans-serif';c.fillStyle='#E8C46A';c.fillText(won?'SESSÃO CONCLUÍDA':'MEDITAÇÃO INTERROMPIDA',540,155);
-  const palette=cards.map(x=>x.cor);palette.forEach((color,i)=>{c.beginPath();c.strokeStyle=color;c.lineWidth=18;c.globalAlpha=.9;c.arc(540,620,245+i*34,Math.PI*(.12+i*.06),Math.PI*(.88-i*.06));c.stroke();});c.globalAlpha=1;
+  c.textAlign='center';c.fillStyle='#F5EFE0';c.font='700 42px Georgia,serif';c.fillText('PATH OF SANIRA',540,105);c.font='500 24px system-ui,sans-serif';
+  const palette=cards.map(x=>x.cor);
   if(imgs.feliz&&imgs.feliz.complete)c.drawImage(imgs.feliz,330,355,420,420);
-  palette.forEach((color,i)=>{const x=390+i*150;c.fillStyle=color;c.beginPath();c.roundRect(x-42,825,84,84,22);c.fill();c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=3;c.stroke();});
+  const hudCards=cards.map((card,i)=>({name:card.nome,color:card.cor}));
+  const totalWidth= Math.min(900,hudCards.length*250+(hudCards.length-1)*18),startX=(1080-totalWidth)/2;
+  hudCards.forEach((card,i)=>{const cx=startX+i*268+20,cy=875;c.fillStyle=card.color;c.beginPath();c.arc(cx,cy,18,0,Math.PI*2);c.fill();c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=3;c.stroke();c.textAlign='left';c.fillStyle='#F5EFE0';c.font='600 24px Georgia,serif';c.fillText(card.name,cx+30,cy+8);});
   c.fillStyle='rgba(20,18,43,.82)';c.beginPath();c.roundRect(115,950,850,250,30);c.fill();c.fillStyle='#F5EFE0';c.font='700 82px system-ui,sans-serif';c.fillText(score.toLocaleString('pt-BR'),540,1055);c.font='500 25px system-ui,sans-serif';c.fillStyle='#CFC8E8';c.fillText('PONTOS',540,1095);c.font='700 32px system-ui,sans-serif';c.fillStyle='#E8C46A';c.fillText(rankPosition?'#'+rankPosition+' NO RANKING':'RANKING',540,1155);c.font='500 21px system-ui,sans-serif';c.fillStyle='#F5EFE0';c.textAlign='right';c.fillText('desenvolvimento por @carlos_h5',1040,1310);
   canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Falha ao gerar a imagem.')),'image/png');
  });
