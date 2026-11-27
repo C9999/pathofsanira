@@ -1245,3 +1245,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A posição no ranking permanece centralizada abaixo das duas métricas.
 - O painel mantém o fundo escuro translúcido, com hierarquia visual consistente e leitura organizada.
 - A página beta foi atualizada para v0.37. A página principal `index.html` permanece inalterada.
+
+
+## Tela inicial — beta v0.38: inclusão da arte-base da Sanira (26/11/2026)
+
+- A tela inicial mantém a composição e os controles existentes: título, autenticação/botão de tiragem e controles de tela cheia e música.
+- Inserida abaixo do nome a arte-base já existente em `assets/sanira/sanira-frente-modular.svg`, sem criar uma nova ilustração nem alterar o arquivo original da personagem.
+- Aplicada somente uma animação CSS discreta de flutuação vertical à imagem na tela inicial.
+- Nenhum elemento novo de cenário, moldura, partículas, halo ou botão foi acrescentado. A tela de tiragem e o fluxo de login permanecem inalterados.
+- `beta.html` atualizada para v0.38. `index.html` permanece inalterada.
+- Validação realizada por inspeção do HTML/CSS e conferência do caminho do SVG existente; teste visual em navegador real ainda pendente.
