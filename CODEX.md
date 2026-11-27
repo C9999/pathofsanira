@@ -1445,3 +1445,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - Página principal atualizada para **v0.53**. `beta.html` não foi alterada.
 - Validação: JavaScript compilado sem erros; conferidos os seletores CSS para os quatro casos (ouro, prata, bronze e partida atual combinada ou fora do pódio). Validação visual/interativa em aparelho real ainda necessária.
 - Commit da implementação: `84ffc9c8a39eb0de4c585415cd8eb160b8ffdc87` — `separa destaques do podio e da partida atual na v0.53`. A documentação é registrada em commit separado.
+
+
+## Transição entre tiragem e início da meditação — página principal v0.54 (27/11/2026)
+
+- Na tela de tiragem, o título **“Sua tiragem”** permanece visível durante a revelação das três cartas.
+- Após a animação de virada da terceira carta terminar (transição CSS de 0,6 segundo), aguarda-se mais **1,5 segundo**. Em seguida, o título desaparece e o botão **“Começar a meditar”** aparece no mesmo fluxo da tela.
+- A troca do título pelo botão acontece no mesmo callback, evitando sobreposição e sem depender da duração da notificação nativa de tela cheia do Chrome.
+- Página principal atualizada para **v0.54**. Nenhuma alteração em `beta.html`.
+- Commits: `9fd0bee93421de461b8b332fe00c54a21c6ec7db` (implementação em `index.html`); documentação neste commit separado.
+- Validação estática: conferidos o título v0.54, a remoção do título após a espera e a exibição simultânea do botão; validação de sintaxe e publicação ainda pendentes.
