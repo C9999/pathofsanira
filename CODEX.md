@@ -1180,3 +1180,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - O botão Compartilhar gera PNG vertical 1080×1350 com cenário correspondente ao nível final, Sanira renderizada com as cores das cartas, pontuação, posição na classificação online quando disponível e crédito `desenvolvimento por @carlos_h5` no rodapé à direita.
 - Em aparelhos/navegadores que suportam compartilhamento de arquivos, usa Web Share API com `File` PNG para abrir a folha nativa do sistema. Em ambientes sem suporte a compartilhamento de arquivos, oferece compartilhamento de texto quando disponível ou salva o PNG.
 - Pendente validar em aparelho Android/iOS real a folha nativa e o comportamento de autenticação após expiração do ID token.
+
+
+## Ajuste — imagem compartilhada da beta v0.31 (26/11/2026)
+
+- Removido da imagem de compartilhamento o texto de situação da partida, incluindo “Meditação interrompida”.
+- Removidas as barras/arcos coloridos em volta da personagem.
+- As cartas agora aparecem como bolinhas preenchidas com suas cores e os respectivos nomes, seguindo a apresentação compacta do HUD.
+- Mantidos cenário do nível final, personagem centralizada, pontuação, posição no ranking e crédito no rodapé à direita.
+- `index.html` permanece na v0.19.
