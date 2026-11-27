@@ -1274,3 +1274,11 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - `beta.html` passa para v0.40. `index.html` permanece inalterada.
 - Fontes consultadas como referência conceitual: Personare (narrativa integrada em tiragens de três cartas), Learn Tarot/Joan Bunning (leitura como história), Biddy Tarot e Clube do Tarô. Os textos do JSON são originais, não transcrições dessas fontes.
 - Validação estática da integração; testar no navegador o carregamento do JSON, a escolha da mensagem, a modal e o avanço ao ranking.
+
+
+## Ajuste — interpretação da tiragem na beta v0.41 (26/11/2026)
+
+- Na tela **“Interpretação da sua tiragem”**, cada bolinha colorida agora aparece junto ao nome da carta correspondente, em etiquetas compactas no mesmo padrão visual do HUD.
+- Mantida a lógica de interpretação: a combinação é identificada pelos IDs das três cartas, ordenados alfabeticamente; uma das três mensagens cadastradas para aquela combinação é escolhida aleatoriamente.
+- O banco JSON e a lógica de sorteio não foram alterados. A página principal `index.html` permanece na v0.19, sem alterações.
+- Validação estática da alteração no HTML/CSS/JavaScript; conferir visualmente em navegador real o encaixe das três etiquetas em telas menores.
