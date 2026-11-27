@@ -1219,3 +1219,12 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - O botão continua aparecendo somente na partida atual; pontuação e bolinhas das cartas permanecem nas colunas próprias.
 - `beta.html` passa para v0.34. `index.html` permanece na v0.19, sem alterações.
 - Validar visualmente em telas menores se o botão permanece legível e não comprime o texto do nível.
+
+
+## Ajuste — beta v0.35: duração da transição e alinhamento do ranking (26/11/2026)
+
+- A transição entre níveis passa a ter três fases: preparação de **3 segundos**, dissolução visual de **2 segundos** e período após a troca de **4 segundos**. A duração total é de **9 segundos**.
+- O progresso da dissolução é calculado com a duração real de 2 segundos, para completar a troca visual ao final da fase.
+- Na linha da partida atual do ranking, o botão **Compartilhar** fica mais compacto horizontalmente. As três bolinhas das cartas permanecem na mesma linha, sem quebra para uma linha inferior.
+- beta.html passa para v0.35. index.html permanece na v0.19, sem alterações.
+- Validar visualmente em telas menores o alinhamento da linha atual e a transição entre níveis.
