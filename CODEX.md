@@ -1316,3 +1316,13 @@ Esta seção prevalece sobre qualquer referência anterior a cinco jogadores, ra
 - A página principal anterior v0.19 foi substituída pelo conteúdo aprovado da beta; não foi mantida como página ativa separada.
 - Commit da promoção: `7f6f24cb302779958818d3a9343beec3165b6fc4` — `promove beta v0.43 para a pagina principal`.
 - A atualização desta documentação é registrada em commit separado.
+
+## Ícone da aba do navegador — página principal v0.44 (27/11/2026)
+
+- A página principal `index.html` passa para **v0.44**.
+- Adicionado um favicon SVG embutido diretamente no HTML, sem criar ou incluir um logotipo.
+- O ícone é uma única bolinha laranja, usando a cor oficial de **A Força** (`#F28C28`) e contorno claro inspirado no marcador colorido da carta.
+- A alteração afeta somente o ícone exibido na aba do navegador e a versão do título. A arte da Sanira, a tela inicial e os demais elementos do jogo permanecem inalterados.
+- A beta `beta.html` permanece na v0.43.
+- Commit da implementação: `dc3f90aa8c647edb9a89acb97e7aa6b03bb27e78` — `adiciona icone laranja da Forca na pagina principal v0.44`.
+- A atualização desta documentação é registrada em commit separado.
